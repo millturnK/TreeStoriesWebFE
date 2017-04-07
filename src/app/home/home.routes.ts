@@ -11,5 +11,7 @@ import {TellComponent} from "../tell/tell.component";
 export const HomeRoutes: Routes = [
 
   {path: "", component: HomeComponent},
-  {path: "home", component: HomeComponent }
+  {path: "home", component: HomeComponent },
+  {path: "tell", component: TellComponent }
+
 ]

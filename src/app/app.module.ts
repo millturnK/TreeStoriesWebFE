@@ -11,7 +11,7 @@ import { NavbarComponent } from "./navbar.component";
 import { User } from "./user/models/user";
 import {AppConsts} from "./app.consts";
 import { NgModule } from "@angular/core";
-import {FormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TellModule} from "./tell/tell.module";
 
 
@@ -29,6 +29,7 @@ import {TellModule} from "./tell/tell.module";
     ContactUsModule,
     UserModule,
     RouterModule,
+    ReactiveFormsModule,
     routing
   ],
   providers: [

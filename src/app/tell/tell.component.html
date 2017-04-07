@@ -3,6 +3,7 @@
   <div class="col-md-12">
 
     <img src="../../assets/TreeStoriesTempLogo.png" height="100px" alt="Tree Stories logo">
+    <h1>Tell your story</h1>
 
 
    <!-- <TextField hint="Email Address" keyboardType="email" [(ngModel)]="user.email"
@@ -19,9 +20,22 @@
 
     <Button text="Submit" class="submit-button" (tap)="submit()"></Button>-->
   </div>
+</div>
+  <!--<div class="row">
+    <div class="col-md-12">
+        <label for="stTitle">Requirement Description </label> <br>
+        <input id="stTitle" name="stTitle" required></input>
+      </div>
 
-</div><!--
+    </div>
+-->
 <form role="form" (ngSubmit)="onSubmit(tellStoryForm.value)" [formGroup]="tellStoryForm">
-  <p> Form data to enter tree story will go here</p>
+  <div class="form-group">
+    <label for="title">Name</label>
+    <textarea id="title" name="title" class="form-control"
+              formControlName="title"  rows="1" required></textarea>
 
-</form>-->
+  </div>
+  <button>Submit</button>
+
+</form>
