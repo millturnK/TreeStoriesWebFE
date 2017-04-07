@@ -1,1 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+#main-wrapper {
+  box-sizing: border-box;
+  min-height: 83%;
+  padding: 0 0 40px;
+  position: relative;
+}
+
+:host {
+  display: block;
+  padding: 0 16px;
+}
+h1{
+  font-size: 2em;
+  font-weight:700;
+  font-family:'Della Respira', serif;
+}
+h2{
+  font-size: 1.75em;
+  font-family:'Della Respira', serif;
+  font-weight:700;
+}
+h3{
+  font-size: 1.5em;
+  font-family:'Della Respira', serif;
+  font-weight:700;
+}
+h4{
+  font-size: 1.2em;
+  font-family:'Della Respira', serif;
+  font-weight:700;
+
+}
+/*
+h2 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    margin-bottom: 0;
+    margin-top: 0.83em;
+}*/
+/*
+input {
+    width: 250px;
+}*/
+
+ul {
+  list-style-type: none;
+  padding: 0 0 0 8px;
+}
+
+
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+
+.tableHeader{
+  background-color: #ffebc2;
+
+}

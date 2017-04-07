@@ -1,3 +1,41 @@
-<h1>
-  {{title}}
-</h1>
+
+<div id="main-wrapper">
+  <navbar [user]="user"></navbar>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+
+<footer class="footer-distributed">
+
+  <div class="footer-right">
+
+    <!--<a href="#"><i class="fa fa-facebook"></i></a>-->
+    <a href="https://twitter.com/UnicornMillsey"><i class="fa fa-twitter"></i></a>
+    <a href="https://au.linkedin.com/in/katieannemills"><i class="fa fa-linkedin"></i></a>
+    <!--<a href="#"><i class="fa fa-github"></i></a>-->
+
+  </div>
+
+  <div class="footer-left">
+
+    <p class="footer-links">
+      <a href="/home">Home</a>
+      ·
+      <a href="https://millturn.com.au/wp/wiki/spqr-wiki/">Blog and discussion forum</a>
+      <!--·
+      <a href="#">Pricing</a>-->
+      ·
+      <a href="{{appConsts.APP_COMPANY_WEBSITE}}">About us at Millturn IT</a>
+      ·
+      <a href="https://millturn.com.au/wp/wiki/spqr-wiki/">FAQ</a>
+      ·
+      <a href="/contactus">Contact</a>
+    </p>
+
+    <p>{{appConsts.APP_COMPANY}} &copy; 2016</p>
+  </div>
+
+</footer>

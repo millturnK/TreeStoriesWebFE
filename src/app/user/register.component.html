@@ -1,0 +1,122 @@
+
+
+
+<h2>Register</h2>
+<p></p>
+
+<div class="alert alert-success" role="alert" *ngIf="regSuccess" >
+  <h4>Registration Successful</h4>
+  <p>
+      An email has been sent to your nominated email address. Please click on the link supplied to activate
+      your account and finalise your registration.
+      If you don't see an email check your spam folder.
+  </p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="regErrorMsg">
+  <div class="header">Registration Failed</div>
+  <p>An error occurred when processing your registration: {{regErrorMsg}}</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Access to a complete quality requirements repository</h4>
+            <p>$10 AUD will buy yearly access to a reliable and up-to-date repository of industry endorsed and standards-conformant
+                quality requirements maintained by industry experts. Save valuable time by not re-inventing the wheel each time you write a
+            requirements specification and relax, knowing you can rely on these requirements.</p>
+            <h4>Contribute to improving the quality of quality requirements in our global analyst community</h4>
+            <p>You will also retain the ongoing right to maintain the content of any requirements you contribute. </p>
+            <h4>Earn free memberships</h4>
+            <p>If you contribute five requirements to the community and they are all endorsed, you will get one free yearly membership.</p>
+        </div>
+        <div class="col-md-4 sideform">
+            <form role="form" (ngSubmit)="onSubmit(registerForm.value)" [formGroup]="registerForm">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group required">
+                        <label for="firstname">First Name</label>
+                        <input type="text" id="firstname" name="firstname" class="form-control" placeholder="First name"
+                               formControlName="firstname" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group required">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Last name"
+                               formControlName="lastname" required>
+                    </div>
+                </div>
+           </div>
+           <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group required">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email"
+                               formControlName="email" required >
+                    </div>
+                </div>
+           </div>
+           <div class="row">
+               <div class="col-md-12">
+                   <div class="form-group has-feedback required">
+                       <label for="pwd">Password</label>
+                       <input type="password" id="pwd" name="pwd" class="form-control"
+                              placeholder="Password" formControlName="password"
+                              data-toggle="tooltip" data-placement="bottom" title="Password length 6..15 chars. Must contain at least: 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character (e.g @ or !)"
+                              required >
+                       <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
+                   </div>
+
+               </div>
+
+           </div>
+           <div class="row">
+               <div class="col-md-12">
+                   <div class="form-group has-feedback required">
+                       <label for="pwd2">Confirm Password</label>
+                       <input type="password" id="pwd2" name="pwd2" class="form-control"
+                              placeholder="Confirm Password" formControlName="passwordConfirm" required >
+                       <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
+                   </div>
+               </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="organisation">Organisation</label>
+                        <input type="text" id="organisation" name="organisation" class="form-control"
+                               formControlName="organisation"  >
+                    </div>
+                </div>
+            </div>
+                <!--
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group required">
+                        <label for="paymentplan">Payment Plan</label>
+                        <select class="form-control" id="paymentplan" formControlName="paymentplan" required>
+                            <option value="IND">Individual subscription</option>
+                            <option value="ORG">Organisation subscription</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+                -->
+                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+                <button type="submit" class="btn btn-success btn-block btn-lg" [disabled]="!registerForm.valid || loading">Register</button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+

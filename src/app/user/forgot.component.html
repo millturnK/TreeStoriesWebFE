@@ -1,0 +1,40 @@
+
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Your password reset email has been sent.</h4>
+  <p>We have sent a password reset email to your email address: {{toEmail}}</p>
+  <p>Please check your inbox to continue.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Something went wrong</div>
+  <p>An error occurred when to process your request: {{errorMessage}}</p>
+</div>
+
+<div class="container">
+  <div class="panel">
+    <h3>Reset Password</h3>
+   <form role="form" (ngSubmit)="onSubmit(forgotForm.value)" [formGroup]="forgotForm">
+     <p class="overview">
+       Enter your email address below and we'll send you a link to reset your password.
+     </p>
+
+     <div class="form-group has-feedback">
+
+       <input type="email" id="email" name="email" class="form-control input-lg"
+              placeholder="Email Address" formControlName="email" required >
+       <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
+     </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!forgotForm.valid">Reset Password</button>
+
+    </form>
+
+    <div class="panel-footer">
+        <a id="loginlink" [routerLink]="['/login']">Login</a>
+        &nbsp; or &nbsp;
+        <a id="registerlink" [routerLink]="['/register']">Sign Up</a>
+    </div>
+
+  </div>
+    Still can't login? <a id="contactlink" [routerLink]="['/contactus']">Email Us</a>
+</div>

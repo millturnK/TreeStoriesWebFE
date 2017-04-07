@@ -1,0 +1,123 @@
+
+<h2>User Account</h2>
+
+<div class="row">
+
+  <div class="col-md-6">
+    Use this page to alter an existing user's account
+   </div>
+
+  <div class="col-md-6">
+    <button class="btn btn-info pull-right" (click)="reset()">Reset Password</button>
+  </div>
+
+</div>
+
+
+<div class="alert alert-success" role="alert" *ngIf="updatesuccess" >
+  <p>User {{updatesuccess}} successfully updated. </p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="updateerror">
+  <div class="header">Something went wrong</div>
+  <p>Unable to update user: {{errorMessage}}</p>
+</div>
+
+
+
+<form role="form"  (ngSubmit)="onSubmit(accountForm.value)" [formGroup]="accountForm">
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="form-group required">
+      <label for="firstname">Firstname</label>
+      <input type="text" id="firstname" name="firstname" placeholder="Firstname"  class="form-control"
+             required formControlName="firstname">
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group required">
+      <label for="lastname">Lastname</label>
+      <input type="text" name="lastname" id="lastname" placeholder="Lastname"  class="form-control"
+             formControlName="lastname" required>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="form-group required">
+      <label for="username">Email</label>
+      <input type="email" id="username" name="username" placeholder="Email Address"  class="form-control"
+             formControlName="username" readonly="">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label for="businessName">Business Name</label>
+      <input type="text" id="businessName" name="bizName"  class="form-control" formControlName="bizname" >
+    </div>
+
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <label for="businessTelephone">Business Telephone</label>
+      <input type="tel" id="businessTelephone" name="bizTel" class="form-control" formControlName="biztel"  >
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="businessAddress">Business Address</label>
+      <input type="text" id="businessAddress" name="bizAddr"  class="form-control" formControlName="bizaddress" >
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="form-group">
+      <label for="businessPostcode">Business Postcode</label>
+      <input type="number" id="businessPostcode" name="bizPC"  class="form-control" formControlName="bizpostcode" >
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="form-group required">
+      <label for="paymentplan">Payment Plan</label>
+      <select class="form-control" id="paymentplan" formControlName="paymentopt" >
+        <option value="IND">Individual subscription</option>
+        <option value="ORG">Organisation subscription</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="user.admin">
+  <div class="col-md-5">
+    <div class="form-group required">
+      <label for="userrole">User Role</label>
+      <select class="form-control" id="userrole" name="userrole" formControlName="role">
+        <option *ngFor="let ur of userRoleOptions" [ngValue]="ur.id">{{ur.name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-2">
+
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <div class="checkbox">
+        <label><input type="checkbox" name="admin" formControlName="admin" ><b>Admin</b></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <button type="submit" class="btn btn-success" [disabled]="!accountForm.valid">Update</button>
+
+</form>
+

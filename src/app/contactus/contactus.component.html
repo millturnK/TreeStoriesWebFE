@@ -1,0 +1,52 @@
+
+
+
+<h2>Contact Us</h2>
+<p>
+  If you want to learn more about the {{appConsts.APP_TOOL}} Tool or {{appConsts.APP_COMPANY}}, please use the form below to send us a message.
+  <br> To suggest features or raise defects, please post to our <a href="https://millturn.com.au/wp/wiki/spqr-wiki/">SPQR Wiki page</a>.
+</p>
+
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Request Submitted</h4>
+  <p>An email has been sent to {{appConsts.APP_COMPANY}}. We'll get back to you ASAP.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Request Failed</div>
+  <p>An error occurred when trying to send your message. Please try again with your own email account. Our email is office@millturn.com.au</p>
+</div>
+
+<form role="form" (ngSubmit)="onSubmit(contactForm.value)" [formGroup]="contactForm">
+
+    <div class="container" width="80%">
+
+        <div class="row">
+            <div class="form-group" required>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Joe Blogs"
+                       formControlName="name" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="joe@company.com"
+                       formControlName="email" required >
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group" required>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" class="form-control" placeholder="write your message here..."
+                          formControlName="message"  rows="3" required></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-success" [disabled]="!contactForm.valid">Send</button>
+        </div>
+
+    </div>
+
+</form>
+

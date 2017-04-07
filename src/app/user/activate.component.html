@@ -1,0 +1,49 @@
+
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Congratulations - Your account is created.</h4>
+  <p>You can now <a id="loginlink1" [routerLink]="['/login']">login</a> to SPQR. </p>
+  <p>Use the login button in the banner or the link above.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMsg">
+  <h4>Payment Failure</h4>
+  <p>Something went wrong when processing your payment. More information follows below.</p>
+  <p>{{errorMsg}}</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="tokenError">
+  <h4>Activation Not Possible</h4>
+  <p>We don't know about the token you have used for this request. Perhaps it has expired?
+    Try and register again and if unsuccessful please contact us.</p>
+  <p>{{errorMsg}}</p>
+</div>
+
+<div class="container">
+  <div class="panel">
+    <h3>Activate Account</h3>
+
+    <div class="formless">
+
+      <p class="overview">
+        To complete your subscription press the purchase button below. We use stripe.com for all our
+        payment processing which means no credit card details are stored on the SPQR site. At present
+        we are just offering a single year's subscription for $10 AUD (GST inclusive).
+      </p>
+
+      <button class="btn btn-primary btn-lg btn-block" id="purchaseBtn" (click)="openCheckout()">Purchase</button>
+
+    </div>
+
+
+    <div class="panel-footer">
+
+        <a id="loginlink" [routerLink]="['/login']">Login</a>
+      &nbsp; or &nbsp;
+      <a id="registerlink" [routerLink]="['/register']">Sign Up</a>
+
+    </div>
+
+  </div>
+  Still having problems? <a id="contactlink" [routerLink]="['/contactus']">Email Us</a>
+</div>
+

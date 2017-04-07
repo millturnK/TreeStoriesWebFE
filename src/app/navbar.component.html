@@ -1,0 +1,52 @@
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+     </button>
+     <a class="navbar-brand" [routerLink]=" ['/home'] ">
+         <img alt="SPQR" class="navbar-brand-img" src="../assets/LogoTextOnlyRed.png">
+     </a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav" id="myNavbarItems">
+          <li><a id="proplink" *ngIf="user.loggedin" [routerLink]=" ['/tell'] ">TELL</a></li>
+          <!--<li><a id="proflink" *ngIf="user.loggedin" [routerLink]=" ['/profile'] ">PROFILE</a></li>-->
+         <!-- <li><a id="curelink" *ngIf="userIsPrivleged()" [routerLink]=" ['/curate'] ">CURATE</a></li>-->
+          <li><a id="contlink" [routerLink]=" ['/contactus'] ">CONTACT US</a></li>
+          <li><a id="admnlink" *ngIf="user.admin" [routerLink]=" ['/admin'] ">ADMIN</a></li>
+      </ul>
+
+      <!-- if you are logged in this is what appears on the right of the navbar -->
+      <ul *ngIf="user.loggedin" class="nav navbar-nav navbar-right">
+
+          <button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="glyphicon glyphicon-user"></i>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li style="text-align: center"><i class="glyphicon glyphicon-user"></i></li>
+              <li style="text-align: center">{{user.firstname}} {{user.lastname}}</li>
+              <li style="text-align: center">{{user.username}}</li>
+              <li role="separator" class="divider"></li>
+ <!--             <li><a id="acctmnglink" [routerLink]=" ['/account', user.username]"><span class="glyphicon glyphicon-cog"></span> Account Settings</a></li> -->
+              <li><a id="acctmnglink" (click)="edit()"><span class="glyphicon glyphicon-cog"></span> Account Settings</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a id="logoutlink" [routerLink]=" ['/home', {logout: true}] "><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+          </ul>
+      </ul>
+
+        <!-- If you are not logged in this is what appears on the right of the navbar -->
+        <ul class="nav navbar-nav navbar-right" *ngIf="!user.loggedin">
+            <li><a  (click)="login()" [routerLink]=" ['/login'] "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <p class="navbar-text"> or </p>
+            <button type="button" class="btn btn-default navbar-btn signup" (click)="register()">Sign Up</button>
+
+        </ul>
+
+
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,82 @@
+
+<div class="row">
+  <div class="col-md-12">
+    <h4>Manage User Accounts</h4>
+    <p>
+      List of all user accounts currently registered
+      <button class="btn-sm" alt="Refresh"   (click)="refreshAcctList()"  >
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+      </button>
+    </p>
+
+    <div class="alert alert-success" role="alert" *ngIf="deletesuccess" >
+      <p>User {{deletesuccess}} successfully deleted. </p>
+    </div>
+
+    <div class="alert alert-danger" role="alert"  *ngIf="deleteerror">
+      <div class="header">Something went wrong</div>
+      <p>Unable to delete user: {{errorMessage}}</p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+<table class="table table-bordered">
+
+  <thead class="tableHeader">
+  <tr>
+    <th>Username</th>
+    <th>Name</th>
+    <th>Role</th>
+    <th>Admin</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let account of accounts; let i=index">
+    <td>{{account.username}}</td>
+    <td>{{account.firstname}} {{account.lastname}}</td>
+    <td>{{account.role}}</td>
+    <td>{{account.admin}}</td>
+    <td>
+      <button class="btn-sm btn-success"   (click)="edit(account)"  >
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+      </button>
+
+      <button class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal"  (click)="delete(i)"  >
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+
+    </td>
+  </tr>
+  </tbody>
+
+
+</table>
+</div>
+  </div>
+<div class="row">
+  <div class="col-md-12">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="abandonDelete()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Danger Will Robinson!!</h4>
+  </div>
+  <div class="modal-body">
+    Are you sure you want to do this?
+    Deleted accounts cannot be recovered.
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="abandonDelete()">No</button>
+    <button type="button" class="btn btn-primary" id="confirmDelete" data-dismiss="modal" (click)="confirmDelete()">Yes</button>
+  </div>
+</div>
+</div>
+
+</div>
+  </div>
+</div>
