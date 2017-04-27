@@ -13,6 +13,7 @@ import {AppConsts} from "./app.consts";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TellModule} from "./tell/tell.module";
+import {GoogleApiService} from "./tell/services/google-api.service";
 
 
 @NgModule({
@@ -31,12 +32,20 @@ import {TellModule} from "./tell/tell.module";
     RouterModule,
     ReactiveFormsModule,
     routing
+    /*,
+    AgmCoreModule.forRoot({
+      apiKey:"AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA"
+    })*/
+
   ],
   providers: [
     User,
     appRoutingProviders,
     AUTH_PROVIDERS,
-    AppConsts],
+    AppConsts,
+    GoogleApiService
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

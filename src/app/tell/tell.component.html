@@ -1,9 +1,9 @@
 
-<div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="col-md-12">
 
-    <img src="../../assets/TreeStoriesTempLogo.png" height="100px" alt="Tree Stories logo">
-    <h1>Tell your story</h1>
+    <h1><img src="../../assets/TreeStoriesTempLogo.png" height="100px" alt="Tree Stories logo">
+   Tell your story</h1>
 
 
    <!-- <TextField hint="Email Address" keyboardType="email" [(ngModel)]="user.email"
@@ -30,12 +30,83 @@
     </div>
 -->
 <form role="form" (ngSubmit)="onSubmit(tellStoryForm.value)" [formGroup]="tellStoryForm">
-  <div class="form-group">
-    <label for="title">Name</label>
+
+
+  <div class="row">
+    <div class="col-md-12">
+          <div class="form-group">
+    <label for="title">Title</label>
     <textarea id="title" name="title" class="form-control"
               formControlName="title"  rows="1" required></textarea>
+          </div>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="ckMap">Location</label>
+          <label><input type="checkbox" id="ckMap" formControlName="ckMap">Select in Map</label>
+          <label class="center-block"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>
+          <label class="center-block"><input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>
+          <!--<input type="radio" formControlName="coordChoice" value="singleTree"  id="coordChoiceSingle" name="coordChoiceSingle"> Single tree-->
+          <!--<input type="radio" formControlName="coordChoiceArea" value="region" id="coordChoiceArea" name="coordChoiceArea"> Region-->
+        </div>
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="ckMap.value == true" height="500px">
+      <label>Select tree location below</label>
+      <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
+
+        <app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <!-- this just shows one way of doing it, call a function
+        <div *ngIf="isSingleTree()"> -->
+        <!-- this does the same thing just in code here -->
+        <div *ngIf="coordChoice.value === 'singleTree'">
+        <label> Latitude</label><input id="latitude" name="latitude" formControlName="latitude" rows="1" placeholder="Latitude" [(ngModel)]="storyModel.locationLat" >
+        <label> Longitude</label> <input id="longitude" name="longitude" formControlName="longitude" rows="1" placeholder="Longitude" [(ngModel)]="storyModel.locationLong">
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="botName">Botanic name (if known)</label>
+        <textarea id="botName" name="botName" class="form-control"
+                  formControlName="botName"  rows="1"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+  <div class="form-group">
+    <label for="description">Your tree story</label>
+    <textarea id="description" name="description" class="form-control"
+              formControlName="description"  rows="3" required></textarea>
 
   </div>
-  <button>Submit</button>
+  </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="source">Contributor(s)</label>
+        <textarea type="text" id="source" name="source" class="form-control"
+                  formControlName="source" placeholder="{{storyModel.contributors}}"></textarea>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success" [disabled]="!tellStoryForm.valid">Submit</button>
 
 </form>
+<p>tellStoryForm value: {{ tellStoryForm.value | json}}</p>
+<p>tellStoryModel value: {{ storyModel.locationLat | json}}</p>
