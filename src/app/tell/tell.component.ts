@@ -22,6 +22,7 @@ export class TellComponent
   longitude = new FormControl('');
   ckMap  = new FormControl('');
   success = false;
+  errorMessage = "";
  // coordChoiceArea = new FormControl('', Validators.required);
 
   storyModel: Story = new Story();
@@ -67,30 +68,12 @@ export class TellComponent
       this.storyModel.botName = botName;
       this.storyModel.description = description;
       this.storyModel.contributors = source;
-      this.storyModel.locationLat = this.latitude.value;
-      this.storyModel.locationLong = this.longitude.value;
+      this.storyModel.latitude = this.latitude.value;
+      this.storyModel.longitude = this.longitude.value;
 
     this._tellService.postStory(this.storyModel).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
 
-      // get nfr out of form
-      /*let category = this.category.value;
-      let subcat = this.subcategory.value;
-      let nfrtext = this.nfrtext.value;
-      let acceptanceTest = this.acceptanceTest.value;
-      let source = this.source.value;
-      let status = NFRConsts.STATUS_PENDING;
-      let changeLog = this.changeComments.value;
-
-      let nfr = new NFR();
-      nfr._id = this.nfr._id;
-      nfr.category = category;
-      nfr.subCategory = subcat;
-      nfr.nfr = nfrtext;
-      nfr.acceptanceTest = acceptanceTest;
-      nfr.source = source;
-      nfr.status = status;
-      nfr.changeLog = changeLog;*/
     }
 
   private successfulSubmit() {
@@ -105,7 +88,7 @@ export class TellComponent
   private failedSubmit(error: any) {
     /*console.log("failedSubmit called: ", error);*/
     this.success = false;
-    // this.errorMessage = error;
+    this.errorMessage = error;
   }
 
     /*locate(){

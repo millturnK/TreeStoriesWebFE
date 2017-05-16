@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {User} from "../user/models/user";
 
+declare const google: any;
 @Component({
   selector: 'app-root',
   templateUrl: './home.component.html',
@@ -14,6 +15,7 @@ export class HomeComponent {
 
   }
 
+
   title = 'Tree Stories';
 
   //TODO implement only going here if user is logged in
@@ -24,6 +26,9 @@ export class HomeComponent {
     this._router.navigate(["tell"]);
 
   }
+
+  //TO DO - put markers on map - do we share one map or can we have two different instances of the component?
+
 }
 
 

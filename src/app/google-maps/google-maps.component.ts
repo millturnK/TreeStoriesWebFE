@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output  } from '@angular/core';
 import {GoogleApiService} from './services/google-api.service';
-import {Story} from './models/story';
+import {loggerFactory} from '../config/ConfigLog4j';
+//import {Story} from './models/story';
 import {isUndefined} from 'util';
+import {StoryService} from './services/story.service';
+import {Story} from './models/story';
 declare const google: any;
-//import LatLng = google.maps.LatLng;
-//import LatLng = google.maps.LatLng;
-
-
 
 @Component({
   selector: 'app-google-maps',
@@ -15,7 +14,7 @@ declare const google: any;
 })
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
-  @Input() story: Story;
+  //@Input() story: Story;
   @Output() onPositionChanged = new EventEmitter<string>();
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
@@ -23,12 +22,17 @@ export class GoogleMapsComponent implements OnInit {
   input: any;
   searchBox: any;
   latlng;
+  @Input() displayAllStories = false;
+  errorMsg='';
+  private log = loggerFactory.getLogger('component.GoogleMaps');
+  markers = [];
 
-  constructor(private googleApi: GoogleApiService) {}
+  constructor(private googleApi: GoogleApiService, private _storyService: StoryService) {}
 
   initialise()
   {
     this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
+    this.log.debug('init: displayAllStories=' + this.displayAllStories);
 
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
@@ -40,7 +44,40 @@ export class GoogleMapsComponent implements OnInit {
       draggable: true,
       title: 'Tree position'
     });
+    // if displayAllStories = true get all stories from DB
+    if(this.displayAllStories)
+    {
+      this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
+      error => this.failedRetrieve(<any>error));
+    }
+
+
   }
+  // parse them and add them to map
+  successfulRetrieve(stories: Story[]){
+
+    //let tempMarkers: google.maps.Marker[] = [];
+
+    for (let story of stories) {
+      const position = new google.maps.LatLng(story.latitude, story.longitude);
+      const marker = new google.maps.Marker();
+      marker.setPosition(position);
+      marker.setTitle(story.title);
+      marker.setMap(this.map);
+      this.markers.push(marker);
+
+    }
+
+   // this.markers = tempMarkers;
+
+
+  }
+  failedRetrieve(error: any) {
+    this.log.error('failed retrieve: ' + error);
+    this.errorMsg = error;
+
+  }
+
 
   ngOnInit() {
     this.googleApi.initMap().then(() => {
@@ -147,17 +184,6 @@ export class GoogleMapsComponent implements OnInit {
         //this.onPositionChanged.emit(e.latLng.toString());
       });
 
-      /*function placeMarkerAndPanTo(latLng, map) {
-        console.log('map=', map);
-        const marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          draggable:true
-        });
-        map.panTo(latLng);
-        //this.story.locationLat = latLng.lat;
-        //this.story.locationLong = latLng.longitude;
-      }*/
 
      // this.map.addListener('click', function(e) {
         this.map.addListener('click', e => {
@@ -167,8 +193,8 @@ export class GoogleMapsComponent implements OnInit {
         //this.testfunconclass(e.latLng.lat());
           this.map.panTo(e.latLng);
           this.treeMarker.setPosition(e.latLng);
-          this.story.locationLat = e.latLng.latitude;
-          this.story.locationLong = e.latLng.longitude;
+          //this.story.locationLat = e.latLng.latitude;
+          //this.story.locationLong = e.latLng.longitude;
           this.onPositionChanged.emit(e.latLng.toString());
       });
 
@@ -178,11 +204,11 @@ export class GoogleMapsComponent implements OnInit {
 
    }//end ngoninit
 
-   testfunconclass(lat: number) {
-    console.log('yeah we got it: ', lat);
-    this.story.locationLat = lat;
-     console.log('set story to: ', this.story);
-   }
+  displayAllStoriesOnMap()
+  {
+
+  }
+
 
 
 }

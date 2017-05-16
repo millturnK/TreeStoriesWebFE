@@ -1,4 +1,16 @@
 
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Story Submitted</h4>
+  <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Failed to save story</div>
+  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
+</div>
+
+
+
 <div class="row" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="col-md-12">
 
@@ -58,7 +70,8 @@
       <label>Select tree location below</label>
       <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
 
-        <app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>
+        <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
+      <app-google-maps (onPositionChanged)="onPositionChanged($event)"></app-google-maps>
 
     </div>
   </div>
@@ -70,8 +83,8 @@
         <div *ngIf="isSingleTree()"> -->
         <!-- this does the same thing just in code here -->
         <div *ngIf="coordChoice.value === 'singleTree'">
-        <label> Latitude</label><input id="latitude" name="latitude" formControlName="latitude" rows="1" placeholder="Latitude" [(ngModel)]="storyModel.locationLat" >
-        <label> Longitude</label> <input id="longitude" name="longitude" formControlName="longitude" rows="1" placeholder="Longitude" [(ngModel)]="storyModel.locationLong">
+        <label> Latitude</label><input id="latitude" name="latitude" formControlName="latitude" rows="1" placeholder="Latitude" [(ngModel)]="storyModel.locationLat" required>
+        <label> Longitude</label> <input id="longitude" name="longitude" formControlName="longitude" rows="1" placeholder="Longitude" [(ngModel)]="storyModel.locationLong" required>
       </div>
       </div>
     </div>

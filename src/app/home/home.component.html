@@ -1,5 +1,16 @@
-<h1>
-  {{title}}
-</h1>
-<p> Mapped tree stories</p>
-<button class="btn btn-default" type="button" (click)="openTell()">Tell my tree story</button>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <h1>
+      {{title}}
+    </h1><button class="btn btn-default" type="button" (click)="openTell()">Tell my tree story</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+<h3>Mapped tree stories</h3>
+    <app-google-maps [displayAllStories]="true"></app-google-maps>
+  </div>
+</div>
+
