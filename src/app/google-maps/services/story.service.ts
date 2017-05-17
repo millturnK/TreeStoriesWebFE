@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
-import {Story} from '../models/story';
+import {Story} from '../../models/story';
 import {User} from '../../user/models/user';
 import {AppConsts} from '../../app.consts';
 import {loggerFactory} from '../../config/ConfigLog4j';

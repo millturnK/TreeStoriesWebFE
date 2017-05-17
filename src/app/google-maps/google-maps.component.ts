@@ -4,8 +4,11 @@ import {loggerFactory} from '../config/ConfigLog4j';
 //import {Story} from './models/story';
 import {isUndefined} from 'util';
 import {StoryService} from './services/story.service';
-import {Story} from './models/story';
+import {Story} from '../models/story';
 declare const google: any;
+//import Marker = google.maps.Marker;
+
+
 
 @Component({
   selector: 'app-google-maps',
@@ -14,7 +17,6 @@ declare const google: any;
 })
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
-  //@Input() story: Story;
   @Output() onPositionChanged = new EventEmitter<string>();
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
@@ -23,9 +25,9 @@ export class GoogleMapsComponent implements OnInit {
   searchBox: any;
   latlng;
   @Input() displayAllStories = false;
-  errorMsg='';
+  errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
-  markers = [];
+  markers= [];
 
   constructor(private googleApi: GoogleApiService, private _storyService: StoryService) {}
 
@@ -45,7 +47,7 @@ export class GoogleMapsComponent implements OnInit {
       title: 'Tree position'
     });
     // if displayAllStories = true get all stories from DB
-    if(this.displayAllStories)
+    if (this.displayAllStories)
     {
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
@@ -58,17 +60,27 @@ export class GoogleMapsComponent implements OnInit {
 
     //let tempMarkers: google.maps.Marker[] = [];
 
-    for (let story of stories) {
+    for (const story of stories) {
       const position = new google.maps.LatLng(story.latitude, story.longitude);
       const marker = new google.maps.Marker();
       marker.setPosition(position);
       marker.setTitle(story.title);
       marker.setMap(this.map);
+      marker.addListener('click', event => {
+        this.log.debug('Click called. Marker title=' + marker.getTitle());
+        this.log.debug('Click called. content=' + story.content);
+        const infowindow = new google.maps.InfoWindow({
+          content: story.content,
+          position: marker.getPosition(),
+          maxWidth: 100,
+          });
+         infowindow.open(this.map);
+      });
       this.markers.push(marker);
 
     }
 
-   // this.markers = tempMarkers;
+
 
 
   }

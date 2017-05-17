@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from '../user/models/user';
 import {Router} from '@angular/router';
-import {Story} from './models/story';
+import {Story} from '../models/story';
 import {Validators, FormControl, FormGroup} from '@angular/forms';
 import {TellService} from './services/tell.service';
 declare const google: any;
@@ -66,7 +66,7 @@ export class TellComponent
 
       this.storyModel.title = title;
       this.storyModel.botName = botName;
-      this.storyModel.description = description;
+      this.storyModel.content = description;
       this.storyModel.contributors = source;
       this.storyModel.latitude = this.latitude.value;
       this.storyModel.longitude = this.longitude.value;
