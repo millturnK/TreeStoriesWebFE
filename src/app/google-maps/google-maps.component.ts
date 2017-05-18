@@ -3,7 +3,7 @@ import {GoogleApiService} from './services/google-api.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 //import {Story} from './models/story';
 import {isUndefined} from 'util';
-import {StoryService} from './services/story.service';
+import {StoryService} from '../services/story.service';
 import {Story} from '../models/story';
 declare const google: any;
 //import Marker = google.maps.Marker;

@@ -8,6 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TellService} from './services/tell.service';
 import {GoogleMapsComponent} from '../google-maps/google-maps.component';
 import {GoogleMapsModule} from '../google-maps/google-maps.module';
+import {ImageUploadModule} from 'angular2-image-upload';
+import {Story} from '../models/story';
+import {StoryService} from '../services/story.service';
 
 @NgModule({
   declarations: [
@@ -18,13 +21,14 @@ import {GoogleMapsModule} from '../google-maps/google-maps.module';
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    ImageUploadModule.forRoot()
 
     // AgmCoreModule.forRoot({
     //   apiKey: 'AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA'
     // })
 
   ],
-  providers: [TellService]
+  providers: [StoryService]
 })
 export class TellModule { }

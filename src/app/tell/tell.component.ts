@@ -4,12 +4,16 @@ import {Router} from '@angular/router';
 import {Story} from '../models/story';
 import {Validators, FormControl, FormGroup} from '@angular/forms';
 import {TellService} from './services/tell.service';
+import {loggerFactory} from '../config/ConfigLog4j';
+import {Picture} from '../models/picture';
+import {StoryService} from '../services/story.service';
 declare const google: any;
 
 @Component({
     selector: 'tell-form',
     templateUrl: 'tell.component.html'
 })
+// TODO allow upload of up to 5 photos
 export class TellComponent
 {
   // form controls & group needed to unpin this form
@@ -22,10 +26,11 @@ export class TellComponent
   longitude = new FormControl('');
   ckMap  = new FormControl('');
   success = false;
-  errorMessage = "";
- // coordChoiceArea = new FormControl('', Validators.required);
+  errorMessage = '';
+  private log = loggerFactory.getLogger('component.GoogleMaps');
 
   storyModel: Story = new Story();
+  pictures: Picture[] = [];
 
   tellStoryForm = new FormGroup({
     title: this.title,
@@ -38,7 +43,7 @@ export class TellComponent
     ckMap: this.ckMap
     // coordChoiceArea: this.coordChoiceArea
   });
-    constructor(private router: Router, private _user: User, private _tellService: TellService) {
+    constructor(private router: Router, private _user: User, private _storyService: StoryService) {
         /*this.storyModel = new Story();*/
         // TODO implement login and pass in name, remove placeholder
         _user.username = 'Katie Test';
@@ -70,8 +75,9 @@ export class TellComponent
       this.storyModel.contributors = source;
       this.storyModel.latitude = this.latitude.value;
       this.storyModel.longitude = this.longitude.value;
+      console.log('onSubmit $event.file=', event);
 
-    this._tellService.postStory(this.storyModel).subscribe( result => this.successfulSubmit(),
+    this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
 
     }
@@ -83,6 +89,12 @@ export class TellComponent
     // setTimeout(() => { // 3
     //   this._router.navigate(["/curate"]);
     // }, 4000);
+  }
+  imageUploaded($event){
+      this.log.debug('imageUploaded called');
+     console.log('imageUploaded called. Event.file:', $event.file);
+      //pull out lat.lng
+    this.pictures.push(new Picture(<File> $event.file));
   }
 
   private failedSubmit(error: any) {

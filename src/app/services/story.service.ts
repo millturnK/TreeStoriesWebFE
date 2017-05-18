@@ -7,27 +7,25 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
-import {Story} from '../../models/story';
-import {User} from '../../user/models/user';
-//import any = jasmine.any;
-import {AppConsts} from '../../app.consts';
-import {Picture} from '../../models/picture';
-import {loggerFactory} from '../../config/ConfigLog4j';
-//import {loggerFactory} from "../../../../config/ConfigLog4j";
-//import {LFService, LoggerFactoryOptions, LogGroupRule, LogLevel} from "typescript-logging";
-//import {loggerFactory} from "../../../../config/ConfigLog4j";
+import {Story} from '../models/story';
+import {User} from '../user/models/user';
+import {AppConsts} from '../app.consts';
+import {loggerFactory} from '../config/ConfigLog4j';
+import {Picture} from '../models/picture';
+
 
 @Injectable()
-export class TellService {
+export class StoryService {
   private queryUrl = 'http://localhost:3000/api/v1/story';
   // private factory = LFService.createLoggerFactory(new LoggerFactoryOptions()
   //.addLogGroupRule(new LogGroupRule(new RegExp(".+"), LogLevel.Debug)));
   // private log = this.factory.getLogger("nfrService");
-  private log = loggerFactory.getLogger('service.Tell');
+  private log = loggerFactory.getLogger('service.story');
   constructor(private http: Http) {
   }
 
   //@TODO it isn't calling handleError
+
   //public postStory(user: User, story: Story): Observable<NFR> {
 
   public postStory(story: Story, pictures: Picture[]): Observable<Story> {
@@ -35,12 +33,12 @@ export class TellService {
 
     const headers = new Headers();
 
-   // headers.append('x-access-token', user.token);
-   const options = new RequestOptions({headers: headers});
+    // headers.append('x-access-token', user.token);
+    const options = new RequestOptions({headers: headers});
     const body = JSON.stringify(story);
     const formData: FormData = new FormData();
     formData.append('body', body);
-   // formData.append('test', 'test');
+    // formData.append('test', 'test');
     for (const pic of pictures) {
       formData.append(pic.partName, pic.file);
       console.log('appended image to req', pic.file);
@@ -51,6 +49,20 @@ export class TellService {
       .catch(this.handleError);
 
   }
+  // GET all stories from database
+  //public getStories(user: User): Observable<Story[]> {
+  public getStories(): Observable<Story[]> {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    //headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.get(this.queryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
+
+
+
   private handleError( error: Response | any ) {
     // TODO consider using a remote logging service to capture this
 

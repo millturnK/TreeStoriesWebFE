@@ -7,7 +7,8 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {GoogleMapsComponent} from './google-maps.component';
 import {GoogleApiService} from './services/google-api.service';
-import {StoryService} from './services/story.service';
+//import {StoryService} from './services/story.service';
+import {StoryService} from '../services/story.service';
 
 @NgModule({
   declarations: [

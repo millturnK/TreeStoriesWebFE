@@ -14,6 +14,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TellModule} from "./tell/tell.module";
 import {GoogleApiService} from "./google-maps/services/google-api.service";
+import {ImageUploadModule} from 'angular2-image-upload';
 
 
 @NgModule({
@@ -31,12 +32,8 @@ import {GoogleApiService} from "./google-maps/services/google-api.service";
     UserModule,
     RouterModule,
     ReactiveFormsModule,
-    routing
-    /*,
-    AgmCoreModule.forRoot({
-      apiKey:"AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA"
-    })*/
-
+    routing,
+    ImageUploadModule.forRoot()
   ],
   providers: [
     User,
