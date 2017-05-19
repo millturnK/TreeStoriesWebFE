@@ -6,6 +6,7 @@ import {HomeComponent} from './home.component';
 //import {GoogleMapsComponent} from '../google-maps/google-maps.component';
 import {GoogleMapsModule} from '../google-maps/google-maps.module';
 import {GoogleMapsComponent} from '../google-maps/google-maps.component';
+import {StoryService} from '../services/story.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import {GoogleMapsComponent} from '../google-maps/google-maps.component';
     GoogleMapsModule
   ],
   providers: [
-
+    StoryService
   ]
 
 })

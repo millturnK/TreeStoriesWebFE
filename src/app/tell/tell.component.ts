@@ -3,7 +3,7 @@ import {User} from '../user/models/user';
 import {Router} from '@angular/router';
 import {Story} from '../models/story';
 import {Validators, FormControl, FormGroup} from '@angular/forms';
-import {TellService} from './services/tell.service';
+//import {TellService} from './services/tell.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';

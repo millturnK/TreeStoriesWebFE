@@ -18,13 +18,15 @@ declare const google: any;
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
   @Output() onPositionChanged = new EventEmitter<string>();
+  @Input() displayAllStories = false;
+  @Input() useTreePosMarker = false;
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
   treeMarker: any;
   input: any;
   searchBox: any;
   latlng;
-  @Input() displayAllStories = false;
+
   errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
   markers= [];
@@ -40,12 +42,15 @@ export class GoogleMapsComponent implements OnInit {
       center: this.latlng,
       zoom: 4
     });
-    this.treeMarker = new google.maps.Marker({
-      position: this.latlng,
-      map: this.map,
-      draggable: true,
-      title: 'Tree position'
-    });
+    if (this.useTreePosMarker) {
+      this.treeMarker = new google.maps.Marker({
+        position: this.latlng,
+        map: this.map,
+        draggable: true,
+        title: 'Tree position'
+      });
+    }
+
     // if displayAllStories = true get all stories from DB
     if (this.displayAllStories)
     {
@@ -57,12 +62,26 @@ export class GoogleMapsComponent implements OnInit {
   }
   // parse them and add them to map
   successfulRetrieve(stories: Story[]){
+    // TODO remove this when migrating environments - find a way to get this from env var
 
-    //let tempMarkers: google.maps.Marker[] = [];
+    const baseServerUrl = 'http://localhost:3000';
 
     for (const story of stories) {
       const position = new google.maps.LatLng(story.latitude, story.longitude);
       const marker = new google.maps.Marker();
+      // this should be formatted in HTML tags - put in for loop
+      let content = '';
+      // console.log('in GM retrieve: story= ', story);
+      if (!isUndefined(story.photoLinks)) {
+        for (const uri of story.photoLinks)
+        {
+          content = content + '<img src=\"' + baseServerUrl + uri + '\" ' + 'alt=\"tree image\"'
+            + ' style=\"width:50px;height:50px;\">';
+          this.log.debug('uri of story.photolinks:' + content);
+        }
+      }
+      content = content + ('<p>' + story.content + '</p>');
+      this.log.debug('final content: ' + content);
       marker.setPosition(position);
       marker.setTitle(story.title);
       marker.setMap(this.map);
@@ -70,9 +89,10 @@ export class GoogleMapsComponent implements OnInit {
         this.log.debug('Click called. Marker title=' + marker.getTitle());
         this.log.debug('Click called. content=' + story.content);
         const infowindow = new google.maps.InfoWindow({
-          content: story.content,
+          content: content,
           position: marker.getPosition(),
-          maxWidth: 100,
+          maxWidth: 200,
+          maxHeight: 200
           });
          infowindow.open(this.map);
       });
@@ -110,22 +130,6 @@ export class GoogleMapsComponent implements OnInit {
 
       this.map.addListener('bounds_changed', e => {
 
-        /*let ok = true;
-        if (this.map === undefined)
-        {
-          console.log('map is undefined');
-        }
-
-        if (e.getBounds() === undefined){
-          console.log('getBounds is undefined');
-          ok = false;
-        }
-        if (ok) {
-          console.log('bounds changed: bounds=', this.map.getBounds());
-          searchBox.setBounds(this.map.getBounds());
-        } else {
-          setTimeout(this.map.getBounds(), 500);
-        }*/
         if (this.map.getBounds() !== undefined) {
           this.searchBox.setBounds(this.map.getBounds());
         } else {
@@ -186,25 +190,25 @@ export class GoogleMapsComponent implements OnInit {
       }); //end places changed
 
 
-
-
-
-
-      this.treeMarker.addListener('dragend', e => {
-        console.log('marker dragged to', e.latLng.lat());
-        this.onPositionChanged.emit(e.latLng);
-        //this.onPositionChanged.emit(e.latLng.toString());
-      });
-
+      if (this.useTreePosMarker) {
+        this.treeMarker.addListener('dragend', e => {
+          // console.log('marker dragged to', e.latLng.lat());
+          this.onPositionChanged.emit(e.latLng);
+          //this.onPositionChanged.emit(e.latLng.toString());
+        });
+      }
 
      // this.map.addListener('click', function(e) {
         this.map.addListener('click', e => {
         //placeMarkerAndPanTo(e.latLng, this.map);
-        console.log('map click detected at lat', e.latLng.lat().valueOf());
+        //console.log('map click detected at lat', e.latLng.lat().valueOf());
         //this.story.locationLat = e.latLng.lat();
         //this.testfunconclass(e.latLng.lat());
           this.map.panTo(e.latLng);
-          this.treeMarker.setPosition(e.latLng);
+          if (this.useTreePosMarker) {
+            this.treeMarker.setPosition(e.latLng);
+          }
+
           //this.story.locationLat = e.latLng.latitude;
           //this.story.locationLong = e.latLng.longitude;
           this.onPositionChanged.emit(e.latLng.toString());

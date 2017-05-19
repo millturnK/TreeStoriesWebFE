@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import {TellComponent} from './tell.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import {GoogleMapsComponent} from './google-maps.component';
-import {TellService} from './services/tell.service';
+//import {TellService} from './services/tell.service';
 import {GoogleMapsComponent} from '../google-maps/google-maps.component';
 import {GoogleMapsModule} from '../google-maps/google-maps.module';
 import {ImageUploadModule} from 'angular2-image-upload';
