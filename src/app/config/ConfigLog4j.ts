@@ -16,7 +16,7 @@ import {LoggerFactory, LoggerFactoryOptions, LFService, LogGroupRule, LogLevel} 
 const options = new LoggerFactoryOptions()
     .addLogGroupRule(new LogGroupRule(new RegExp('model.+'), LogLevel.Debug))
     .addLogGroupRule(new LogGroupRule(new RegExp('service.+'), LogLevel.Debug))
-    .addLogGroupRule(new LogGroupRule(new RegExp('component.GoogleMaps'), LogLevel.Error))
+    .addLogGroupRule(new LogGroupRule(new RegExp('component.GoogleMaps'), LogLevel.Debug))
     .addLogGroupRule(new LogGroupRule(new RegExp('component.+'), LogLevel.Debug))
     .addLogGroupRule(new LogGroupRule(new RegExp('.+'), LogLevel.Debug));
 

@@ -5,6 +5,7 @@ import {loggerFactory} from '../config/ConfigLog4j';
 import {isUndefined} from 'util';
 import {StoryService} from '../services/story.service';
 import {Story} from '../models/story';
+//import OverlayCompleteEvent = google.maps.drawing.OverlayCompleteEvent;
 declare const google: any;
 //import Marker = google.maps.Marker;
 
@@ -20,12 +21,14 @@ export class GoogleMapsComponent implements OnInit {
   @Output() onPositionChanged = new EventEmitter<string>();
   @Input() displayAllStories = false;
   @Input() useTreePosMarker = false;
+  @Input() useDrawingManager = false;
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
   treeMarker: any;
   input: any;
   searchBox: any;
   latlng;
+  drawingManager;
 
   errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
@@ -50,10 +53,30 @@ export class GoogleMapsComponent implements OnInit {
         title: 'Tree position'
       });
     }
+    this.drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.MARKER,
+      drawingControl: this.useDrawingManager,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_RIGHT,
+        drawingModes: ['marker', 'rectangle']
+      },
+      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
+      polygonOptions: {editable: true, draggable: true},
+      rectangleOptions: {editable: true, draggable: true}
+      // circleOptions: {
+      //   fillColor: '#ffff00',
+      //   fillOpacity: 1,
+      //   strokeWeight: 5,
+      //   clickable: false,
+      //   editable: true,
+      //   zIndex: 1
+      // }
+    });
+
+    this.drawingManager.setMap(this.map);
 
     // if displayAllStories = true get all stories from DB
-    if (this.displayAllStories)
-    {
+    if (this.displayAllStories){
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
     }
@@ -75,8 +98,8 @@ export class GoogleMapsComponent implements OnInit {
       if (!isUndefined(story.photoLinks)) {
         for (const uri of story.photoLinks)
         {
-          content = content + '<img src=\"' + baseServerUrl + uri + '\" ' + 'alt=\"tree image\"'
-            + ' style=\"width:50px;height:50px;\">';
+          content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'
+            + ' style=\"width:50px;height:50px;margin:5px\">';
           this.log.debug('uri of story.photolinks:' + content);
         }
       }
@@ -99,16 +122,14 @@ export class GoogleMapsComponent implements OnInit {
       this.markers.push(marker);
 
     }
-
-
-
-
   }
+
   failedRetrieve(error: any) {
     this.log.error('failed retrieve: ' + error);
     this.errorMsg = error;
 
   }
+
 
 
   ngOnInit() {
@@ -136,6 +157,29 @@ export class GoogleMapsComponent implements OnInit {
           console.log('getBounds is undefined');
         }
 
+
+      });
+
+      google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
+        if (e.type === 'circle') {
+          const radius = e.overlay.getRadius();
+          this.log.debug('drawing man. Radius=' + radius);
+        }
+        else if (e.type === 'polygon'){
+          const paths = e.overlay.getPaths();
+          this.log.debug('drawing man. paths=' + paths);
+        }
+        else if (e.type === 'rectangle'){
+          const bounds = e.overlay.getBounds();
+          this.log.debug('drawing man. bounds=' + bounds);
+        }
+        else if (e.type === 'marker'){
+
+          const pos = e.overlay.getPosition();
+          this.log.debug('drawing man. pos=' + pos);
+          this.onPositionChanged.emit(e.overlay.getPosition());
+
+        }
 
       });
       //let markers = [];

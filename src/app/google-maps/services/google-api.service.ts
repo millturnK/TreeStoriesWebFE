@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 
-const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA&libraries=places&callback=initMap';
+const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA&libraries=places,drawing&callback=initMap';
 //const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA&libraries=places';
 
 

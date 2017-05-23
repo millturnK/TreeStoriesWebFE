@@ -82,7 +82,7 @@
       <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
-      <app-google-maps (onPositionChanged)="onPositionChanged($event)" [useTreePosMarker]="true"></app-google-maps>
+      <app-google-maps (onPositionChanged)="onPositionChanged($event)" [useTreePosMarker]="false" [useDrawingManager]="true"></app-google-maps>
 
     </div>
   </div>
@@ -91,13 +91,15 @@
     <div class="col-md-12">
         <div *ngIf="coordChoice.value === 'singleTree'">
           <div class="form-group">
-          <div class="col-xs-6">
-            <label for="latitude"> Latitude<input id="latitude" name="latitude" formControlName="latitude" rows="1" placeholder="Latitude" [(ngModel)]="storyModel.locationLat" required></label>
+          <div class="col-md-6">
+            <label for="latitude"> Latitude<input id="latitude" name="latitude" formControlName="latitude"
+                                                  title="Latitudes must be in the format...." required></label>
           </div>
           </div>
           <div class="form-group">
-          <div class="col-xs-6">
-            <label for="longitude"> Longitude <input id="longitude" name="longitude" formControlName="longitude" rows="1" placeholder="Longitude" [(ngModel)]="storyModel.locationLong" required></label>
+          <div class="col-md-6">
+            <label for="longitude"> Longitude <input id="longitude" name="longitude" formControlName="longitude"
+                                                     title="Longitudes must be in the format...." required></label>
           </div>
           </div>
       </div>

@@ -7,7 +7,26 @@ import {Validators, FormControl, FormGroup} from '@angular/forms';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';
+import {isUndefined} from 'util';
 declare const google: any;
+
+//declare const latitudeValPattern = '/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/';
+//const longValPatter = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+function latitudeValidator(control: FormControl): { [s: string]: boolean } {
+
+  //console.log('in lat val. control=', control);
+  const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  return control.value.match(pattern) ? null : {pattern: true};
+
+
+}
+function longitudeValidator(control: FormControl): { [s: string]: boolean } {
+
+  //console.log('in long val. control=', control);
+  const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  return control.value.match(pattern) ? null : {pattern: true};
+
+}
 
 @Component({
     selector: 'tell-form',
@@ -16,22 +35,21 @@ declare const google: any;
 // TODO allow upload of up to 5 photos
 export class TellComponent
 {
-  // form controls & group needed to unpin this form
+   // ngOnInit (){
+   //
+   //
+   // }
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
   source= new FormControl('', Validators.required);
   coordChoice = new FormControl('singleTree');
-  latitude = new FormControl('');
-  longitude = new FormControl('');
+  // TODO getting error can't match value of undefined
+  //latitude = new FormControl('', [Validators.required, latitudeValidator]);
+  //longitude = new FormControl('', [Validators.required, longitudeValidator]);
+  latitude = new FormControl('', [Validators.required, latitudeValidator]);
+  longitude = new FormControl('', [Validators.required, longitudeValidator]);
   ckMap  = new FormControl('');
-  success = false;
-  errorMessage = '';
-  private log = loggerFactory.getLogger('component.GoogleMaps');
-
-  storyModel: Story = new Story();
-  pictures: Picture[] = [];
-
   tellStoryForm = new FormGroup({
     title: this.title,
     botName: this.botName,
@@ -43,6 +61,18 @@ export class TellComponent
     ckMap: this.ckMap
     // coordChoiceArea: this.coordChoiceArea
   });
+   // form controls & group needed to unpin this form
+  latitudeValPattern = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+
+
+  success = false;
+  errorMessage = '';
+  private log = loggerFactory.getLogger('component.GoogleMaps');
+
+  storyModel: Story = new Story();
+  pictures: Picture[] = [];
+
+
     constructor(private router: Router, private _user: User, private _storyService: StoryService) {
         /*this.storyModel = new Story();*/
         // TODO implement login and pass in name, remove placeholder
@@ -50,14 +80,30 @@ export class TellComponent
         this.storyModel.contributors = _user.username;
     }
 
-
+  // latitudeValidator(control: FormControl): { [s: string]: boolean } {
+  //
+  //   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  //   //
+  //   return control.value.match(pattern) ? null : {pattern: true};
+  //
+  //
+  // }
+  // longitudeValidator(control: FormControl): { [s: string]: boolean } {
+  //
+  //   console.log('in long val. control=', control.value);
+  //   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  //
+  //   //
+  //   return control.value.match(pattern) ? null : {pattern: true};
+  // }
 
    // onPositionChanged(newPos: string){
   onPositionChanged(newPos) {
      //set value of text box
       console.log('onPosition changed called with', newPos);
-    this.latitude.setValue(newPos.lat());
-    this.longitude.setValue(newPos.lng());
+      // round to 6 dec places
+    this.latitude.setValue(newPos.lat().toFixed(6));
+    this.longitude.setValue(newPos.lng().toFixed(6));
     }
 
 
@@ -79,6 +125,7 @@ export class TellComponent
 
     this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
+    this.tellStoryForm.reset();
 
     }
 
