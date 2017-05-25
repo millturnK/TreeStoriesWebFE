@@ -1,39 +1,42 @@
-import {Injectable} from "@angular/core";
-import {Http, Response, ResponseOptions, Headers, RequestOptions} from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import {Injectable} from '@angular/core';
+import {Http, Response, ResponseOptions, Headers, RequestOptions} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 
-import {User} from "../models/user";
+import {User} from '../models/user';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
 
+  private apiUrl: string = environment.server_url + '/api/v1/users';
 
   constructor(private http: Http) {}
 
 
   login(user: User): Observable<User> {
 
-    let headers = new Headers({"Content-Type": "application/json"});
-    let options = new RequestOptions({ headers: headers});
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const options = new RequestOptions({ headers: headers});
 
-    let body = JSON.stringify( user );
-    let targetUrl = "api/v1/users/login";
+    const body = JSON.stringify( user );
+    // let targetUrl = 'api/v1/users/login';
+    const targetUrl = this.apiUrl + '/login';
 
     return this.http.post(targetUrl, body, options)
       .timeout(10000)
       .map(this.extractData)
       .catch(this.handleError);
 
-  // .timeout(10000, new Response( new ResponseOptions({ body: "{'error': 'Timeout exceeded'}"})))
+  // .timeout(10000, new Response( new ResponseOptions({ body: '{'error': 'Timeout exceeded'}'})))
 
 
   }
 
   private extractData(res: Response) {
     if ( res.status < 200 || res.status >= 300 ) {
-      throw new Error("Response status: " + res.status);
+      throw new Error('Response status: ' + res.status);
     }
-    let body = res.json();
+    const body = res.json();
 
     // this doesn't seem to be wrapping the response in a data object???
     // so just returning the body and letting it get mapped to a user object
@@ -43,10 +46,8 @@ export class AuthenticationService {
   private handleError( error: any) {
     // TODO consider using a remote logging service to capture this
     // error and return to us so we know about it
-    /*console.log("Login failed = ", error);*/
-    let body = error.json();
-    /*console.log("Error body = ", body);*/
-    let errMsg = body.error || "Server error";
+    const body = error.json();
+    const errMsg = body.error || 'Server error';
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
@@ -54,11 +55,12 @@ export class AuthenticationService {
 
   public getAccount(username: string, user: User): Observable<User> {
 
-    let headers = new Headers({"Content-Type": "application/json"});
-    headers.append("x-access-token", user.token);
-    let options = new RequestOptions({ headers: headers });
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
 
-    let queryUrl = "api/v1/users/" + username;
+//    let queryUrl = 'api/v1/users/' + username;
+    const queryUrl = this.apiUrl + '/' + username;
 
     return this.http.get(queryUrl, options)
       .map(this.extractData)
@@ -70,11 +72,12 @@ export class AuthenticationService {
 
   public getAccounts(user: User): Observable<User[]> {
 
-    let headers = new Headers({"Content-Type": "application/json"});
-    headers.append("x-access-token", user.token);
-    let options = new RequestOptions({ headers: headers });
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
 
-    let queryUrl = "api/v1/users";
+   // const queryUrl = 'api/v1/users';
+    const queryUrl = this.apiUrl;
 
     return this.http.get(queryUrl, options)
       .map(this.extractData)
@@ -85,11 +88,11 @@ export class AuthenticationService {
 
   public delete(username: string, user: User): Observable<string> {
 
-    let headers = new Headers({"Content-Type": "application/json"});
-    headers.append("x-access-token", user.token);
-    let options = new RequestOptions({ headers: headers });
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
 
-    let targetUrl = "api/v1/users/" + username;
+    const targetUrl = this.apiUrl + '/' + username;
 
     return this.http.delete(targetUrl, options)
       .timeout(10000)
@@ -100,33 +103,31 @@ export class AuthenticationService {
 
   private extractDeleteData(res: Response) {
     if ( res.status < 200 || res.status >= 300) {
-      throw new Error("Response status: " + res.status);
+      throw new Error('Response status: ' + res.status);
     }
-    let body = res.json();
+    const body = res.json();
 
     // this doesn't seem to be wrapping the response in a data object???
     // so just returning the body and letting it get mapped to a user object
-    return body.result || "";
+    return body.result || '';
   }
 
   private handleDeleteError( error: any) {
     // error and return to us so we know about it
-    /*console.log("Delete failed = ", error);*/
-    let body = error.json();
-    /*console.log("Error body = ", body);*/
-    let errMsg = body.error || "Server error";
+    const body = error.json();
+    const errMsg = body.error || 'Server error';
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
 
   public updateAccount(account: User, adminuser: User): Observable<User> {
 
-    let headers = new Headers({"Content-Type": "application/json"});
-    headers.append("x-access-token", adminuser.token);
-    let options = new RequestOptions({ headers: headers});
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', adminuser.token);
+    const options = new RequestOptions({ headers: headers});
 
-    let body = JSON.stringify( account );
-    let targetUrl = "api/v1/users/" + account.username;
+    const body = JSON.stringify( account );
+    const targetUrl = this.apiUrl + '/' + account.username;
 
     // use put for update
     return this.http.put(targetUrl, body, options)
