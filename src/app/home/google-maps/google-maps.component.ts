@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output  } from '@angular/core';
 import {GoogleApiService} from '../../services/google-api.service';
 import {loggerFactory} from '../../config/ConfigLog4j';
-//import {Story} from './models/story';
 import {isUndefined} from 'util';
 import {StoryService} from '../../services/story.service';
 import {Story} from '../../models/story';
@@ -22,7 +21,6 @@ export class GoogleMapsComponent implements OnInit {
 
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
-  //treeMarker: any;
   input: any;
   searchBox: any;
   latlng;
@@ -153,8 +151,6 @@ export class GoogleMapsComponent implements OnInit {
             bounds.extend(place.geometry.location);
           }
         });
-
-        //console.log('bounds=', bounds);
         this.map.fitBounds(bounds);
         const posString = lat + ',' + lng;
         this.log.debug('in search box listener. posString=' + posString);
@@ -162,12 +158,8 @@ export class GoogleMapsComponent implements OnInit {
       }); //end places changed
 
         this.map.addListener('click', e => {
-        //placeMarkerAndPanTo(e.latLng, this.map);
-        //console.log('map click detected at lat', e.latLng.lat().valueOf());
-        //this.story.locationLat = e.latLng.lat();
-        //this.testfunconclass(e.latLng.lat());
           this.map.panTo(e.latLng);
-          //this.onPositionChanged.emit(e.latLng.toString());
+
       });
 
 
