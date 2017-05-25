@@ -52,16 +52,27 @@
               formControlName="title"  rows="1" required></textarea>
           </div>
     </div>
+  </div><div class="row">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label imgUpload="botName">Upload photo(s)</label>
+      <image-upload id="imgUpload"[max]="5"
+                    (onFileUploadFinish)="imageUploaded($event)"
+                    [maxFileSize]="2048576">
+      </image-upload>
+    </div>
   </div>
+</div>
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <label for="ckMap">Location</label>
+          <label for="ckMap">Location and type of feature</label>
+          <div class="checkbox">
           <label><input type="checkbox" id="ckMap" formControlName="ckMap">Select in Map</label>
-          <label class="center-block"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>
-          <label class="center-block"><input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>
-          <!--<input type="radio" formControlName="coordChoice" value="singleTree"  id="coordChoiceSingle" name="coordChoiceSingle"> Single tree-->
-          <!--<input type="radio" formControlName="coordChoiceArea" value="region" id="coordChoiceArea" name="coordChoiceArea"> Region-->
+          </div>
+            <label class="radio-inline"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>
+            <label class="radio-inline"> <input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>
+
         </div>
       </div>
     </div>
@@ -71,21 +82,26 @@
       <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
-      <app-google-maps (onPositionChanged)="onPositionChanged($event)"></app-google-maps>
+      <app-google-maps (onPositionChanged)="onPositionChanged($event)" [useTreePosMarker]="false" [useDrawingManager]="true"></app-google-maps>
 
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <div class="form-group">
-        <!-- this just shows one way of doing it, call a function
-        <div *ngIf="isSingleTree()"> -->
-        <!-- this does the same thing just in code here -->
         <div *ngIf="coordChoice.value === 'singleTree'">
-        <label> Latitude</label><input id="latitude" name="latitude" formControlName="latitude" rows="1" placeholder="Latitude" [(ngModel)]="storyModel.locationLat" required>
-        <label> Longitude</label> <input id="longitude" name="longitude" formControlName="longitude" rows="1" placeholder="Longitude" [(ngModel)]="storyModel.locationLong" required>
-      </div>
+          <div class="form-group">
+          <div class="col-md-6">
+            <label for="latitude"> Latitude<input id="latitude" name="latitude" formControlName="latitude"
+                                                  title="Latitudes must be in the format...." required></label>
+          </div>
+          </div>
+          <div class="form-group">
+          <div class="col-md-6">
+            <label for="longitude"> Longitude <input id="longitude" name="longitude" formControlName="longitude"
+                                                     title="Longitudes must be in the format...." required></label>
+          </div>
+          </div>
       </div>
     </div>
   </div>
@@ -98,24 +114,13 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <div class="form-group">
-        <label imgUpload="botName">Upload photo</label>
-         <image-upload id="imgUpload"[max]="5"
-                       (onFileUploadFinish)="imageUploaded($event)"
-                       [maxFileSize]="2048576">
-         </image-upload>
-      </div>
-    </div>
-  </div>
+
   <div class="row">
     <div class="col-md-12">
   <div class="form-group">
     <label for="description">Your tree story</label>
     <textarea id="description" name="description" class="form-control"
               formControlName="description"  rows="3" required></textarea>
-
   </div>
   </div>
   </div>

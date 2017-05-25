@@ -8,13 +8,13 @@ declare var jQuery: any;
 
 function passwordValidator(control: FormControl): { [s: string]: boolean } {
 
-    let pattern = /(?=^.{6,15}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{";:"?/>.<,])(?!.*\s).*$/;
+    const pattern = /(?=^.{6,15}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{";:"?/>.<,])(?!.*\s).*$/;
     //
     return control.value.match(pattern) ? null : {pattern: true};
 }
 function emailValidator(control: FormControl): { [s: string]: boolean } {
 
-    let pattern =  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const pattern =  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     //
     return control.value.match(pattern) ? null : {pattern: true};
 }

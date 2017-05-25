@@ -5,6 +5,7 @@ import {loggerFactory} from '../config/ConfigLog4j';
 import {isUndefined} from 'util';
 import {StoryService} from '../services/story.service';
 import {Story} from '../models/story';
+//import OverlayCompleteEvent = google.maps.drawing.OverlayCompleteEvent;
 declare const google: any;
 //import Marker = google.maps.Marker;
 
@@ -18,13 +19,18 @@ declare const google: any;
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
   @Output() onPositionChanged = new EventEmitter<string>();
+  @Output() onPlaceChanged = new EventEmitter<string>();
+  @Input() displayAllStories = false;
+  @Input() useTreePosMarker = false;
+  @Input() useDrawingManager = false;
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
   treeMarker: any;
   input: any;
   searchBox: any;
   latlng;
-  @Input() displayAllStories = false;
+  drawingManager;
+
   errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
   markers= [];
@@ -40,15 +46,38 @@ export class GoogleMapsComponent implements OnInit {
       center: this.latlng,
       zoom: 4
     });
-    this.treeMarker = new google.maps.Marker({
-      position: this.latlng,
-      map: this.map,
-      draggable: true,
-      title: 'Tree position'
+    if (this.useTreePosMarker) {
+      this.treeMarker = new google.maps.Marker({
+        position: this.latlng,
+        map: this.map,
+        draggable: true,
+        title: 'Tree position'
+      });
+    }
+    this.drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.MARKER,
+      drawingControl: this.useDrawingManager,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_RIGHT,
+        drawingModes: ['marker', 'rectangle']
+      },
+      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
+      polygonOptions: {editable: true, draggable: true},
+      rectangleOptions: {editable: true, draggable: true}
+      // circleOptions: {
+      //   fillColor: '#ffff00',
+      //   fillOpacity: 1,
+      //   strokeWeight: 5,
+      //   clickable: false,
+      //   editable: true,
+      //   zIndex: 1
+      // }
     });
+
+    this.drawingManager.setMap(this.map);
+
     // if displayAllStories = true get all stories from DB
-    if (this.displayAllStories)
-    {
+    if (this.displayAllStories){
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
     }
@@ -57,12 +86,26 @@ export class GoogleMapsComponent implements OnInit {
   }
   // parse them and add them to map
   successfulRetrieve(stories: Story[]){
+    // TODO remove this when migrating environments - find a way to get this from env var
 
-    //let tempMarkers: google.maps.Marker[] = [];
+    const baseServerUrl = 'http://localhost:3000';
 
     for (const story of stories) {
       const position = new google.maps.LatLng(story.latitude, story.longitude);
       const marker = new google.maps.Marker();
+      // this should be formatted in HTML tags - put in for loop
+      let content = '';
+      // console.log('in GM retrieve: story= ', story);
+      if (!isUndefined(story.photoLinks)) {
+        for (const uri of story.photoLinks)
+        {
+          content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'
+            + ' style=\"width:50px;height:50px;margin:5px\">';
+          this.log.debug('uri of story.photolinks:' + content);
+        }
+      }
+      content = content + ('<p>' + story.content + '</p>');
+      this.log.debug('final content: ' + content);
       marker.setPosition(position);
       marker.setTitle(story.title);
       marker.setMap(this.map);
@@ -70,25 +113,24 @@ export class GoogleMapsComponent implements OnInit {
         this.log.debug('Click called. Marker title=' + marker.getTitle());
         this.log.debug('Click called. content=' + story.content);
         const infowindow = new google.maps.InfoWindow({
-          content: story.content,
+          content: content,
           position: marker.getPosition(),
-          maxWidth: 100,
+          maxWidth: 200,
+          maxHeight: 200
           });
          infowindow.open(this.map);
       });
       this.markers.push(marker);
 
     }
-
-
-
-
   }
+
   failedRetrieve(error: any) {
     this.log.error('failed retrieve: ' + error);
     this.errorMsg = error;
 
   }
+
 
 
   ngOnInit() {
@@ -110,22 +152,6 @@ export class GoogleMapsComponent implements OnInit {
 
       this.map.addListener('bounds_changed', e => {
 
-        /*let ok = true;
-        if (this.map === undefined)
-        {
-          console.log('map is undefined');
-        }
-
-        if (e.getBounds() === undefined){
-          console.log('getBounds is undefined');
-          ok = false;
-        }
-        if (ok) {
-          console.log('bounds changed: bounds=', this.map.getBounds());
-          searchBox.setBounds(this.map.getBounds());
-        } else {
-          setTimeout(this.map.getBounds(), 500);
-        }*/
         if (this.map.getBounds() !== undefined) {
           this.searchBox.setBounds(this.map.getBounds());
         } else {
@@ -134,15 +160,39 @@ export class GoogleMapsComponent implements OnInit {
 
 
       });
+
+      google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
+        if (e.type === 'circle') {
+          const radius = e.overlay.getRadius();
+          this.log.debug('drawing man. Radius=' + radius);
+        }
+        else if (e.type === 'polygon'){
+          const paths = e.overlay.getPaths();
+          this.log.debug('drawing man. paths=' + paths);
+        }
+        else if (e.type === 'rectangle'){
+          const bounds = e.overlay.getBounds();
+          this.log.debug('drawing man. bounds=' + bounds);
+        }
+        else if (e.type === 'marker'){
+
+          const pos = e.overlay.getPosition();
+          this.log.debug('drawing man. pos=' + pos);
+          this.onPositionChanged.emit(e.overlay.getPosition());
+
+        }
+
+      });
       //let markers = [];
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
       this.searchBox.addListener('places_changed', e => {
         const places = this.searchBox.getPlaces();
+        let lat = 0;
+        let lng = 0;
 
-        if (places.length === 0) {
-          return;
-        }
+        console.log('in searchBox. places=', places);
+
 
         /*// Clear out the old markers.
         markers.forEach(function(marker) {
@@ -157,21 +207,11 @@ export class GoogleMapsComponent implements OnInit {
             console.log('Returned place contains no geometry');
             return;
           }
-          /*const icon = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25)
-          };*/
-
-          /*// Create a marker for each place.
-          markers.push(new google.maps.Marker({
-            map: this.map,
-            icon: icon,
-            title: place.name,
-            position: place.geometry.location
-          }));*/
+          const latlng = place.geometry.location;
+          lat = latlng.lat().toFixed(6);
+          lng = latlng.lng().toFixed(6);
+          console.log('in search box places. lat=', lat, 'lng', lng);
+          console.log('place.geometry.location=', latlng);
 
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
@@ -181,30 +221,33 @@ export class GoogleMapsComponent implements OnInit {
           }
         });
 
-        console.log('bounds=', bounds);
+        //console.log('bounds=', bounds);
         this.map.fitBounds(bounds);
+        const posString = lat + ',' + lng;
+        this.log.debug('in search box listener. posString=' + posString);
+        this.onPlaceChanged.emit(posString);
       }); //end places changed
 
 
-
-
-
-
-      this.treeMarker.addListener('dragend', e => {
-        console.log('marker dragged to', e.latLng.lat());
-        this.onPositionChanged.emit(e.latLng);
-        //this.onPositionChanged.emit(e.latLng.toString());
-      });
-
+      if (this.useTreePosMarker) {
+        this.treeMarker.addListener('dragend', e => {
+          // console.log('marker dragged to', e.latLng.lat());
+          this.onPositionChanged.emit(e.latLng);
+          //this.onPositionChanged.emit(e.latLng.toString());
+        });
+      }
 
      // this.map.addListener('click', function(e) {
         this.map.addListener('click', e => {
         //placeMarkerAndPanTo(e.latLng, this.map);
-        console.log('map click detected at lat', e.latLng.lat().valueOf());
+        //console.log('map click detected at lat', e.latLng.lat().valueOf());
         //this.story.locationLat = e.latLng.lat();
         //this.testfunconclass(e.latLng.lat());
           this.map.panTo(e.latLng);
-          this.treeMarker.setPosition(e.latLng);
+          if (this.useTreePosMarker) {
+            this.treeMarker.setPosition(e.latLng);
+          }
+
           //this.story.locationLat = e.latLng.latitude;
           //this.story.locationLong = e.latLng.longitude;
           this.onPositionChanged.emit(e.latLng.toString());

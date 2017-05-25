@@ -1,6 +1,7 @@
 /**
  * Created by KatieMills on 27/4/17.
  */
+
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
@@ -12,6 +13,9 @@ import {User} from '../user/models/user';
 import {AppConsts} from '../app.consts';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
+
+declare var google: any;
+
 
 
 @Injectable()
@@ -57,6 +61,16 @@ export class StoryService {
     const options = new RequestOptions({ headers: headers });
 
     return this.http.get(this.queryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
+  public getStoriesWithinRadiusPoint(point: string): Observable<Story[]> {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    //headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
+    const pointQueryUrl = this.queryUrl + '?' + 'point=' + point;
+    this.log.debug('in getStoriesWithinRadiusPoint. queryUrl=' + pointQueryUrl);
+    return this.http.get(pointQueryUrl, options)
       .map(this.extractGetData)
       .catch(this.handleError);
   }
