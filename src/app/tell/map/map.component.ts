@@ -3,7 +3,7 @@ import {StoryService} from '../../services/story.service';
 import {Story} from '../../models/story';
 import {isUndefined} from 'util';
 import {loggerFactory} from '../../config/ConfigLog4j';
-import {GoogleApiService} from './services/google-api.service';
+import {GoogleApiService} from '../../services/google-api.service';
 
 
 declare const google: any;

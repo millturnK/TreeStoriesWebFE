@@ -11,7 +11,8 @@ import {ImageUploadModule} from 'angular2-image-upload';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import { MapComponent } from './map/map.component';
-import {GoogleApiService} from './map/services/google-api.service';
+import { GoogleApiService } from '../services/google-api.service';
+
 
 @NgModule({
   declarations: [

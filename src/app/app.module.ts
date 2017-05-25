@@ -13,7 +13,7 @@ import {AppConsts} from "./app.consts";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TellModule} from "./tell/tell.module";
-import {GoogleApiService} from "./home/google-maps/services/google-api.service";
+import {GoogleApiService} from "./services/google-api.service";
 import {ImageUploadModule} from 'angular2-image-upload';
 
 
