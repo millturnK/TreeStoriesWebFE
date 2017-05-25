@@ -4,7 +4,9 @@
 
     <h1>
       {{title}}
-    </h1><button class="btn btn-default" type="button" (click)="openTell()">Tell my tree story</button>
+    </h1>
+    <button class="btn btn-default" type="button" (click)="openTell()" *ngIf="_user.loggedin">Tell my tree story</button>
+    <button class="btn btn-default" type="button" disabled *ngIf="!_user.loggedin">Tell my tree story</button>
   </div>
 </div>
 <div class="row">

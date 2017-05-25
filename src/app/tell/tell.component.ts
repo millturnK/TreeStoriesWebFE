@@ -41,7 +41,7 @@ export class TellComponent
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
-  source= new FormControl('', Validators.required);
+  //source= new FormControl('', Validators.required);
   coordChoice = new FormControl('singleTree');
   // TODO getting error can't match value of undefined
   //latitude = new FormControl('', [Validators.required, latitudeValidator]);
@@ -49,11 +49,12 @@ export class TellComponent
   latitude = new FormControl('', [Validators.required, latitudeValidator]);
   longitude = new FormControl('', [Validators.required, longitudeValidator]);
   ckMap  = new FormControl('');
+
   tellStoryForm = new FormGroup({
     title: this.title,
     botName: this.botName,
     description: this.description,
-    source: this.source,
+   // source: this.source,
     coordChoice: this.coordChoice,
     latitude: this.latitude,
     longitude: this.longitude,
@@ -75,7 +76,7 @@ export class TellComponent
     constructor(private router: Router, private _user: User, private _storyService: StoryService) {
         /*this.storyModel = new Story();*/
         // TODO implement login and pass in name, remove placeholder
-        _user.username = 'Katie Test';
+        // _user.username = 'Katie Test';
         this.storyModel.contributors = _user.username;
     }
 
@@ -96,12 +97,13 @@ export class TellComponent
       const title = this.title.value;
       const botName = this.botName.value;
       const description = this.description.value;
-      const source = this.source.value;
+     // const source = this.source.value;
 
       this.storyModel.title = title;
       this.storyModel.botName = botName;
       this.storyModel.content = description;
-      this.storyModel.contributors = source;
+      //this.storyModel.contributors = source;
+      // need to set contributor to the user's username
       this.storyModel.latitude = this.latitude.value;
       this.storyModel.longitude = this.longitude.value;
       console.log('onSubmit $event.file=', event);
@@ -120,6 +122,9 @@ export class TellComponent
     //   this._router.navigate(["/curate"]);
     // }, 4000);
   }
+
+
+
   imageUploaded($event){
     this.log.debug('imageUploaded called');
      console.log('imageUploaded called. Event.file:', $event.file);
