@@ -6,6 +6,7 @@ import {loggerFactory} from '../../config/ConfigLog4j';
 import {GoogleApiService} from './services/google-api.service';
 
 
+
 declare const google: any;
 
 @Component({
@@ -153,10 +154,6 @@ export class MapComponent implements OnInit {
           const radius = e.overlay.getRadius();
           this.log.debug('drawing man. Radius=' + radius);
         }
-        else if (e.type === 'polygon'){
-          const paths = e.overlay.getPaths();
-          this.log.debug('drawing man. paths=' + paths);
-        }
         else if (e.type === 'rectangle'){
           const bounds = e.overlay.getBounds();
           this.log.debug('drawing man. bounds=' + bounds);
@@ -177,6 +174,7 @@ export class MapComponent implements OnInit {
         const places = this.searchBox.getPlaces();
         let lat = 0;
         let lng = 0;
+        let latlng = new google.maps.LatLng(0,0);
 
         console.log('in searchBox. places=', places);
 
@@ -188,7 +186,7 @@ export class MapComponent implements OnInit {
             console.log('Returned place contains no geometry');
             return;
           }
-          const latlng = place.geometry.location;
+          latlng = place.geometry.location;
           lat = latlng.lat().toFixed(6);
           lng = latlng.lng().toFixed(6);
           console.log('in search box places. lat=', lat, 'lng', lng);
@@ -207,7 +205,8 @@ export class MapComponent implements OnInit {
         const posString = lat + ',' + lng;
         this.log.debug('in search box listener. posString=' + posString);
         // pan to new position
-        this.map.panTo(lat, lng);
+        this.map.panTo(latlng);
+        this.log.debug('panned map');
       }); //end places changed
 
 

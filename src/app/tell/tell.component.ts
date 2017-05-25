@@ -147,5 +147,9 @@ export class TellComponent
     return false;
   }
 
+  ngOnDestroy(){
+
+  }
+
 
 }
