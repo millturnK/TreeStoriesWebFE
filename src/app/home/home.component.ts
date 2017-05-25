@@ -15,8 +15,6 @@ export class HomeComponent implements OnInit {
   title = 'Tree Stories';
   stories: Story[]= [];
 
-  figtree = '45';
-
   private log = loggerFactory.getLogger('component.Home');
   constructor(private _router: Router, private _user: User, private _storyService: StoryService)
   {
@@ -64,21 +62,6 @@ export class HomeComponent implements OnInit {
 
   }
 
-  btnPressed() {
-    console.log("Button pressed");
-    this.figtree = "Button pressed";
-    this.stories = [];
-
-    const story = new Story();
-    story.title = "tstt";
-    story.content = 'test content';
-    story.contributors = 'test contrib';
-    story.photoLinks = [];
-    story.latitude = 56.5;
-    story.longitude = 45.6;
-
-    this.stories.push( story);
-  }
 
 
   onPlaceChanged(newPos) {
