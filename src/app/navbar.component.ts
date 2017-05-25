@@ -2,6 +2,8 @@ import {Component, Input, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from './user/models/user';
 
+declare var jQuery: any;
+
 @Component({
   selector: 'app-navbar',
   templateUrl: 'navbar.component.html',
@@ -14,14 +16,18 @@ export class NavbarComponent implements OnInit {
 
     // tag in html that we are referring to here
     // means no need anymore for jquery.
-    @ViewChild('ddmenu') dropDownMenu: ElementRef;
+    //@ViewChild('ddmenu') dropDownMenu: ElementRef;
 
-  constructor(private _router: Router) {}
+  constructor(private _router: Router, private elementRef: ElementRef) {}
 
   ngOnInit(): any {
     // Need to pass in the URL to redirect to if not logged in
     // Look, no jquery, Maximillan is awesome.
-    this.dropDownMenu.nativeElement.dropdown();
+    //this.dropDownMenu.nativeElement.dropdown();
+
+    jQuery(this.elementRef.nativeElement).find('.dropdown-toggle')
+      .dropdown();
+
   }
 
 
