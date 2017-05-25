@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output  } from '@angular/core';
-import {GoogleApiService} from './services/google-api.service';
+import {GoogleApiService} from '../../services/google-api.service';
 import {loggerFactory} from '../../config/ConfigLog4j';
 //import {Story} from './models/story';
 import {isUndefined} from 'util';
