@@ -1,18 +1,18 @@
-import { Component, Output, EventEmitter } from "@angular/core";
-import { AuthenticationService } from "./services/authentication.service";
+import { Component, Output, EventEmitter } from '@angular/core';
+import { AuthenticationService } from './services/authentication.service';
 
 
-import { User } from "./models/user";
-import { Router } from "@angular/router";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import {AppConsts} from "../app.consts";
+import { User } from './models/user';
+import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {AppConsts} from '../app.consts';
 
 
 @Component({
-    selector: "login-form",
+    selector: 'app-login-form',
     providers: [AuthenticationService],
-    templateUrl: "login.component.html",
-    styleUrls: ["login.components.css"]
+    templateUrl: 'login.component.html',
+    styleUrls: ['login.components.css']
 
 })
 
@@ -20,8 +20,8 @@ export class LoginComponent {
 
     appConsts: AppConsts;
 
-    username = new FormControl("", Validators.required);
-    password = new FormControl("", Validators.required);
+    username = new FormControl('', Validators.required);
+    password = new FormControl('', Validators.required);
 
     loginForm = new FormGroup({
         username: this.username,
@@ -29,7 +29,7 @@ export class LoginComponent {
     });
 
 
-    public errorMsg = "";
+    public errorMsg = '';
 
     constructor(private _router: Router, private _user: User,
                 private _service: AuthenticationService, _appConsts: AppConsts) {
@@ -39,22 +39,22 @@ export class LoginComponent {
 
     onSubmit(form: any): void {
 
-        let user = new User();
+        const user = new User();
         user.username = this.username.value;
         user.password = this.password.value;
 
         // clear any existing error
-        this.errorMsg = "";
+        this.errorMsg = '';
 
         this._service.login( user )
-                            .subscribe( user => this.successfulLogin(user),
+                            .subscribe( auser => this.successfulLogin(auser),
                                         error => this.failedLogin(<any>error));
     }
 
 
 
     private successfulLogin(user: User) {
-        /*console.log("Login successful: ", user);*/
+        /*console.log('Login successful: ', user);*/
 
         this._user.firstname = user.firstname;
         this._user.lastname = user.lastname;
@@ -66,23 +66,22 @@ export class LoginComponent {
         this._user.role = user.role;
 
         // store the user in local storage
-        console.log("Pushing user into localstorage");
-        localStorage.setItem("currentUser", JSON.stringify(user));
+        console.log('Pushing user into localstorage');
+        localStorage.setItem('currentUser', JSON.stringify(user));
 
         // Successful, so route to main webapp page.
-        this._router.navigate(["/main"]);
+        this._router.navigate(['/main']);
 
     }
 
      private failedLogin(error: any) {
-       console.log("Login failed: ", error);
+       console.log('Login failed: ', error);
 
-       if (error === "Account inactive") {
-           this.errorMsg = "Your account is inactive. Please complete the registration process first and then login. " +
-                   "As part of registration you should have received an email that contains a link with an activation key. " +
-                   "That link will take you to the payment page";
-       }
-       else {
+       if (error === 'Account inactive') {
+           this.errorMsg = 'Your account is inactive. Please complete the registration process first and then login. ' +
+                   'As part of registration you should have received an email that contains a link with an activation key. ' +
+                   'That link will take you to the payment page';
+       } else {
            this.errorMsg = error;
        }
 
@@ -95,9 +94,9 @@ export class LoginComponent {
 
 
   forgot() {
-    /*console.log("Forgot link clicked");*/
+    /*console.log('Forgot link clicked');*/
     // send them back to the home page
-    this._router.navigate(["/forgot"]);
+    this._router.navigate(['/forgot']);
 
   }
 
