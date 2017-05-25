@@ -19,6 +19,7 @@ declare const google: any;
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
   @Output() onPositionChanged = new EventEmitter<string>();
+  @Output() onPlaceChanged = new EventEmitter<string>();
   @Input() displayAllStories = false;
   @Input() useTreePosMarker = false;
   @Input() useDrawingManager = false;
@@ -187,10 +188,11 @@ export class GoogleMapsComponent implements OnInit {
       // more details for that place.
       this.searchBox.addListener('places_changed', e => {
         const places = this.searchBox.getPlaces();
+        let lat = 0;
+        let lng = 0;
 
-        if (places.length === 0) {
-          return;
-        }
+        console.log('in searchBox. places=', places);
+
 
         /*// Clear out the old markers.
         markers.forEach(function(marker) {
@@ -205,21 +207,11 @@ export class GoogleMapsComponent implements OnInit {
             console.log('Returned place contains no geometry');
             return;
           }
-          /*const icon = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25)
-          };*/
-
-          /*// Create a marker for each place.
-          markers.push(new google.maps.Marker({
-            map: this.map,
-            icon: icon,
-            title: place.name,
-            position: place.geometry.location
-          }));*/
+          const latlng = place.geometry.location;
+          lat = latlng.lat().toFixed(6);
+          lng = latlng.lng().toFixed(6);
+          console.log('in search box places. lat=', lat, 'lng', lng);
+          console.log('place.geometry.location=', latlng);
 
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
@@ -229,8 +221,11 @@ export class GoogleMapsComponent implements OnInit {
           }
         });
 
-        console.log('bounds=', bounds);
+        //console.log('bounds=', bounds);
         this.map.fitBounds(bounds);
+        const posString = lat + ',' + lng;
+        this.log.debug('in search box listener. posString=' + posString);
+        this.onPlaceChanged.emit(posString);
       }); //end places changed
 
 

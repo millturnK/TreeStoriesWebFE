@@ -7,6 +7,7 @@ import {HomeComponent} from './home.component';
 import {GoogleMapsModule} from '../google-maps/google-maps.module';
 import {GoogleMapsComponent} from '../google-maps/google-maps.component';
 import {StoryService} from '../services/story.service';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {StoryService} from '../services/story.service';
     BrowserModule,
     FormsModule,
     HttpModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    CommonModule
   ],
   providers: [
     StoryService

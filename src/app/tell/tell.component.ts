@@ -10,8 +10,7 @@ import {StoryService} from '../services/story.service';
 import {isUndefined} from 'util';
 declare const google: any;
 
-//declare const latitudeValPattern = '/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/';
-//const longValPatter = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
   //console.log('in lat val. control=', control);
@@ -80,22 +79,6 @@ export class TellComponent
         this.storyModel.contributors = _user.username;
     }
 
-  // latitudeValidator(control: FormControl): { [s: string]: boolean } {
-  //
-  //   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
-  //   //
-  //   return control.value.match(pattern) ? null : {pattern: true};
-  //
-  //
-  // }
-  // longitudeValidator(control: FormControl): { [s: string]: boolean } {
-  //
-  //   console.log('in long val. control=', control.value);
-  //   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
-  //
-  //   //
-  //   return control.value.match(pattern) ? null : {pattern: true};
-  // }
 
    // onPositionChanged(newPos: string){
   onPositionChanged(newPos) {

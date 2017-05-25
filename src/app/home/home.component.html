@@ -10,16 +10,27 @@
 <div class="row">
   <div class="col-md-12">
 <h3>Mapped tree stories</h3>
-    <app-google-maps [displayAllStories]="true" [useTreePosMarker]="false" [useDrawingManager]="false"></app-google-maps>
+    <app-google-maps [displayAllStories]="true" [useTreePosMarker]="false" [useDrawingManager]="false" (onPlaceChanged)="onPlaceChanged($event)"></app-google-maps>
   </div>
 </div>
+<div class="row"  *ngFor="let story of stories">
+  <div class="col-md-12">
+    <p>{{story.title}}.Submitted by: {{story.contributors}}</p>
+
+  </div>
+</div>
+
+All stories = {{stories}}
+Figtree = {{figtree}}
+
+<button class="btn btn-danger" (click)="btnPressed()">Click ME</button>
 
 <div class="row">
   <div class="col-md-12">
     <!--<div class="table-scrollable">-->
     <div class="panel-group scrollPanel" id="accordion" role="tablist" aria-multiselectable="true">
 
-      <div class="panel panel-default" *ngFor="let story of stories;let i=index">
+      <div class="panel panel-default" *ngFor="let story of getStories();let i=index">
         <div class="panel-heading" role="tab" [id]="'id'+i">
         <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" [href]="'#collapse'+i" aria-expanded="false" aria-controls="collapse">
