@@ -121,7 +121,7 @@ export class TellComponent
     // }, 4000);
   }
   imageUploaded($event){
-      this.log.debug('imageUploaded called');
+    this.log.debug('imageUploaded called');
      console.log('imageUploaded called. Event.file:', $event.file);
       //pull out lat.lng
     this.pictures.push(new Picture(<File> $event.file));

@@ -11,10 +11,12 @@ import {GoogleMapsModule} from '../google-maps/google-maps.module';
 import {ImageUploadModule} from 'angular2-image-upload';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
-    TellComponent
+    TellComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,

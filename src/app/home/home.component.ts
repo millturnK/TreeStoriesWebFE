@@ -15,8 +15,6 @@ export class HomeComponent implements OnInit {
   title = 'Tree Stories';
   stories: Story[]= [];
 
-  figtree = '45';
-
   private log = loggerFactory.getLogger('component.Home');
   constructor(private _router: Router, private _user: User, private _storyService: StoryService)
   {

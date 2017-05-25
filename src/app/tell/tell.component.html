@@ -82,7 +82,7 @@
       <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
-      <app-google-maps (onPositionChanged)="onPositionChanged($event)" [useTreePosMarker]="false" [useDrawingManager]="true"></app-google-maps>
+      <app-map (onPositionChanged)="onPositionChanged($event)"></app-map>
 
     </div>
   </div>
