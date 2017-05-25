@@ -13,17 +13,6 @@
     <app-google-maps (onPlaceChanged)="onPlaceChanged($event)"></app-google-maps>
   </div>
 </div>
-<div class="row"  *ngFor="let story of stories">
-  <div class="col-md-12">
-    <p>{{story.title}}.Submitted by: {{story.contributors}}</p>
-
-  </div>
-</div>
-
-All stories = {{stories}}
-Figtree = {{figtree}}
-
-<button class="btn btn-danger" (click)="btnPressed()">Click ME</button>
 
 <div class="row">
   <div class="col-md-12">

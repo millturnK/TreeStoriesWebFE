@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output  } from '@angular/core';
 import {GoogleApiService} from './services/google-api.service';
-import {loggerFactory} from '../config/ConfigLog4j';
+import {loggerFactory} from '../../config/ConfigLog4j';
 //import {Story} from './models/story';
 import {isUndefined} from 'util';
-import {StoryService} from '../services/story.service';
-import {Story} from '../models/story';
-//import OverlayCompleteEvent = google.maps.drawing.OverlayCompleteEvent;
+import {StoryService} from '../../services/story.service';
+import {Story} from '../../models/story';
+
 declare const google: any;
-//import Marker = google.maps.Marker;
 
 
 
@@ -18,11 +17,9 @@ declare const google: any;
 })
 // TODO detect click and drag on marker to new position
 export class GoogleMapsComponent implements OnInit {
-  //@Output() onPositionChanged = new EventEmitter<string>();
+
   @Output() onPlaceChanged = new EventEmitter<string>();
- // @Input() displayAllStories = false;
- // @Input() useTreePosMarker = false;
- // @Input() useDrawingManager = false;
+
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
   //treeMarker: any;
