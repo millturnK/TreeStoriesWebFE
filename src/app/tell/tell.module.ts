@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import {GoogleMapsComponent} from './google-maps.component';
 //import {TellService} from './services/tell.service';
 import {GoogleMapsComponent} from '../home/google-maps/google-maps.component';
-import {GoogleMapsModule} from '../home/google-maps/google-maps.module';
 import {ImageUploadModule} from 'angular2-image-upload';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
