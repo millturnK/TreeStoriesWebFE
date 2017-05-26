@@ -109,7 +109,27 @@
           </div>
       </div>
     </div>
-  </div>
+  </div> <!-- end choice of single tree -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngIf="coordChoice.value === 'area'">
+        <div class="form-group">
+          <div class="col-md-6">
+            <label for="latitude"> Top Left Corner Coords</label> <input id="areaPointsTopLeft" name="areaPointsTopLeft" class="form-control" formControlName="areaPointsTopLeft"
+                                                  title="...must be in the format...." required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6">
+            <label for="longitude"> Bottom Right Corner Coords </label><input id="areaPointsBottomRight" name="areaPointsBottomRight" class="form-control" formControlName="areaPointsBottomRight"
+                                                     title="... must be in the format...." required>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- end choice of area -->
+
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">

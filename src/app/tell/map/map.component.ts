@@ -52,70 +52,25 @@ export class MapComponent implements OnInit {
         drawingModes: ['marker', 'rectangle']
       },
       markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
-      polygonOptions: {editable: true, draggable: true},
       rectangleOptions: {editable: true, draggable: true}
-      // circleOptions: {
-      //   fillColor: '#ffff00',
-      //   fillOpacity: 1,
-      //   strokeWeight: 5,
-      //   clickable: false,
-      //   editable: true,
-      //   zIndex: 1
-      // }
     });
 
     this.drawingManager.setMap(this.map);
 
 
   }
-  // parse them and add them to map
-  successfulRetrieve(stories: Story[]) {
-    // TODO remove this when migrating environments - find a way to get this from env var
-
-    const baseServerUrl = 'http://localhost:3000';
-
-    for (const story of stories) {
-      const position = new google.maps.LatLng(story.latitude, story.longitude);
-      const marker = new google.maps.Marker();
-      // this should be formatted in HTML tags - put in for loop
-      let content = '';
-      // console.log('in GM retrieve: story= ', story);
-      if (!isUndefined(story.photoLinks)) {
-        for (const uri of story.photoLinks)
-        {
-          content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'
-            + ' style=\"width:50px;height:50px;margin:5px\">';
-          this.log.debug('uri of story.photolinks:' + content);
-        }
-      }
-      content = content + ('<p>' + story.content + '</p>');
-      this.log.debug('final content: ' + content);
-      marker.setPosition(position);
-      marker.setTitle(story.title);
-      marker.setMap(this.map);
-      marker.setIcon('../assets/treeMarker.png');
-      marker.addListener('click', event => {
-        this.log.debug('Click called. Marker title=' + marker.getTitle());
-        this.log.debug('Click called. content=' + story.content);
-        const infowindow = new google.maps.InfoWindow({
-          content: content,
-          position: marker.getPosition(),
-          maxWidth: 200,
-          maxHeight: 200
-        });
-        infowindow.open(this.map);
-      });
-      this.markers.push(marker);
-
-    }
-  }
-
-  failedRetrieve(error: any) {
-    this.log.error('failed retrieve: ' + error);
-    this.errorMsg = error;
+  deleteMarker(){
+    this.log.debug('deleteMarkers');
+    this.treeMarker.setMap(null);
+    this.markers = [];
 
   }
+  deleteRectanlge(){
+    this.log.debug('deleteRectangle');
+    this.treeMarker.setMap(null);
+    this.markers = [];
 
+  }
 
 
   ngOnInit() {
@@ -145,21 +100,33 @@ export class MapComponent implements OnInit {
 
 
       });
+      google.maps.event.addListener(this.drawingManager, 'markercomplete', marker => {
+        console.log('markerComplete');
+        this.treeMarker = marker;
+        // this.drawingManager.setOptions({
+        //   drawingControl: false
+        // });
+
+      });
+      google.maps.event.addListener(this.drawingManager, 'rectanglecomplete', function(retangle) {
+        console.log('rectangleComplete');
+        // this.drawingManager.setOptions({
+        //   drawingControl: false
+        // });
+      });
+
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
-        if (e.type === 'circle') {
-          const radius = e.overlay.getRadius();
-          this.log.debug('drawing man. Radius=' + radius);
-        } else if (e.type === 'polygon') {
-          const paths = e.overlay.getPaths();
-          this.log.debug('drawing man. paths=' + paths);
-        } else if (e.type === 'rectangle') {
+        if (e.type === 'rectangle'){
           const bounds = e.overlay.getBounds();
-          this.log.debug('drawing man. bounds=' + bounds);
-        } else if (e.type === 'marker') {
+          console.log('drawing man. bounds=' + bounds);
+          // TODO emit pos changed for rectangle and switch between area or points, setting drawing manager accordingly
+
+        }
+        else if (e.type === 'marker'){
 
           const pos = e.overlay.getPosition();
-          this.log.debug('drawing man. pos=' + pos);
+          console.log('drawing man. pos=' + pos);
           this.onPositionChanged.emit(e.overlay.getPosition());
 
         }
@@ -212,24 +179,10 @@ export class MapComponent implements OnInit {
       }); // end places changed
 
 
-      // if (this.useTreePosMarker) {
-      //   this.treeMarker.addListener('dragend', e => {
-      //     // console.log('marker dragged to', e.latLng.lat());
-      //     this.onPositionChanged.emit(e.latLng);
-      //     //this.onPositionChanged.emit(e.latLng.toString());
-      //   });
-      // }
-
       // this.map.addListener('click', function(e) {
       this.map.addListener('click', e => {
-
-        this.ngZone.run(() => {
-
-          this.map.panTo(e.latLng);
-          this.onPositionChanged.emit(e.latLng.toString());
-        });
-
-
+        this.map.panTo(e.latLng);
+        this.onPositionChanged.emit(e.latLng.toString());
       });
 
 

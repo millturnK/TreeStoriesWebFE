@@ -145,12 +145,8 @@ export class TellComponent {
     this.errorMessage = error;
   }
 
-    /*locate(){
-       // alert("Locate called");
-        this.router.navigate(["/locate"]);
-    }*/
 
-
+  // TODO display map drawing tool accordingly
   isSingleTree(): boolean {
     if (this.coordChoice.value === 'singleTree') {
       console.log('single tree checked: ', this.coordChoice.value);
@@ -158,6 +154,7 @@ export class TellComponent {
     }
     return false;
   }
+
 
 
 }
