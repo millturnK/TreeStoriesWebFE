@@ -8,6 +8,7 @@ import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';
 import {isUndefined} from 'util';
+import {CoordsFromPhoto} from './coordsFromPhoto';
 declare const google: any;
 
 
@@ -32,12 +33,8 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
     templateUrl: 'tell.component.html'
 })
 // TODO allow upload of up to 5 photos
-export class TellComponent
+export class TellComponent implements OnInit
 {
-   // ngOnInit (){
-   //
-   //
-   // }
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
@@ -49,6 +46,20 @@ export class TellComponent
   latitude = new FormControl('', [Validators.required, latitudeValidator]);
   longitude = new FormControl('', [Validators.required, longitudeValidator]);
   ckMap  = new FormControl('');
+  coordsAttr: Number[] = [];
+  //let input = Observable.bindCallback()
+  //coordsSubject = new Subject();
+  coordsFromPhoto = new CoordsFromPhoto();
+
+  ngOnInit() {
+    this.coordsFromPhoto.coordsSubject.subscribe((
+      coords:Number[])=>{
+      this.coordsAttr= coords;
+      this.latitude.setValue(this.coordsAttr[0].toFixed(6));
+      this.longitude.setValue(this.coordsAttr[1].toFixed(6));
+    });
+  }
+
   tellStoryForm = new FormGroup({
     title: this.title,
     botName: this.botName,
@@ -125,6 +136,7 @@ export class TellComponent
      console.log('imageUploaded called. Event.file:', $event.file);
       //pull out lat.lng
     this.pictures.push(new Picture(<File> $event.file));
+    this.coordsFromPhoto.getCoordsFromPhoto($event.file);
   }
 
   private failedSubmit(error: any) {

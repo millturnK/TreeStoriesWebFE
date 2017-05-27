@@ -24,7 +24,9 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js"
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/exif-js/exif.js",
+        "../node_modules/dms2dec/index.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

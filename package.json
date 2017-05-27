@@ -25,6 +25,8 @@
     "angular2-image-upload": "^0.6.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
+    "dms2dec": "^1.1.0",
+    "exif-js": "^2.2.1",
     "jquery": "^3.2.1",
     "rxjs": "^5.1.0",
     "typescript-logging": "^0.3.1",

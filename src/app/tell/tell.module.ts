@@ -12,6 +12,7 @@ import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import { MapComponent } from './map/map.component';
 import { GoogleApiService } from '../services/google-api.service';
+import {ImageService} from 'angular2-image-upload/lib/image.service';
 
 
 @NgModule({
@@ -31,6 +32,6 @@ import { GoogleApiService } from '../services/google-api.service';
     // })
 
   ],
-  providers: [StoryService, GoogleApiService]
+  providers: [StoryService, GoogleApiService, ImageService]
 })
 export class TellModule { }
