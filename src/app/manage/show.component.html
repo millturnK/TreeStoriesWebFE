@@ -11,20 +11,24 @@
       </div>
     </div>
   </div>
-<!--
-  <div class="row">
-    <div class="col-md-12" height="500px">
-      <app-map (onPositionChanged)="onPositionChanged($event)"></app-map>
-    </div>
-  </div>
--->
 
+  <div class="row">
+    <div class="col-md-7">
+      <app-map-displayonly [location]="story.loc"></app-map-displayonly>
+    </div>
+
+    <div class="col-md-5">
+      <img *ngFor="let uri of story.photoLinks" src="{{uri}}" alt="tree image" style="width:75px;height:75px;margin:5px">
+    </div>
+
+  </div>
+<!--
   <div class="row" *ngIf="story.photoLinks.length > 0">
     <div class="col-md-12">
       <img *ngFor="let uri of story.photoLinks" src="{{uri}}" alt="tree image" style="width:50px;height:50px;margin:5px">
     </div>
   </div>
-
+-->
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">

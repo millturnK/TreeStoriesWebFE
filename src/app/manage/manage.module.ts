@@ -6,11 +6,13 @@ import { StoryListComponent } from './list.component';
 import {StoryService} from '../services/story.service';
 import {CommonModule} from '@angular/common';
 import {ShowComponent} from './show.component';
+import {DisplayOnlyMapComponent} from "../map/displayonly-map.component";
 
 @NgModule({
   declarations: [
     StoryListComponent,
-    ShowComponent
+    ShowComponent,
+    DisplayOnlyMapComponent
   ],
   imports: [
     BrowserModule,

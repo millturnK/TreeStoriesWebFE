@@ -1,0 +1,21 @@
+
+#infowindow-content .title {
+  font-weight: bold;
+}
+
+#infowindow-content {
+  display: none;
+}
+
+#map #infowindow-content {
+  display: inline;
+}
+
+
+
+#target {
+  width: 345px;
+}
+#map {
+  height: 300px;
+}
