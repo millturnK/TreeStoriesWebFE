@@ -1,22 +1,24 @@
 /**
- * Created by evan on 21/09/2016.
+ * Added manage routes 26/05/17.
  */
-import { Routes, RouterModule } from "@angular/router";
+import { Routes, RouterModule } from '@angular/router';
 
-import { HomeRoutes } from "./home/home.routes";
-import { ContactUsRoutes } from "./contactus/contactus.routes";
-import { UserRoutes } from "./user/user.routes";
-import {AuthGuardAdmin} from "./auth.guard.admin";
-import {AuthGuard} from "./auth.guard";
-import {AuthGuardPrivlege} from "./auth.guard.privlege";
-import {TellRoutes} from "./tell/tell.routes";
+import { HomeRoutes } from './home/home.routes';
+import { ContactUsRoutes } from './contactus/contactus.routes';
+import { UserRoutes } from './user/user.routes';
+import {AuthGuardAdmin} from './auth.guard.admin';
+import {AuthGuard} from './auth.guard';
+import {AuthGuardPrivlege} from './auth.guard.privlege';
+import {TellRoutes} from './tell/tell.routes';
+import {ManageRoutes} from './manage/manage.routes';
 
 
 const appRoutes: Routes = [
     ...HomeRoutes,
     ...ContactUsRoutes,
     ...UserRoutes,
-  ...TellRoutes
+    ...TellRoutes,
+    ...ManageRoutes
 ];
 
 export const appRoutingProviders: any[] = [

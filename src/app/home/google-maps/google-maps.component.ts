@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, EventEmitter, Output  } from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, NgZone} from '@angular/core';
 import {GoogleApiService} from '../../services/google-api.service';
 import {loggerFactory} from '../../config/ConfigLog4j';
 import {isUndefined} from 'util';
 import {StoryService} from '../../services/story.service';
 import {Story} from '../../models/story';
 
-declare const google: any;
+// declare const google: any;  // no longer required, types being picked up by @types
 
 
 
@@ -19,20 +19,27 @@ export class GoogleMapsComponent implements OnInit {
 
   @Output() onPlaceChanged = new EventEmitter<string>();
 
+  @ViewChild('search')
+  public searchElementRef: ElementRef;
+
+
+
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
+  // treeMarker: any;
   input: any;
   searchBox: any;
   latlng;
+  // zoom level for map
+  zoom = 4;
 
   errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
   markers= [];
 
-  constructor(private googleApi: GoogleApiService, private _storyService: StoryService) {}
+  constructor(private googleApi: GoogleApiService, private ngZone: NgZone, private _storyService: StoryService) {}
 
-  initialise()
-  {
+  initialise() {
     this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
@@ -42,8 +49,9 @@ export class GoogleMapsComponent implements OnInit {
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
   }
+
   // parse them and add them to map
-  successfulRetrieve(stories: Story[]){
+  successfulRetrieve(stories: Story[]) {
     // TODO remove this when migrating environments - find a way to get this from env var
 
     const baseServerUrl = 'http://localhost:3000';
@@ -74,8 +82,7 @@ export class GoogleMapsComponent implements OnInit {
         const infowindow = new google.maps.InfoWindow({
           content: content,
           position: marker.getPosition(),
-          maxWidth: 200,
-          maxHeight: 200
+          maxWidth: 200
           });
          infowindow.open(this.map);
       });
@@ -98,15 +105,14 @@ export class GoogleMapsComponent implements OnInit {
     this.initialise();
 
 
-     /// Create the search box and link it to the UI element.
-     this.input = document.getElementById('pac-input');
-     this.searchBox = new google.maps.places.SearchBox(this.input);
+     // Create the search box and link it to the UI element.
+     this.searchBox = new google.maps.places.SearchBox(this.searchElementRef.nativeElement);
       const defaultBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-33.8902, 151.1759),
         new google.maps.LatLng(-33.8474, 151.2631));
       this.searchBox.setBounds(defaultBounds);
 
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.searchElementRef.nativeElement);
       // Bias the SearchBox results towards current map's viewport.
 
       this.map.addListener('bounds_changed', e => {
@@ -122,51 +128,67 @@ export class GoogleMapsComponent implements OnInit {
 
 
       // Listen for the event fired when the user selects a prediction and retrieve
-      // more details for that place.
+      // more details for that place. The listener needs to run in its own zone
+      // otherwise the DOM doesn't refresh properly
       this.searchBox.addListener('places_changed', e => {
-        const places = this.searchBox.getPlaces();
-        let lat = 0;
-        let lng = 0;
 
-        console.log('in searchBox. places=', places);
+        this.ngZone.run(() => {
+
+          const places = this.searchBox.getPlaces();
+          let lat = 0;
+          let lng = 0;
+
+          console.log('in searchBox. places=', places);
 
 
-        // For each place, get the icon, name and location.
-        const bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
-          if (!place.geometry) {
-            console.log('Returned place contains no geometry');
-            return;
-          }
-          const latlng = place.geometry.location;
-          lat = latlng.lat().toFixed(6);
-          lng = latlng.lng().toFixed(6);
-          console.log('in search box places. lat=', lat, 'lng', lng);
-          console.log('place.geometry.location=', latlng);
+          // For each place, get the icon, name and location.
+          const bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log('Returned place contains no geometry');
+              return;
+            }
+            const latlng = place.geometry.location;
+            lat = latlng.lat().toFixed(6);
+            lng = latlng.lng().toFixed(6);
+            console.log('in search box places. lat=', lat, 'lng', lng);
+            console.log('place.geometry.location=', latlng);
 
-          if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+
+          this.map.fitBounds(bounds);
+          const posString = lat + ',' + lng;
+          this.log.debug('in search box listener. posString=' + posString);
+          this.onPlaceChanged.emit(posString);
+
+
+
         });
-        this.map.fitBounds(bounds);
-        const posString = lat + ',' + lng;
-        this.log.debug('in search box listener. posString=' + posString);
-        this.onPlaceChanged.emit(posString);
-      }); //end places changed
+
+
+      }); // end places changed
+
 
         this.map.addListener('click', e => {
+        // placeMarkerAndPanTo(e.latLng, this.map);
+        // console.log('map click detected at lat', e.latLng.lat().valueOf());
+        // this.story.locationLat = e.latLng.lat();
+        // this.testfunconclass(e.latLng.lat());
           this.map.panTo(e.latLng);
-
+          // this.onPositionChanged.emit(e.latLng.toString());
       });
 
 
 
-    }); //end initMap
+    }); // end initMap
 
-   }//end ngoninit
+   }// end ngoninit
 
 
 

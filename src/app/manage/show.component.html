@@ -1,0 +1,49 @@
+
+
+
+<form role="form"  [formGroup]="storyForm">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input id="title" name="title" class="form-control" formControlName="title" >
+      </div>
+    </div>
+  </div>
+<!--
+  <div class="row">
+    <div class="col-md-12" height="500px">
+      <app-map (onPositionChanged)="onPositionChanged($event)"></app-map>
+    </div>
+  </div>
+-->
+
+  <div class="row" *ngIf="story.photoLinks.length > 0">
+    <div class="col-md-12">
+      <img *ngFor="let uri of story.photoLinks" src="{{uri}}" alt="tree image" style="width:50px;height:50px;margin:5px">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="botName">Botanic name (if known)</label>
+        <input id="botName" name="botName" class="form-control" formControlName="botName" >
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="description">Your tree story</label>
+        <textarea id="description" name="description" class="form-control" formControlName="description"  rows="3" >
+
+        </textarea>
+      </div>
+    </div>
+  </div>
+
+
+</form>

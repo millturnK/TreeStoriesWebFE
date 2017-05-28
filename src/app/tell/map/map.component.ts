@@ -1,10 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
 import {StoryService} from '../../services/story.service';
 import {Story} from '../../models/story';
 import {isUndefined} from 'util';
 import {loggerFactory} from '../../config/ConfigLog4j';
 import {GoogleApiService} from '../../services/google-api.service';
-
 
 
 declare const google: any;
@@ -28,12 +27,10 @@ export class MapComponent implements OnInit {
   private log = loggerFactory.getLogger('component.GoogleMaps');
   markers= [];
 
-  constructor(private googleApi: GoogleApiService, private _storyService: StoryService) {}
+  constructor(private googleApi: GoogleApiService, private ngZone: NgZone, private _storyService: StoryService) {}
 
-  initialise()
-  {
+  initialise() {
     this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
-    //this.log.debug('init: displayAllStories=' + this.displayAllStories);
 
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
@@ -62,13 +59,13 @@ export class MapComponent implements OnInit {
 
 
   }
-  deleteMarker(){
+  deleteMarker() {
     this.log.debug('deleteMarkers');
     this.treeMarker.setMap(null);
     this.markers = [];
 
   }
-  deleteRectanlge(){
+  deleteRectanlge() {
     this.log.debug('deleteRectangle');
     this.treeMarker.setMap(null);
     this.markers = [];
@@ -120,13 +117,12 @@ export class MapComponent implements OnInit {
 
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
-        if (e.type === 'rectangle'){
+        if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
           // TODO emit pos changed for rectangle and switch between area or points, setting drawing manager accordingly
 
-        }
-        else if (e.type === 'marker'){
+        } else if (e.type === 'marker') {
 
           const pos = e.overlay.getPosition();
           console.log('drawing man. pos=' + pos);
@@ -135,47 +131,51 @@ export class MapComponent implements OnInit {
         }
 
       });
-      //let markers = [];
+      // let markers = [];
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
       this.searchBox.addListener('places_changed', e => {
-        const places = this.searchBox.getPlaces();
-        let lat = 0;
-        let lng = 0;
-        let latlng = new google.maps.LatLng(0, 0);
 
-        console.log('in searchBox. places=', places);
+        this.ngZone.run(() => {
+
+          const places = this.searchBox.getPlaces();
+          let lat = 0;
+          let lng = 0;
+
+          console.log('in searchBox. places=', places);
 
 
-        // For each place, get the icon, name and location.
-        const bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
-          if (!place.geometry) {
-            console.log('Returned place contains no geometry');
-            return;
-          }
-          latlng = place.geometry.location;
-          lat = latlng.lat().toFixed(6);
-          lng = latlng.lng().toFixed(6);
-          console.log('in search box places. lat=', lat, 'lng', lng);
-          console.log('place.geometry.location=', latlng);
+          // For each place, get the icon, name and location.
+          const bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log('Returned place contains no geometry');
+              return;
+            }
+            const latlng = place.geometry.location;
+            lat = latlng.lat().toFixed(6);
+            lng = latlng.lng().toFixed(6);
+            console.log('in search box places. lat=', lat, 'lng', lng);
+            console.log('place.geometry.location=', latlng);
 
-          if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+
+          this.map.fitBounds(bounds);
+          const posString = lat + ',' + lng;
+          this.log.debug('in search box listener. posString=' + posString);
+          // pan to new position
+          this.map.panTo(lat, lng);
         });
 
-        //console.log('bounds=', bounds);
-        this.map.fitBounds(bounds);
-        const posString = lat + ',' + lng;
-        this.log.debug('in search box listener. posString=' + posString);
-        // pan to new position
-        this.map.panTo(latlng);
-        this.log.debug('panned map');
-      }); //end places changed
+
+
+      }); // end places changed
 
 
       // this.map.addListener('click', function(e) {
@@ -186,8 +186,8 @@ export class MapComponent implements OnInit {
 
 
 
-    }); //end initMap
+    }); // end initMap
 
-  }//end ngoninit
+  } // end ngoninit
 
 }

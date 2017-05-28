@@ -1,0 +1,10 @@
+
+.table-scrollable{
+  /*height: 300px;*/
+  overflow: auto;
+  max-height: 300px;
+}
+.smallTableCell
+{
+  width: 10%;
+}

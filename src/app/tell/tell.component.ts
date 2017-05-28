@@ -14,7 +14,7 @@ declare const google: any;
 
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  //console.log('in lat val. control=', control);
+  console.log('in lat val. control=', control);
   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -22,7 +22,7 @@ function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 }
 function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  //console.log('in long val. control=', control);
+  console.log('in long val. control=', control);
   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -33,18 +33,15 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
     templateUrl: 'tell.component.html'
 })
 // TODO allow upload of up to 5 photos
-export class TellComponent implements OnInit
-{
+export class TellComponent {
+
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
   source= new FormControl('', Validators.required);
   coordChoice = new FormControl('singleTree');
-  // TODO getting error can't match value of undefined
-  //latitude = new FormControl('', [Validators.required, latitudeValidator]);
-  //longitude = new FormControl('', [Validators.required, longitudeValidator]);
-  latitude = new FormControl('', [Validators.required, latitudeValidator]);
-  longitude = new FormControl('', [Validators.required, longitudeValidator]);
+  latitude = new FormControl('', latitudeValidator);
+  longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
   coordsAttr: Number[] = [];
   //let input = Observable.bindCallback()
@@ -64,7 +61,7 @@ export class TellComponent implements OnInit
     title: this.title,
     botName: this.botName,
     description: this.description,
-    source: this.source,
+   // source: this.source,
     coordChoice: this.coordChoice,
     latitude: this.latitude,
     longitude: this.longitude,
@@ -86,19 +83,19 @@ export class TellComponent implements OnInit
     constructor(private router: Router, private _user: User, private _storyService: StoryService) {
         /*this.storyModel = new Story();*/
         // TODO implement login and pass in name, remove placeholder
-        _user.username = 'Katie Test';
+        // _user.username = 'Katie Test';
         this.storyModel.contributors = _user.username;
     }
 
 
    // onPositionChanged(newPos: string){
   onPositionChanged(newPos) {
-     //set value of text box
-      console.log('onPosition changed called with', newPos);
-      // round to 6 dec places
-    this.latitude.setValue(newPos.lat().toFixed(6));
-    this.longitude.setValue(newPos.lng().toFixed(6));
-    }
+     // set value of text box
+     console.log('onPosition changed called with', newPos);
+     // round to 6 dec places
+     this.latitude.setValue(newPos.lat().toFixed(6));
+     this.longitude.setValue(newPos.lng().toFixed(6));
+  }
 
 
   onSubmit() {
@@ -119,7 +116,7 @@ export class TellComponent implements OnInit
 
     this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
-    this.tellStoryForm.reset();
+
 
     }
 
@@ -130,11 +127,30 @@ export class TellComponent implements OnInit
     // setTimeout(() => { // 3
     //   this._router.navigate(["/curate"]);
     // }, 4000);
+    //this.tellStoryForm.reset();
+    this.resetForm();
   }
-  imageUploaded($event){
+
+
+  private resetForm() {
+
+      // manually resetting all the fields. Have seen some funny behaviour when resetting a whole form group
+    this.title.reset('');
+    this.botName.reset('');
+    this.description.reset('');
+    this.latitude.reset('');
+    this.longitude.reset('');
+    // and close the map
+    this.ckMap.setValue(false);
+  }
+
+
+
+
+  imageUploaded($event) {
     this.log.debug('imageUploaded called');
      console.log('imageUploaded called. Event.file:', $event.file);
-      //pull out lat.lng
+      // pull out lat.lng
     this.pictures.push(new Picture(<File> $event.file));
     this.coordsFromPhoto.getCoordsFromPhoto($event.file);
   }
