@@ -5,35 +5,35 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/catch';
 import {Story} from '../models/story';
 import {User} from '../user/models/user';
 import {AppConsts} from '../app.consts';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
+import {environment} from '../../environments/environment';
 
-declare var google: any;
+// declare var google: any;
 
 
 
 @Injectable()
 export class StoryService {
-  private queryUrl = 'http://localhost:3000/api/v1/story';
-  // private factory = LFService.createLoggerFactory(new LoggerFactoryOptions()
-  //.addLogGroupRule(new LogGroupRule(new RegExp(".+"), LogLevel.Debug)));
-  // private log = this.factory.getLogger("nfrService");
+
+
+  private apiUrl: string = environment.server_url + '/api/v1/story';
+
+
+
+//  private queryUrl = 'http://localhost:3000/api/v1/story';
+
   private log = loggerFactory.getLogger('service.story');
-  constructor(private http: Http) {
-  }
 
-  //@TODO it isn't calling handleError
+  constructor(private http: Http) { }
 
-  //public postStory(user: User, story: Story): Observable<NFR> {
 
   public postStory(story: Story, pictures: Picture[]): Observable<Story> {
-    //const headers = new Headers({'Content-Type': 'application/json'});
+
+    // const headers = new Headers({'Content-Type': 'application/json'});
 
     const headers = new Headers();
 
@@ -42,13 +42,22 @@ export class StoryService {
     const body = JSON.stringify(story);
     const formData: FormData = new FormData();
     formData.append('body', body);
+    formData.append('title', story.title);
+    formData.append('contributors', story.contributors);
+    formData.append('content', story.content);
+    formData.append('latitude', story.latitude);
+    formData.append('longitude', story.longitude);
+    formData.append('botName', story.botName);
+    // TODO Not available in story yet
+    formData.append('links', []);
+
     // formData.append('test', 'test');
     for (const pic of pictures) {
       formData.append(pic.partName, pic.file);
       console.log('appended image to req', pic.file);
     }
 
-    return this.http.post(this.queryUrl, formData, options)
+    return this.http.post(this.apiUrl, formData, options)
       .map(this.extractGetData)
       .catch(this.handleError);
 
@@ -60,17 +69,28 @@ export class StoryService {
     //headers.append('x-access-token', user.token);
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(this.queryUrl, options)
+    return this.http.get(this.apiUrl, options)
       .map(this.extractGetData)
       .catch(this.handleError);
   }
+
   public getStoriesWithinRadiusPoint(point: string): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
     //headers.append('x-access-token', user.token);
     const options = new RequestOptions({ headers: headers });
-    const pointQueryUrl = this.queryUrl + '?' + 'point=' + point;
+    const pointQueryUrl = this.apiUrl + '?' + 'point=' + point;
     this.log.debug('in getStoriesWithinRadiusPoint. queryUrl=' + pointQueryUrl);
     return this.http.get(pointQueryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
+
+  public getUsersStories(user: User): Observable<Story[]> {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    //headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
+    const userQueryUrl = this.apiUrl + '?' + 'user=' + user.username;
+    return this.http.get(userQueryUrl, options)
       .map(this.extractGetData)
       .catch(this.handleError);
   }

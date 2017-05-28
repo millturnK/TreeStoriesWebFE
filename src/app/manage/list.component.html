@@ -1,0 +1,62 @@
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>
+      {{title}}
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-scrollable">
+
+    <table class="table table-bordered">
+
+      <thead class="tableHeader">
+      <tr>
+        <th>Story</th>
+        <th>Location</th>
+        <th>Created</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let story of stories; let i=index" (click)="storySelected(i)">
+        <td>{{story.title}}</td>
+        <td>{{story.latitude}}, {{story.longitude}}</td>
+        <td>{{story.creationDate}}</td>
+        <td>
+          <button class="btn-sm btn-success"   (click)="edit(i)"  >
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          </button>
+
+          <button class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal"  (click)="delete(i)"  >
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+
+        </td>
+      </tr>
+      </tbody>
+
+
+    </table>
+
+
+
+</div>
+
+  </div>
+</div>
+
+<div class="row" *ngIf="selectedStory">
+
+  <div class="col-md-12">
+
+    <show-story-form [story]="selectedStory"></show-story-form>
+
+
+  </div>
+
+  </div>

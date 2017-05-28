@@ -1,20 +1,21 @@
 
-import { BrowserModule }  from "@angular/platform-browser";
-import { HttpModule }    from "@angular/http";
-import { RouterModule } from "@angular/router";
-import { appRoutingProviders, routing, AUTH_PROVIDERS } from "./app.routes";
-import { HomeModule } from "./home/home.module";
-import { ContactUsModule } from "./contactus/contactus.module";
-import { AppComponent } from "./app.component";
-import { UserModule } from "./user/user.module";
-import { NavbarComponent } from "./navbar.component";
-import { User } from "./user/models/user";
-import {AppConsts} from "./app.consts";
-import { NgModule } from "@angular/core";
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
+import { appRoutingProviders, routing, AUTH_PROVIDERS } from './app.routes';
+import { HomeModule } from './home/home.module';
+import { ContactUsModule } from './contactus/contactus.module';
+import { AppComponent } from './app.component';
+import { UserModule } from './user/user.module';
+import { NavbarComponent } from './navbar.component';
+import { User } from './user/models/user';
+import {AppConsts} from './app.consts';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {TellModule} from "./tell/tell.module";
-import {GoogleApiService} from "./services/google-api.service";
+import {TellModule} from './tell/tell.module';
+import {GoogleApiService} from './services/google-api.service';
 import {ImageUploadModule} from 'angular2-image-upload';
+import {ManageModule} from './manage/manage.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {ImageUploadModule} from 'angular2-image-upload';
     HttpModule,
     HomeModule,
     TellModule,
+    ManageModule,
     ContactUsModule,
     UserModule,
     RouterModule,

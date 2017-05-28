@@ -59,13 +59,13 @@ export class MapComponent implements OnInit {
 
 
   }
-  deleteMarker(){
+  deleteMarker() {
     this.log.debug('deleteMarkers');
     this.treeMarker.setMap(null);
     this.markers = [];
 
   }
-  deleteRectanlge(){
+  deleteRectanlge() {
     this.log.debug('deleteRectangle');
     this.treeMarker.setMap(null);
     this.markers = [];
@@ -117,13 +117,12 @@ export class MapComponent implements OnInit {
 
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
-        if (e.type === 'rectangle'){
+        if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
           // TODO emit pos changed for rectangle and switch between area or points, setting drawing manager accordingly
 
-        }
-        else if (e.type === 'marker'){
+        } else if (e.type === 'marker') {
 
           const pos = e.overlay.getPosition();
           console.log('drawing man. pos=' + pos);
