@@ -41,9 +41,9 @@ export class StoryService {
     const options = new RequestOptions({headers: headers});
     const body = JSON.stringify(story);
     const formData: FormData = new FormData();
-    formData.append('body', body);
     formData.append('title', story.title);
     formData.append('contributors', story.contributors);
+    formData.append('sources', story.sources);
     formData.append('content', story.content);
     formData.append('latitude', story.latitude);
     formData.append('longitude', story.longitude);

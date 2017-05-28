@@ -7,6 +7,7 @@ export class Story {
     latitude: number;
     longitude: number;
     contributors: string;
+    sources: string;
     botName: string;
     photoLinks: string[];
     // TODO: link, coords from photo, bounding box coords

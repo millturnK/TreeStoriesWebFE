@@ -149,13 +149,20 @@
   </div>
   </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="source">Sources - where did your story come from?</label>
+        <input type="text" id="source" name="source" class="form-control" formControlName="source" required >
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <label for="source">Contributor</label>
-        <input type="text" id="source" name="source" class="form-control" value="{{storyModel.contributors}}" readonly />
-
+        <label for="contributor">Contributor</label>
+        <input type="text" id="contributor" name="contributor" class="form-control" value="{{storyModel.contributors}}" formControlName="contributor" readonly>
 
       </div>
     </div>

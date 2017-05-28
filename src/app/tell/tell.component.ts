@@ -35,14 +35,29 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 // TODO allow upload of up to 5 photos
 export class TellComponent {
 
+
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
+  contributor= new FormControl('');
   source= new FormControl('', Validators.required);
   coordChoice = new FormControl('singleTree');
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
+
+  tellStoryForm = new FormGroup({
+  title: this.title,
+  botName: this.botName,
+  description: this.description,
+  contributor: this.contributor,
+  source: this.source,
+  coordChoice: this.coordChoice,
+  latitude: this.latitude,
+  longitude: this.longitude,
+  ckMap: this.ckMap
+  // coordChoiceArea: this.coordChoiceArea
+});
   coordsAttr: Number[] = [];
   //let input = Observable.bindCallback()
   //coordsSubject = new Subject();
@@ -57,17 +72,7 @@ export class TellComponent {
     });
   }
 
-  tellStoryForm = new FormGroup({
-    title: this.title,
-    botName: this.botName,
-    description: this.description,
-   // source: this.source,
-    coordChoice: this.coordChoice,
-    latitude: this.latitude,
-    longitude: this.longitude,
-    ckMap: this.ckMap
-    // coordChoiceArea: this.coordChoiceArea
-  });
+
    // form controls & group needed to unpin this form
   latitudeValPattern = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
 
@@ -105,11 +110,12 @@ export class TellComponent {
       const botName = this.botName.value;
       const description = this.description.value;
       const source = this.source.value;
+      const contributor = this.contributor.value;
 
       this.storyModel.title = title;
       this.storyModel.botName = botName;
+      this.storyModel.sources = source;
       this.storyModel.content = description;
-      this.storyModel.contributors = source;
       this.storyModel.latitude = this.latitude.value;
       this.storyModel.longitude = this.longitude.value;
       console.log('onSubmit $event.file=', event);
@@ -138,6 +144,8 @@ export class TellComponent {
     this.title.reset('');
     this.botName.reset('');
     this.description.reset('');
+    this.source.reset('');
+    this.contributor.reset('');
     this.latitude.reset('');
     this.longitude.reset('');
     // and close the map
