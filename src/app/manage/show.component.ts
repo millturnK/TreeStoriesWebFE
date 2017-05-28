@@ -41,13 +41,14 @@ export class ShowComponent implements OnChanges {
 
     this.log.debug('change to input, displaying... ' + this.story.title);
 
-
-
     this.storyForm.reset({
         title: this.story.title,
         botName: this.story.botName,
         description: this.story.content
     });
+
+    // do I have the story photolinks here?
+    this.log.debug('photolinks = ' + this.story.photoLinks);
 
   }
 
