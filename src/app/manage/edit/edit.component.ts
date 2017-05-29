@@ -83,7 +83,7 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.params['_id'];
+    const id = this.route.snapshot.params['id'];
     this.log.debug('in ngOnInit. Id=' + id);
     this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
       this.coordsAttr = coords;
