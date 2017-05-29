@@ -62,6 +62,39 @@ export class StoryService {
       .catch(this.handleError);
 
   }
+
+  public updateStory(story: Story, pictures: Picture[]): Observable<Story> {
+
+  // const headers = new Headers({'Content-Type': 'application/json'});
+
+  const headers = new Headers();
+  const queryUrl = this.apiUrl + '/' + story._id;
+
+  // headers.append('x-access-token', user.token);
+  const options = new RequestOptions({headers: headers});
+  const body = JSON.stringify(story);
+  const formData: FormData = new FormData();
+    formData.append('_id', story._id);
+  formData.append('title', story.title);
+  formData.append('contributors', story.contributors);
+  formData.append('sources', story.sources);
+  formData.append('content', story.content);
+  formData.append('latitude', story.latitude);
+  formData.append('longitude', story.longitude);
+  formData.append('botName', story.botName);
+  // TODO Not available in story yet
+  formData.append('links', []);
+
+  // formData.append('test', 'test');
+  for (const pic of pictures) {
+    formData.append(pic.partName, pic.file);
+    console.log('appended image to req', pic.file);
+  }
+
+  return this.http.put(this.apiUrl, formData, options)
+    .map(this.extractGetData)
+    .catch(this.handleError);
+  }
   // GET all stories from database
   //public getStories(user: User): Observable<Story[]> {
   public getStories(): Observable<Story[]> {

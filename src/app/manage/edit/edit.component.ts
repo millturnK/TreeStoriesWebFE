@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../user/models/user';
 import {StoryService} from '../../services/story.service';
@@ -30,14 +30,14 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnChanges {
   private log = loggerFactory.getLogger('component.Edit');
   private user: User = null;
   success = false;
   errorMessage = '';
   coordsAttr: Number[] = [];
   coordsFromPhoto = new CoordsFromPhoto();
-  private editedStory: Story = null;
+  editedStory: Story = null;
 
   storyModel: Story = new Story();
   pictures: Picture[] = [];
@@ -92,6 +92,25 @@ export class EditComponent implements OnInit {
     });
     this._storyService.getStoryByID(this.user, id).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
+  }
+  ngOnChanges() {
+
+    this.log.debug('change to input, displaying... ' + this.editedStory.title);
+
+    this.editStoryForm.reset({
+      title: this.editedStory.title,
+      botName: this.editedStory.botName,
+      description: this.editedStory.content,
+      contributor: this.editedStory.contributors,
+      sources: this.editedStory.sources,
+      latititude: this.editedStory.latitude,
+      longitude: this.editedStory.longitude
+
+    });
+
+    // do I have the story photolinks here?
+    //this.log.debug('photolinks = ' + this.story.photoLinks);
+
   }
   private successfulRetrieve(stories: Story[]) {
 
@@ -149,7 +168,7 @@ onSubmit() {
   this.storyModel.longitude = this.longitude.value;
   console.log('onSubmit $event.file=', event);
 
-  this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
+  this._storyService.updateStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
     error => this.failedSubmit(<any>error));
 
 
