@@ -96,7 +96,7 @@ export class MapComponent implements OnInit {
 
 
       });
-      
+
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
         // this.lastOverlay = null; // delete previous shape
         // this.lastOverlay = e.overlay; //replace with new shape
