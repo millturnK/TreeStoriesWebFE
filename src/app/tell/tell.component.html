@@ -85,7 +85,7 @@
       <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
-      <app-map (onPositionChanged)="onPositionChanged($event)"></app-map>
+      <app-map (onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)"></app-map>
 
     </div>
   </div>
@@ -116,14 +116,26 @@
       <div *ngIf="coordChoice.value === 'area'">
         <div class="form-group">
           <div class="col-md-6">
-            <label for="latitude"> Top Left Corner Coords</label> <input id="areaPointsTopLeft" name="areaPointsTopLeft" class="form-control" formControlName="areaPointsTopLeft"
+            <label for="bbPointsTopLeftLat"> Latitude: Top Left Corner Coords</label> <input id="bbPointsTopLeftLat" name="bbPointsTopLeftLat" class="form-control" formControlName="bbPointsTopLeftLat"
                                                   title="...must be in the format...." required>
           </div>
         </div>
         <div class="form-group">
           <div class="col-md-6">
-            <label for="longitude"> Bottom Right Corner Coords </label><input id="areaPointsBottomRight" name="areaPointsBottomRight" class="form-control" formControlName="areaPointsBottomRight"
-                                                     title="... must be in the format...." required>
+            <label for="bbPointsTopLeftLng">  Longitude: Top Left Corner Coords </label><input id="bbPointsTopLeftLng" name="bbPointsTopLeftLng" class="form-control" formControlName="bbPointsTopLeftLng"
+                                                   title="... must be in the format...." required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6">
+            <label for="bbPointsBottomRightLat"> Latitude: Bottom Right Corner Coords </label> <input id="bbPointsBottomRightLat" name="bbPointsBottomRightLat" class="form-control" formControlName="bbPointsBottomRightLat"
+                                                                         title="...must be in the format...." required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6">
+            <label for="bbPointsBottomRightLng"> Longitude: Bottom Right Corner Coords </label><input id="bbPointsBottomRightLng" name="bbPointsBottomRightLng" class="form-control" formControlName="bbPointsBottomRightLng"
+                                                                              title="... must be in the format...." required>
           </div>
         </div>
       </div>

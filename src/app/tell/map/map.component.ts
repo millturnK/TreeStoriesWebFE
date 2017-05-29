@@ -15,17 +15,20 @@ declare const google: any;
 })
 export class MapComponent implements OnInit {
   @Output() onPositionChanged = new EventEmitter<string>();
+  @Output() onRectPositionChanged = new EventEmitter<string>();
   myLatLng = {lat: -25.363, lng: 131.044};
   map: any;
-  treeMarker: any;
-  input: any;
+  recOrTreeMarker: any = null;
+   input: any;
   searchBox: any;
+  // this saves the last drawing
+  lastOverlay: any;
   latlng;
   drawingManager;
 
   errorMsg= '';
   private log = loggerFactory.getLogger('component.GoogleMaps');
-  markers= [];
+
 
   constructor(private googleApi: GoogleApiService, private ngZone: NgZone, private _storyService: StoryService) {}
 
@@ -61,17 +64,10 @@ export class MapComponent implements OnInit {
   }
   deleteMarker() {
     this.log.debug('deleteMarkers');
-    this.treeMarker.setMap(null);
-    this.markers = [];
-
+    if(this.recOrTreeMarker)   {
+      this.recOrTreeMarker.setMap(null);
+    }
   }
-  deleteRectanlge() {
-    this.log.debug('deleteRectangle');
-    this.treeMarker.setMap(null);
-    this.markers = [];
-
-  }
-
 
   ngOnInit() {
     this.googleApi.initMap().then(() => {
@@ -100,33 +96,33 @@ export class MapComponent implements OnInit {
 
 
       });
-      google.maps.event.addListener(this.drawingManager, 'markercomplete', marker => {
-        console.log('markerComplete');
-        this.treeMarker = marker;
-        // this.drawingManager.setOptions({
-        //   drawingControl: false
-        // });
-
-      });
-      google.maps.event.addListener(this.drawingManager, 'rectanglecomplete', function(retangle) {
-        console.log('rectangleComplete');
-        // this.drawingManager.setOptions({
-        //   drawingControl: false
-        // });
-      });
-
-
+      
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
+        // this.lastOverlay = null; // delete previous shape
+        // this.lastOverlay = e.overlay; //replace with new shape
+        this.deleteMarker();
+        this.recOrTreeMarker = e.overlay;
+
         if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
+          this.onRectPositionChanged.emit(bounds);
+          // none of this works...
+         // this.drawingManager.setDrawingMode(null); // Return to 'hand' mode
+         //  this.drawingManager.setOptions({
+         //    drawingControl: false
+         //  });
           // TODO emit pos changed for rectangle and switch between area or points, setting drawing manager accordingly
 
         } else if (e.type === 'marker') {
-
           const pos = e.overlay.getPosition();
-          console.log('drawing man. pos=' + pos);
-          this.onPositionChanged.emit(e.overlay.getPosition());
+          console.log('drawing man. REc pos=' + pos);
+          this.onPositionChanged.emit(pos);
+          // this.drawingManager.setOptions({
+          //   drawingControl: false
+          // });
+         // this.drawingManager.setDrawingMode(null); // Return to 'hand' mode
+
 
         }
 

@@ -3,7 +3,6 @@ import {User} from '../user/models/user';
 import {Router} from '@angular/router';
 import {Story} from '../models/story';
 import {Validators, FormControl, FormGroup} from '@angular/forms';
-//import {TellService} from './services/tell.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';
@@ -45,6 +44,10 @@ export class TellComponent {
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
+  bbPointsTopLeftLat = new FormControl('');
+  bbPointsTopLeftLng = new FormControl('');
+  bbPointsBottomRightLat = new FormControl('');
+  bbPointsBottomRightLng = new FormControl('');
 
   tellStoryForm = new FormGroup({
   title: this.title,
@@ -55,7 +58,13 @@ export class TellComponent {
   coordChoice: this.coordChoice,
   latitude: this.latitude,
   longitude: this.longitude,
-  ckMap: this.ckMap
+  ckMap: this.ckMap,
+    bbPointsTopLeftLat: this.bbPointsTopLeftLat,
+  bbPointsTopLeftLng: this.bbPointsTopLeftLng,
+  bbPointsBottomRightLat: this.bbPointsBottomRightLat,
+  bbPointsBottomRightLng: this.bbPointsBottomRightLng
+
+
   // coordChoiceArea: this.coordChoiceArea
 });
   coordsAttr: Number[] = [];
@@ -100,6 +109,10 @@ export class TellComponent {
      // round to 6 dec places
      this.latitude.setValue(newPos.lat().toFixed(6));
      this.longitude.setValue(newPos.lng().toFixed(6));
+  }
+  onRectPositionChanged(newPos){
+      this.log.debug("Yay, I am in onRectPositionChanged. newPos=" + newPos);
+      // somehow parse it!
   }
 
 

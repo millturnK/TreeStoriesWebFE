@@ -7,10 +7,12 @@ import { StoryListComponent } from './list.component';
 import {AuthGuardPrivlege} from '../auth.guard.privlege';
 import {AuthGuard} from '../auth.guard';
 import {TellComponent} from '../tell/tell.component';
+import {EditComponent} from './edit/edit.component';
 
 
 export const ManageRoutes: Routes = [
 
-  {path: 'list', component: StoryListComponent }
+  {path: 'list', component: StoryListComponent },
+  {path: 'edit/:id', component: EditComponent }
 
 ];

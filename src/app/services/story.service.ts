@@ -95,6 +95,17 @@ export class StoryService {
       .catch(this.handleError);
   }
 
+  getStoryByID(user: User, id: string) {
+    const queryUrl = this.apiUrl + '?' + '_id=' + id;
+
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.get(queryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
 
 
   private handleError( error: Response | any ) {

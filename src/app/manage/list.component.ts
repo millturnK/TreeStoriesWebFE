@@ -56,7 +56,9 @@ export class StoryListComponent implements OnInit {
 
 
   edit(index: number) {
-    this.log.debug('edit: ' + index + ', =' + this.stories[index].title);
+    this.log.debug('edit: ' + index + ', =' + this.stories[index].title + ',id=' + this.stories[index]._id );
+    this._router.navigate(['/edit', this.stories[index]._id ]);
+
   }
 
   delete(index: number) {
