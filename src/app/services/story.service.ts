@@ -45,9 +45,15 @@ export class StoryService {
     formData.append('contributors', story.contributors);
     formData.append('sources', story.sources);
     formData.append('content', story.content);
-    formData.append('latitude', story.latitude);
-    formData.append('longitude', story.longitude);
+    formData.append('NECoords', JSON.stringify(story.NECoords));
+    formData.append('SWCoords', JSON.stringify(story.SWCoords));
+    formData.append('loc', JSON.stringify(story.loc));
+    formData.append('shapeType', story.shapeType);
+    // formData.append('latitude', story.latitude);
+    // formData.append('longitude', story.longitude);
     formData.append('botName', story.botName);
+
+
     // TODO Not available in story yet
     formData.append('links', []);
 
@@ -79,11 +85,16 @@ export class StoryService {
   formData.append('contributors', story.contributors);
   formData.append('sources', story.sources);
   formData.append('content', story.content);
-  formData.append('latitude', story.latitude);
-  formData.append('longitude', story.longitude);
+  formData.append('NECoords', JSON.stringify(story.NECoords));
+    formData.append('SWCoords', JSON.stringify(story.SWCoords));
+    formData.append('loc', JSON.stringify(story.loc));
+    formData.append('shapeType', story.shapeType);
+  // formData.append('latitude', story.latitude);
+  // formData.append('longitude', story.longitude);
   formData.append('botName', story.botName);
   // TODO Not available in story yet
   formData.append('links', []);
+
 
   // formData.append('test', 'test');
   for (const pic of pictures) {

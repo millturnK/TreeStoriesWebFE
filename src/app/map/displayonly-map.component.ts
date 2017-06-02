@@ -2,7 +2,7 @@ import {Component, OnChanges, Input, EventEmitter, Output, ElementRef, ViewChild
 import {GoogleApiService} from '../services/google-api.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 
-import {Location} from '../models/Location';
+import {Place} from '../models/Place';
 
 @Component({
   selector: 'app-map-displayonly',
@@ -16,7 +16,7 @@ export class DisplayOnlyMapComponent implements OnChanges {
  // @ViewChild('search')
  // public searchElementRef: ElementRef;
 
-  @Input() location: Location;
+  @Input() location: Place;
 
 //  myLatLng = {lat: -25.363, lng: 131.044};
   map: any;

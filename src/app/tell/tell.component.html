@@ -68,21 +68,27 @@
   <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <label for="ckMap">Location and type of feature</label>
-          <div class="checkbox">
-          <label><input type="checkbox" id="ckMap" formControlName="ckMap">Select in Map</label>
-          </div>
-            <label class="radio-inline"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>
-            <label class="radio-inline"> <input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>
-
+          <h4 >Location and type of feature</h4>
         </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="ckMap" formControlName="ckMap"> Select in Map
+          </label>
+        </div>
+
+
+            <!--<label class="radio-inline"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>-->
+            <!--<label class="radio-inline"> <input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>-->
+
+
       </div>
     </div>
 
   <div class="row">
     <div class="col-md-12" *ngIf="ckMap.value === true" height="500px">
-      <label>Select tree location below</label>
-      <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker.</p>
+      <label>Select tree (or area of trees) location below</label>
+      <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker or a rectangle to mark an area.
+      We will attempt to locate the coordinates from either the photo you submit or the marker or area you draw (its centrepoint).</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
       <app-map (onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)"></app-map>
@@ -91,60 +97,66 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
-        <div *ngIf="coordChoice.value === 'singleTree'">
-          <div class="form-group">
-          <div class="col-md-6">
-            <label for="latitude"> Latitude</label>
+      <div class="col-md-6">
+        <div class="form-group">
+            <label for="latitude">Latitude</label>
             <input id="latitude" name="latitude" class="form-control" formControlName="latitude"
                                                   title="Latitudes must be in the format...." >
           </div>
           </div>
-          <div class="form-group">
           <div class="col-md-6">
-            <label for="longitude"> Longitude</label>
+            <div class="form-group">
+            <label for="longitude">Longitude</label>
             <input id="longitude" name="longitude" class="form-control" formControlName="longitude"
                                                      title="Longitudes must be in the format...." >
           </div>
           </div>
-      </div>
     </div>
-  </div> <!-- end choice of single tree -->
 
-  <div class="row">
-    <div class="col-md-12">
-      <div *ngIf="coordChoice.value === 'area'">
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="bbPointsTopLeftLat"> Latitude: Top Left Corner Coords</label> <input id="bbPointsTopLeftLat" name="bbPointsTopLeftLat" class="form-control" formControlName="bbPointsTopLeftLat"
-                                                  title="...must be in the format...." required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="bbPointsTopLeftLng">  Longitude: Top Left Corner Coords </label><input id="bbPointsTopLeftLng" name="bbPointsTopLeftLng" class="form-control" formControlName="bbPointsTopLeftLng"
-                                                   title="... must be in the format...." required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="bbPointsBottomRightLat"> Latitude: Bottom Right Corner Coords </label> <input id="bbPointsBottomRightLat" name="bbPointsBottomRightLat" class="form-control" formControlName="bbPointsBottomRightLat"
-                                                                         title="...must be in the format...." required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="bbPointsBottomRightLng"> Longitude: Bottom Right Corner Coords </label><input id="bbPointsBottomRightLng" name="bbPointsBottomRightLng" class="form-control" formControlName="bbPointsBottomRightLng"
-                                                                              title="... must be in the format...." required>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- end choice of area -->
 
+  <!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+      <!--<div *ngIf="coordChoice.value === 'area'">-->
+        <!--<div class="form-group">-->
+          <!--<div class="col-md-6">-->
+            <!--<label for="bbPointsNELat"> Latitude: NE Corner Coords</label> <input id="bbPointsNELat" name="bbPointsNELat" class="form-control" formControlName="bbPointsNELat"-->
+                                                                                        <!--title="...must be in the format....">-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<div class="col-md-6">-->
+            <!--<label for="bbPointsNELng">  Longitude: NE Corner Coords </label><input id="bbPointsNELng" name="bbPointsNELng" class="form-control" formControlName="bbPointsNELng"-->
+                                                                                          <!--title="... must be in the format...." >-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<div class="col-md-6">-->
+            <!--<label for="bbPointsSWLat"> Latitude: SW Corner Coords </label> <input id="bbPointsSWLat" name="bbPointsSWLat" class="form-control" formControlName="bbPointsSWLat"-->
+                                                                                             <!--title="...must be in the format...." >-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<div class="col-md-6">-->
+            <!--<label for="bbPointsSWLng"> Longitude: SW Corner Coords </label><input id="bbPointsSWLng" name="bbPointsBottomRightLng" class="form-control" formControlName="bbPointsSWLng"-->
+                                                                                             <!--title="... must be in the format...." >-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div> &lt;!&ndash; end choice of area &ndash;&gt;-->
+  <!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+      <!--<div class="form-group">-->
+        <!---->
+        <!--&lt;!&ndash;<label class="radio-inline"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>&ndash;&gt;-->
+        <!--&lt;!&ndash;<label class="radio-inline"> <input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>&ndash;&gt;-->
+
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
   <div class="row">
-    <div class="col-md-4">
-      <div class="form-group">
+    <div class="col-md-6">
+      <div class="form-group"><h4>About the tree</h4>
         <label for="botName">Botanic name (if known)</label>
         <textarea id="botName" name="botName" class="form-control"
                   formControlName="botName"  rows="1"></textarea>
@@ -183,4 +195,4 @@
 
 </form>
 <p>tellStoryForm value: {{ tellStoryForm.value | json}}</p>
-<p>tellStoryModel value: {{ storyModel.locationLat | json}}</p>
+<p>tellStoryModel value: {{ storyModel | json}}</p>

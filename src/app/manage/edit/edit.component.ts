@@ -8,6 +8,7 @@ import {Picture} from '../../models/picture';
 import {Story} from '../../models/story';
 import {CoordsFromPhoto} from '../../tell/coordsFromPhoto';
 import {isUndefined} from 'util';
+import {Place} from '../../models/Place';
 declare const google: any;
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
@@ -52,10 +53,10 @@ export class EditComponent implements OnInit, OnChanges {
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
-  bbPointsTopLeftLat = new FormControl('');
-  bbPointsTopLeftLng = new FormControl('');
-  bbPointsBottomRightLat = new FormControl('');
-  bbPointsBottomRightLng = new FormControl('');
+  bbPointsNELat = new FormControl('');
+  bbPointsNELng = new FormControl('');
+  bbPointsSWLat = new FormControl('');
+  bbPointsSWLng = new FormControl('');
 
   editStoryForm = new FormGroup({
     title: this.title,
@@ -66,11 +67,7 @@ export class EditComponent implements OnInit, OnChanges {
     coordChoice: this.coordChoice,
     latitude: this.latitude,
     longitude: this.longitude,
-    ckMap: this.ckMap,
-    bbPointsTopLeftLat: this.bbPointsTopLeftLat,
-    bbPointsTopLeftLng: this.bbPointsTopLeftLng,
-    bbPointsBottomRightLat: this.bbPointsBottomRightLat,
-    bbPointsBottomRightLng: this.bbPointsBottomRightLng
+    ckMap: this.ckMap
 
 
     // coordChoiceArea: this.coordChoiceArea
@@ -103,8 +100,8 @@ export class EditComponent implements OnInit, OnChanges {
       description: this.editedStory.content,
       contributor: this.editedStory.contributors,
       sources: this.editedStory.sources,
-      latititude: this.editedStory.latitude,
-      longitude: this.editedStory.longitude
+      latititude: this.editedStory.loc.coordinates[0],
+      longitude: this.editedStory.loc.coordinates[1]
 
     });
 
@@ -124,8 +121,8 @@ export class EditComponent implements OnInit, OnChanges {
       this.description.setValue(this.editedStory.content);
       this.contributor.setValue(this.editedStory.contributors);
       this.source.setValue(this.editedStory.sources);
-      this.latitude.setValue(this.editedStory.latitude);
-      this.longitude.setValue(this.editedStory.longitude);
+      this.latitude.setValue(this.editedStory.loc.coordinates[0]);
+      this.longitude.setValue(this.editedStory.loc.coordinates[1]);
 
     }
 
@@ -164,8 +161,9 @@ onSubmit() {
   this.storyModel.botName = botName;
   this.storyModel.sources = source;
   this.storyModel.content = description;
-  this.storyModel.latitude = this.latitude.value;
-  this.storyModel.longitude = this.longitude.value;
+
+  //set the location based on latitude contents
+  this.storyModel.loc = new Place('Point', [ Number(this.longitude.value).toFixed(6), Number(this.latitude.value).toFixed(6) ]);
   console.log('onSubmit $event.file=', event);
 
   this._storyService.updateStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
@@ -218,14 +216,7 @@ private failedSubmit(error: any) {
 }
 
 
-// TODO display map drawing tool accordingly
-isSingleTree(): boolean {
-  if (this.coordChoice.value === 'singleTree') {
-    console.log('single tree checked: ', this.coordChoice.value);
-    return true;
-  }
-  return false;
-}
+
 
 
 

@@ -64,7 +64,7 @@ export class MapComponent implements OnInit {
   }
   deleteMarker() {
     this.log.debug('deleteMarkers');
-    if(this.recOrTreeMarker)   {
+    if (this.recOrTreeMarker)   {
       this.recOrTreeMarker.setMap(null);
     }
   }
@@ -98,8 +98,6 @@ export class MapComponent implements OnInit {
       });
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
-        // this.lastOverlay = null; // delete previous shape
-        // this.lastOverlay = e.overlay; //replace with new shape
         this.deleteMarker();
         this.recOrTreeMarker = e.overlay;
 
@@ -107,23 +105,11 @@ export class MapComponent implements OnInit {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
           this.onRectPositionChanged.emit(bounds);
-          // none of this works...
-         // this.drawingManager.setDrawingMode(null); // Return to 'hand' mode
-         //  this.drawingManager.setOptions({
-         //    drawingControl: false
-         //  });
-          // TODO emit pos changed for rectangle and switch between area or points, setting drawing manager accordingly
 
         } else if (e.type === 'marker') {
           const pos = e.overlay.getPosition();
           console.log('drawing man. REc pos=' + pos);
           this.onPositionChanged.emit(pos);
-          // this.drawingManager.setOptions({
-          //   drawingControl: false
-          // });
-         // this.drawingManager.setDrawingMode(null); // Return to 'hand' mode
-
-
         }
 
       });
@@ -177,7 +163,7 @@ export class MapComponent implements OnInit {
       // this.map.addListener('click', function(e) {
       this.map.addListener('click', e => {
         this.map.panTo(e.latLng);
-        this.onPositionChanged.emit(e.latLng.toString());
+        //this.onPositionChanged.emit(e.latLng.toString());
       });
 
 

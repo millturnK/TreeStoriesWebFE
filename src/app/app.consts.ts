@@ -10,6 +10,7 @@ export class AppConsts {
     public APP_TOOL = "Tree Stories";
 
 
+
     // Consts used for error messages in the front end, these based on HTTP error codes
 //    public static ERR_401_MSG = "You don't have authorisation to perform the requested action. Most likely this is because your " +
 //        "session has expired. Please <a id='loginlink' [routerLink]=\"['/login']\">Login</a> again";
