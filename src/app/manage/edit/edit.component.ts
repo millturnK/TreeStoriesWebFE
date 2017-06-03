@@ -9,10 +9,11 @@ import {Story} from '../../models/story';
 import {CoordsFromPhoto} from '../../tell/coordsFromPhoto';
 import {isUndefined} from 'util';
 import {Place} from '../../models/Place';
+
 declare const google: any;
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in lat val. control=', control);
+  console.log('in lat val. control=', control.value);
   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -20,7 +21,7 @@ function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 }
 function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in long val. control=', control);
+  console.log('in long val. control=', control.value);
   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -49,14 +50,9 @@ export class EditComponent implements OnInit, OnChanges {
   description= new FormControl('', Validators.required);
   contributor= new FormControl('');
   source= new FormControl('', Validators.required);
-  coordChoice = new FormControl('singleTree');
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
-  bbPointsNELat = new FormControl('');
-  bbPointsNELng = new FormControl('');
-  bbPointsSWLat = new FormControl('');
-  bbPointsSWLng = new FormControl('');
 
   editStoryForm = new FormGroup({
     title: this.title,
@@ -64,11 +60,9 @@ export class EditComponent implements OnInit, OnChanges {
     description: this.description,
     contributor: this.contributor,
     source: this.source,
-    coordChoice: this.coordChoice,
     latitude: this.latitude,
     longitude: this.longitude,
     ckMap: this.ckMap
-
 
     // coordChoiceArea: this.coordChoiceArea
   });
@@ -84,8 +78,8 @@ export class EditComponent implements OnInit, OnChanges {
     this.log.debug('in ngOnInit. Id=' + id);
     this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
       this.coordsAttr = coords;
-      this.latitude.setValue(this.coordsAttr[0].toFixed(6));
-      this.longitude.setValue(this.coordsAttr[1].toFixed(6));
+      this.latitude.setValue(this.coordsAttr[0]);
+      this.longitude.setValue(this.coordsAttr[1]);
     });
     this._storyService.getStoryByID(this.user, id).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
@@ -100,8 +94,8 @@ export class EditComponent implements OnInit, OnChanges {
       description: this.editedStory.content,
       contributor: this.editedStory.contributors,
       sources: this.editedStory.sources,
-      latititude: this.editedStory.loc.coordinates[0],
-      longitude: this.editedStory.loc.coordinates[1]
+      latititude: Number(this.editedStory.loc.coordinates[1]),
+      longitude: Number(this.editedStory.loc.coordinates[0])
 
     });
 
@@ -121,8 +115,10 @@ export class EditComponent implements OnInit, OnChanges {
       this.description.setValue(this.editedStory.content);
       this.contributor.setValue(this.editedStory.contributors);
       this.source.setValue(this.editedStory.sources);
-      this.latitude.setValue(this.editedStory.loc.coordinates[0]);
-      this.longitude.setValue(this.editedStory.loc.coordinates[1]);
+      this.latitude.setValue(this.editedStory.loc.coordinates[1].toString());
+      this.longitude.setValue(this.editedStory.loc.coordinates[0].toString());
+
+
 
     }
 
@@ -139,12 +135,24 @@ onPositionChanged(newPos) {
   // set value of text box
   console.log('onPosition changed called with', newPos);
   // round to 6 dec places
-  this.latitude.setValue(newPos.lat.toFixed(6));
-  this.longitude.setValue(newPos.lng.toFixed(6));
+  this.latitude.setValue((Number(newPos.lat).toFixed(6)).toString());
+  this.longitude.setValue((Number(newPos.lng).toFixed(6)).toString());
 }
 onRectPositionChanged(newPos){
-  this.log.debug("Yay, I am in onRectPositionChanged. newPos=" + newPos);
-  // somehow parse it!
+  const centre = newPos.getCenter();
+  this.latitude.setValue((Number(centre.lat()).toFixed(6)).toString());
+  this.longitude.setValue((Number(centre.lng()).toFixed(6)).toString());
+  const centreCoords = [Number(centre.lng()).toFixed(6), Number(centre.lat()).toFixed(6)];
+
+  this.storyModel.loc = new Place('Point', centreCoords);
+  //this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
+  const coordsNE = [Number(newPos.getNorthEast().lat()).toFixed(6), Number(newPos.getNorthEast().lng()).toFixed(6)];
+  this.storyModel.NECoords = new Place('Point', coordsNE);
+  // this.storyModel.NECoords = { type : 'Point', coordinates : coordsNE };
+  const coordsSW = [Number(newPos.getSouthWest().lat()).toFixed(6), Number(newPos.getSouthWest().lng()).toFixed(6)];
+  this.storyModel.SWCoords = new Place('Point', coordsSW);
+  this.storyModel.shapeType = '';
+  this.storyModel.shapeType = this.storyModel.shapeTypeRect;
 }
 
 

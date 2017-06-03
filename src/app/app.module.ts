@@ -16,6 +16,7 @@ import {TellModule} from './tell/tell.module';
 import {GoogleApiService} from './services/google-api.service';
 import {ImageUploadModule} from 'angular2-image-upload';
 import {ManageModule} from './manage/manage.module';
+import { InteractiveMapComponent } from './map/interactive-map/interactive-map.component';
 
 
 @NgModule({

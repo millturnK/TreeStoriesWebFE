@@ -44,58 +44,50 @@
       </div>
     </div>
   </div>
-  <div *ngIf="editedStory">
+
   <div class="row">
-    <div class="col-md-7">
-      <app-map-displayonly [location]="editedStory.loc"></app-map-displayonly>
+    <div class="col-md-12">
+      <div class="form-group">
+        <h4 >Location and type of feature</h4>
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="editedStory">
+  <div class="row" >
+    <div class="col-md-7" height="500px">
+      <app-interactive-map [editedStory]="editedStory"(onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)">
+      </app-interactive-map>
+
     </div>
 
     <div class="col-md-5">
       <img *ngFor="let uri of editedStory.photoLinks" src="{{uri}}" alt="tree image" style="width:75px;height:75px;margin:5px">
     </div>
-
   </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
       <div class="form-group">
-        <label for="ckMap">Location and type of feature</label>
-        <div class="checkbox">
-          <label><input type="checkbox" id="ckMap" formControlName="ckMap">Select in Map</label>
-        </div>
-        <label class="radio-inline"><input type="radio" id="coordChoiceSingle" formControlName="coordChoice" value="singleTree" >Single Tree</label>
-        <label class="radio-inline"> <input type="radio" id="coordChoiceArea" formControlName="coordChoice" value="area">Region</label>
-
+        <label for="latitude">Latitude</label>
+        <input id="latitude" name="latitude" class="form-control" formControlName="latitude"
+               title="Latitudes must be in the format...." >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="longitude">Longitude</label>
+        <input id="longitude" name="longitude" class="form-control" formControlName="longitude"
+               title="Longitudes must be in the format...." >
       </div>
     </div>
   </div>
 
 
-  <div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="latitude"> Latitude</label>
-            <input id="latitude" name="latitude" class="form-control" formControlName="latitude"
-                   title="Latitudes must be in the format...." >
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-6">
-            <label for="longitude"> Longitude</label>
-            <input id="longitude" name="longitude" class="form-control" formControlName="longitude"
-                   title="Longitudes must be in the format...." >
-          </div>
-        </div>
-      </div>
-
-  </div> <!-- end choice of single tree -->
-
-
 
   <div class="row">
     <div class="col-md-4">
-      <div class="form-group">
+      <div class="form-group"><h4>About the tree</h4>
         <label for="botName">Botanic name (if known)</label>
         <textarea id="botName" name="botName" class="form-control"
                   formControlName="botName"  rows="1"></textarea>

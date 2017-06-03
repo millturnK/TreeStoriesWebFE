@@ -9,6 +9,7 @@ import {ShowComponent} from './show.component';
 import {DisplayOnlyMapComponent} from '../map/displayonly-map.component';
 import { EditComponent } from './edit/edit.component';
 import {ImageUploadModule} from 'angular2-image-upload';
+import {InteractiveMapComponent} from '../map/interactive-map/interactive-map.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {ImageUploadModule} from 'angular2-image-upload';
     ShowComponent,
     DisplayOnlyMapComponent,
     EditComponent,
+    InteractiveMapComponent
 
   ],
   imports: [
