@@ -2,12 +2,16 @@
 import {Subject} from "rxjs/Subject";
 declare var EXIF: any;
 declare var dms2dec: any;
+import {loggerFactory} from '../config/ConfigLog4j';
 
 export class CoordsFromPhoto {
   coordsAttr: Number[] = [];
   coordsSubject = new Subject();
+  private log;
 
-  constructor() { }
+  constructor() {
+   this.log = loggerFactory.getLogger('component.CoordsFromPhoto');
+  }
 
 
   getCoordsFromPhoto(photo:File)
@@ -18,7 +22,9 @@ export class CoordsFromPhoto {
       let allMetaData = EXIF.getAllTags(photo);
       let GPSTags = null;
       GPSTags = EXIF.getPosition;
-      if (GPSTags != null)
+      let latArr = allMetaData.GPSLatitude;
+      // for some reason the EXIF functions are not working with some photos
+      if (GPSTags != null || latArr != null)
       {
         let lat = EXIF.getTag(photo,EXIF.GPSTags.GPSLatitude);
         let GPSVersionID = EXIF.getTag(photo,EXIF.GPSTags.GPSVersionID);
@@ -51,6 +57,9 @@ export class CoordsFromPhoto {
         // console.log('lngDMS', lngDMS);
         //coords = dms2dec(latDMS,latRef,lngDMS,lngRef);
         coords = dms2dec(latDMS,latRef,lngDMS,lngRef);
+      }
+      else {
+        this.log.debug('Photo has no coords');
       }
 
       //console.log('internal coords', coords);
