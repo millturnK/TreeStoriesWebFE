@@ -30,7 +30,7 @@ export class InteractiveMapComponent implements OnInit {
   drawingManager;
 
   errorMsg= '';
-  private log = loggerFactory.getLogger('component.GoogleMaps');
+  private log = loggerFactory.getLogger('component.InteractiveMap');
 
 
   constructor(private googleApi: GoogleApiService, private ngZone: NgZone, private _storyService: StoryService) {}
@@ -76,20 +76,7 @@ export class InteractiveMapComponent implements OnInit {
     }
     content = content + ('<p>' + this.editedStory.content + '</p>');
     this.log.debug('final content: ' + content);
-    // this.recOrTreeMarker.setPosition(this.latlng);
-    // this.recOrTreeMarker.setTitle(this.editedStory.title);
-    // this.recOrTreeMarker.setMap(this.map);
-    // this.recOrTreeMarker.setIcon('../assets/treeMarker.png');
-    // this.recOrTreeMarker.addListener('click', event => {
-    //   this.log.debug('Click called. Marker title=' + this.recOrTreeMarker.getTitle());
-    //   this.log.debug('Click called. content=' + this.editedStory.content);
-    //   const infowindow = new google.maps.InfoWindow({
-    //     content: content,
-    //     position: this.recOrTreeMarker.getPosition(),
-    //     maxWidth: 200
-    //   });
-    //   infowindow.open(this.map);
-    // });
+
     if (this.editedStory.shapeType != null){
       if (this.editedStory.shapeType === 'rectangle') {
         //SW then NE
@@ -99,7 +86,8 @@ export class InteractiveMapComponent implements OnInit {
         this.recOrTreeMarker = new google.maps.Rectangle();
         this.recOrTreeMarker.setBounds(myBounds);
         this.recOrTreeMarker.setMap(this.map);
-        this.recOrTreeMarker.draggable = true;
+        this.recOrTreeMarker.setOptions({editable: true, draggable: true, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5});
+        this.recOrTreeMarker.addListener('bounds_changed', this.onRectPositionChanged.emit(this.recOrTreeMarker.getBounds()));
         // TODO set other options
 
         // strokeColor: '#FF0000',

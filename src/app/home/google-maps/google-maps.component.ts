@@ -101,7 +101,9 @@ export class GoogleMapsComponent implements OnInit {
             const myBounds = new google.maps.LatLngBounds(SW, NE);
             const rectangle = new google.maps.Rectangle();
             rectangle.setBounds(myBounds);
+            rectangle.setOptions({editable: false, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5});
             rectangle.setMap(this.map);
+
             // TODO set other options
 
             // strokeColor: '#FF0000',

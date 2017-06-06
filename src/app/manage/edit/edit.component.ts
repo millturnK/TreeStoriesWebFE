@@ -77,9 +77,14 @@ export class EditComponent implements OnInit, OnChanges {
     const id = this.route.snapshot.params['id'];
     this.log.debug('in ngOnInit. Id=' + id);
     this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
-      this.coordsAttr = coords;
-      this.latitude.setValue(this.coordsAttr[0]);
-      this.longitude.setValue(this.coordsAttr[1]);
+      this.log.debug('in coords');
+      if (!isUndefined(coords) && coords.length > 0){
+        this.coordsAttr = coords;
+        this.latitude.setValue(Number(this.coordsAttr[0]).toFixed(6));
+        this.longitude.setValue(Number(this.coordsAttr[1]).toFixed(6));
+        this.log.debug('set photo coords');
+      }
+
     });
     this._storyService.getStoryByID(this.user, id).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
@@ -115,8 +120,10 @@ export class EditComponent implements OnInit, OnChanges {
       this.description.setValue(this.editedStory.content);
       this.contributor.setValue(this.editedStory.contributors);
       this.source.setValue(this.editedStory.sources);
+    if (!isUndefined(this.editedStory.loc.coordinates) && this.editedStory.loc.coordinates.length > 0) {
       this.latitude.setValue(this.editedStory.loc.coordinates[1].toString());
       this.longitude.setValue(this.editedStory.loc.coordinates[0].toString());
+    }
 
 
 
@@ -133,15 +140,18 @@ export class EditComponent implements OnInit, OnChanges {
 // onPositionChanged(newPos: string){
 onPositionChanged(newPos) {
   // set value of text box
-  console.log('onPosition changed called with', newPos);
+  this.log.debug('onPosition changed called with', newPos);
   // round to 6 dec places
-  this.latitude.setValue((Number(newPos.lat).toFixed(6)).toString());
-  this.longitude.setValue((Number(newPos.lng).toFixed(6)).toString());
+  this.latitude.setValue(Number(newPos.lat).toFixed(6));
+  this.longitude.setValue(Number(newPos.lng).toFixed(6));
+  this.storyModel.shapeType = '';
+  this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
 }
 onRectPositionChanged(newPos){
+  this.log.debug('onRecPositionChanged called with' + newPos);
   const centre = newPos.getCenter();
-  this.latitude.setValue((Number(centre.lat()).toFixed(6)).toString());
-  this.longitude.setValue((Number(centre.lng()).toFixed(6)).toString());
+  this.latitude.setValue(Number(centre.lat()).toFixed(6));
+  this.longitude.setValue(Number(centre.lng()).toFixed(6));
   const centreCoords = [Number(centre.lng()).toFixed(6), Number(centre.lat()).toFixed(6)];
 
   this.storyModel.loc = new Place('Point', centreCoords);

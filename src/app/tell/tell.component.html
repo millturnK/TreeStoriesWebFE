@@ -1,46 +1,13 @@
 
-<div class="alert alert-success" role="alert" *ngIf="success" >
-  <h4>Story Submitted</h4>
-  <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>
-</div>
-
-<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
-  <div class="header">Failed to save story</div>
-  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
-</div>
-
-
-
 <div class="row" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="col-md-12">
 
     <h1><img src="../../assets/TreeStoriesTempLogo.png" height="100px" alt="Tree Stories logo">
    Tell your story</h1>
 
-
-   <!-- <TextField hint="Email Address" keyboardType="email" [(ngModel)]="user.email"
-               autocorrect="false" autocapitalizationType="none"></TextField>
-    <TextField hint="Password" secure="true" [(ngModel)]="user.password"></TextField>
-    <TextField hint="Enter short title" [(ngModel)]="story.title"></TextField>
-    <TextView hint="Enter your story" [(ngModel)]="story.description"></TextView>
-    <Label text="Location of tree (latitude and longitude)"></Label>
-    <Button text="Location on Map" class="submit-button" (tap)="locate()"></Button>
-    <TextField hint="Latitude" [(ngModel)]="story.locationLat"></TextField>
-    <TextField hint="Longitude" [(ngModel)]="story.locationLong"></TextField>
-    <Label text="Contributor(s)"></Label>
-    <TextView hint="Contributor(s)" [(ngModel)]="story.contributors"></TextView>
-
-    <Button text="Submit" class="submit-button" (tap)="submit()"></Button>-->
   </div>
 </div>
-  <!--<div class="row">
-    <div class="col-md-12">
-        <label for="stTitle">Requirement Description </label> <br>
-        <input id="stTitle" name="stTitle" required></input>
-      </div>
 
-    </div>
--->
 <form role="form" (ngSubmit)="onSubmit(tellStoryForm.value)" [formGroup]="tellStoryForm">
 
 
@@ -111,7 +78,7 @@
 
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group"><h4>About the tree</h4>
+      <div class="form-group"><h4>About the tree or region</h4>
         <label for="botName">Botanic name (if known)</label>
         <textarea id="botName" name="botName" class="form-control"
                   formControlName="botName"  rows="1"></textarea>
@@ -149,5 +116,14 @@
   <button type="submit" class="btn btn-success" [disabled]="!tellStoryForm.valid">Submit</button>
 
 </form>
-<p>tellStoryForm value: {{ tellStoryForm.value | json}}</p>
-<p>tellStoryModel value: {{ storyModel | json}}</p>
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Story Submitted</h4>
+  <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Failed to save story</div>
+  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
+</div>
+<!--<p>tellStoryForm value: {{ tellStoryForm.value | json}}</p>-->
+<!--<p>tellStoryModel value: {{ storyModel | json}}</p>-->

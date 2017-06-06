@@ -81,9 +81,11 @@ export class TellComponent {
   ngOnInit() {
     this.coordsFromPhoto.coordsSubject.subscribe((
       coords:Number[])=>{
-      this.coordsAttr= coords;
-      this.latitude.setValue(this.coordsAttr[0].toFixed(6));
-      this.longitude.setValue(this.coordsAttr[1].toFixed(6));
+      if (!isUndefined(coords) && coords.length > 0) {
+        this.coordsAttr = coords;
+        this.latitude.setValue(this.coordsAttr[0].toFixed(6));
+        this.longitude.setValue(this.coordsAttr[1].toFixed(6));
+      }
     });
   }
 
@@ -96,6 +98,8 @@ export class TellComponent {
         // TODO implement login and pass in name, remove placeholder
         // _user.username = 'Katie Test';
         this.storyModel.contributors = _user.username;
+        // set it to Marker as shapetype by default
+        this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
     }
 
 
@@ -183,6 +187,7 @@ export class TellComponent {
     this.contributor.reset('');
     this.latitude.reset('');
     this.longitude.reset('');
+    this.pictures = [];
     // and close the map
     this.ckMap.setValue(false);
   }

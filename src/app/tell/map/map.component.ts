@@ -27,7 +27,7 @@ export class MapComponent implements OnInit {
   drawingManager;
 
   errorMsg= '';
-  private log = loggerFactory.getLogger('component.GoogleMaps');
+  private log = loggerFactory.getLogger('component.MapComponent');
 
 
   constructor(private googleApi: GoogleApiService, private ngZone: NgZone, private _storyService: StoryService) {}
@@ -55,7 +55,7 @@ export class MapComponent implements OnInit {
         drawingModes: ['marker', 'rectangle']
       },
       markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
-      rectangleOptions: {editable: true, draggable: true}
+      rectangleOptions: {editable: true, draggable: true, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5}
     });
 
     this.drawingManager.setMap(this.map);
@@ -104,6 +104,9 @@ export class MapComponent implements OnInit {
         if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
+          // google.maps.event.addListener(this.recOrTreeMarker, 'drag_end',  function ()  {
+          //   this.log.debug('in rec drag_end');
+          // });
           this.onRectPositionChanged.emit(bounds);
 
         } else if (e.type === 'marker') {
@@ -113,6 +116,17 @@ export class MapComponent implements OnInit {
         }
 
       });
+
+      google.maps.event.addListener(this.recOrTreeMarker, 'drag_end',  e =>  {
+        this.log.debug('in rec bounds_changed');
+      });
+      // // how do you add the listener only once?
+      // if(this.recOrTreeMarker){
+      //   this.recOrTreeMarker.addListener('dragend',  e =>  {
+      //     this.log.debug('in dragend');
+      //   });
+      // }
+
       // let markers = [];
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
