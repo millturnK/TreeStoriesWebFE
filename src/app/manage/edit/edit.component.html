@@ -1,16 +1,4 @@
 
-<div class="alert alert-success" role="alert" *ngIf="success" >
-  <h4>Story Submitted</h4>
-  <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>
-</div>
-
-<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
-  <div class="header">Failed to save story</div>
-  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
-</div>
-
-
-
 <div class="row" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="col-md-12">
 
@@ -32,40 +20,53 @@
       </div>
     </div>
   </div>
-
+  <div *ngIf="editedStory">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="form-group">
-        <label imgUpload="botName">Upload photo(s)</label>
+        <label for imgUpload>Upload photo(s)</label>
         <image-upload id="imgUpload"[max]="5"
                       (onFileUploadFinish)="imageUploaded($event)"
                       [maxFileSize]="2048576">
+          <!--<a href="#" class="thumbnail">-->
+            <!--<span class="glyphicon glyphicon-remove">-->
+          <!--<img *ngFor="let uri of editedStory.photoLinks" src="{{uri}}" alt="tree image"></span>-->
+          <!--</a>-->
         </image-upload>
       </div>
     </div>
-  </div>
+    <div class="col-md-6">
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <h4 >Location and type of feature</h4>
-      </div>
+      <label>Existing photo(s)</label>
+
+      <div *ngFor="let uri of editedStory.photoLinks;let i=index" style="width:100px; height:100px; position: relative">
+
+        <!--<img id="photo" *ngFor="let uri of editedStory.photoLinks" src="{{uri}}" alt="tree image" style="width:75px;height:75px;margin:5px">-->
+        <!--<a href="#" class="thumbnail">-->
+
+        <!--<div class="image_canvas">-->
+        <button type="button" class="btn btn-xs delete-img-tag"  (click)="deletePhoto(i)"><i class="glyphicon glyphicon-remove"></i></button>
+        <!--<a href="#" class="thumbnail">-->
+        <img [id]="'photo'+i"  src="{{uri}}" alt="tree image" class="img-thumbnail">
+
+        <!--</a>-->
 
     </div>
+     
   </div>
-  <div *ngIf="editedStory">
+  </div>
+  </div>
+
+
+  <!--<div *ngIf="editedStory">-->
   <div class="row" >
-    <div class="col-md-7" height="500px">
+    <div class="col-md-12" height="500px">
+      <h4 >Location and type of feature</h4>
       <app-interactive-map [editedStory]="editedStory"(onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)">
       </app-interactive-map>
-
-    </div>
-
-    <div class="col-md-5">
-      <img *ngFor="let uri of editedStory.photoLinks" src="{{uri}}" alt="tree image" style="width:75px;height:75px;margin:5px">
     </div>
   </div>
-  </div>
+
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
@@ -125,5 +126,14 @@
   <button type="submit" class="btn btn-success" [disabled]="!editStoryForm.valid">Submit</button>
 
 </form>
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Story Submitted</h4>
+  <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Failed to save story</div>
+  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
+</div>
 <p>editlStoryForm value: {{ editStoryForm.value | json}}</p>
 <p>editStoryModel value: {{ storyModel | json}}</p>

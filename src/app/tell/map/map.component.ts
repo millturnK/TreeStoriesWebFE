@@ -54,8 +54,8 @@ export class MapComponent implements OnInit {
         position: google.maps.ControlPosition.TOP_RIGHT,
         drawingModes: ['marker', 'rectangle']
       },
-      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
-      rectangleOptions: {editable: true, draggable: true, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5}
+      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: false},
+      rectangleOptions: {editable: true, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5}
     });
 
     this.drawingManager.setMap(this.map);
@@ -96,17 +96,25 @@ export class MapComponent implements OnInit {
 
 
       });
+      //this.map.setZoom(5);
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
         this.deleteMarker();
         this.recOrTreeMarker = e.overlay;
+        // this.recOrTreeMarker.addListener('bounds_changed', function () {
+        //    this.log.debug('in rec bounds_changed');
+        //  });
 
         if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
           console.log('drawing man. bounds=' + bounds);
+          // all this gives an error
           // google.maps.event.addListener(this.recOrTreeMarker, 'drag_end',  function ()  {
           //   this.log.debug('in rec drag_end');
           // });
+         // e.overlay.addListener('bounds_changed', function () {
+         //    this.log.debug('in rec bounds_changed');
+         //  });
           this.onRectPositionChanged.emit(bounds);
 
         } else if (e.type === 'marker') {
@@ -117,9 +125,9 @@ export class MapComponent implements OnInit {
 
       });
 
-      google.maps.event.addListener(this.recOrTreeMarker, 'drag_end',  e =>  {
-        this.log.debug('in rec bounds_changed');
-      });
+      // google.maps.event.addListener(this.recOrTreeMarker, 'drag_end',  e =>  {
+      //   this.log.debug('in rec bounds_changed');
+      // });
       // // how do you add the listener only once?
       // if(this.recOrTreeMarker){
       //   this.recOrTreeMarker.addListener('dragend',  e =>  {
@@ -167,6 +175,7 @@ export class MapComponent implements OnInit {
           this.log.debug('in search box listener. posString=' + posString);
           // pan to new position
           this.map.panTo(lat, lng);
+
         });
 
 

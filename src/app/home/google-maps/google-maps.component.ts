@@ -67,7 +67,7 @@ export class GoogleMapsComponent implements OnInit {
         // this should be formatted in HTML tags - put in for loop
         let content = '';
         // console.log('in GM retrieve: story= ', story);
-        if (!isUndefined(story.photoLinks)) {
+        if (!isUndefined(story.photoLinks) && story.photoLinks != null) {
           for (const uri of story.photoLinks)
           {
             content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'

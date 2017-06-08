@@ -1,26 +1,39 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../user/models/user';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 
+declare var jQuery: any;
 declare const google: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+// TODO change to display all thumbnails of photos
 export class HomeComponent implements OnInit, OnDestroy {
+  imageToShow: string;
+  showModal: boolean;
   title = 'Tree Stories';
   stories: Story[]= [];
   private sub: any;
   private logout = false;
   private register = false;
+  //modal = document.getElementById('myModal');
 
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+  //img = document.getElementById('myImg');
+//  modalImg = document.getElementById('img01').nativeElement;
+  // captionText = document.getElementById("caption");
+  modalImg;
+  modal;
 
   private log = loggerFactory.getLogger('component.Home');
-  constructor(private _router: Router, private route: ActivatedRoute, private _user: User, private _storyService: StoryService) {
+
+
+  constructor(private elementRef: ElementRef, private _router: Router, private route: ActivatedRoute, private _user: User, private _storyService: StoryService) {
 
   }
 
@@ -58,7 +71,34 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._user.clear();
 
   }
+  showEnlargedPhoto(i) {
+    this.log.debug('in showEnlargedPhoto.Index=' + i);
+    const photoUrl = this.stories[i].photoLinks[0];
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    // const img = document.getElementById('photo' + i);
 
+    this.modalImg = jQuery(this.elementRef.nativeElement).find('#img01');
+    this.modal = jQuery(this.elementRef.nativeElement).find('#myModal');
+
+    console.log('modal = ', this.modal);
+    console.log('img = ', this.modalImg);
+
+    this.modalImg.src = photoUrl;
+
+    console.log('was I am to set img?', this.modalImg);
+
+    //this.modal.style.display = 'block';
+    this.showModal = true;
+    this.imageToShow = photoUrl;
+
+    console.log('was I able to set display?', this.modal);
+
+  }
+
+  closeModal() {
+//    document.getElementById('myModal').style.display='none'
+    this.showModal = false;
+  }
 
   getStories() {
     this.log.debug('in getStories. Length is ' + this.stories.length);

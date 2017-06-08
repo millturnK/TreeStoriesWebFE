@@ -92,6 +92,7 @@ export class StoryService {
   // formData.append('latitude', story.latitude);
   // formData.append('longitude', story.longitude);
   formData.append('botName', story.botName);
+  formData.append('photoLinks', JSON.stringify(story.photoLinks));
   // TODO Not available in story yet
   formData.append('links', []);
 
@@ -102,7 +103,7 @@ export class StoryService {
     console.log('appended image to req', pic.file);
   }
 
-  return this.http.put(this.apiUrl, formData, options)
+  return this.http.put(queryUrl, formData, options)
     .map(this.extractGetData)
     .catch(this.handleError);
   }
@@ -158,7 +159,7 @@ export class StoryService {
     //this.log.debug("inside handleError using proper logging");
     //console.log("inside handleError");
 
-    const errMsg = 'Error in tell service';
+    const errMsg = 'Please contact MillturnIT support. Error in story service: ' + error.toString();
     //if (error instanceof Response) {
     //   const body = error.json() || "";
     //   const err = body.error || JSON.stringify(body);

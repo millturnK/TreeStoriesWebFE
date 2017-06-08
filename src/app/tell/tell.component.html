@@ -48,8 +48,9 @@
   <div class="row">
     <div class="col-md-12" *ngIf="ckMap.value === true" height="500px">
       <label>Select tree (or area of trees) location below</label>
-      <p>Use the controls to zoom in and out then drag the marker to where your tree is. Or search for a place and click to add a marker or a rectangle to mark an area.
-      We will attempt to locate the coordinates from either the photo you submit or the marker or area you draw (its centrepoint).</p>
+      <p>Use the controls to zoom in and out then click to add a marker for your tree location.
+        Or search for a place and click to add a marker or a rectangle to mark an area.
+      We will attempt to locate the coordinates from either the photo you submit or the marker or area you draw (its centrepoint) or you can manually enter them.</p>
 
         <!--<app-google-maps [story]="storyModel" (onPositionChanged)="onPositionChanged($event)"></app-google-maps>-->
       <app-map (onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)"></app-map>

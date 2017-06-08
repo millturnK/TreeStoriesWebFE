@@ -45,6 +45,7 @@ export class EditComponent implements OnInit, OnChanges {
   pictures: Picture[] = [];
 
 
+
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description= new FormControl('', Validators.required);
@@ -71,12 +72,15 @@ export class EditComponent implements OnInit, OnChanges {
               private _user: User, private _storyService: StoryService) {
     this.user = _user;
     this.storyModel.contributors = _user.username;
+    this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
+
   }
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
     this.log.debug('in ngOnInit. Id=' + id);
-    this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
+    this.storyModel._id = id;
+      this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
       this.log.debug('in coords');
       if (!isUndefined(coords) && coords.length > 0){
         this.coordsAttr = coords;
@@ -124,6 +128,8 @@ export class EditComponent implements OnInit, OnChanges {
       this.latitude.setValue(this.editedStory.loc.coordinates[1].toString());
       this.longitude.setValue(this.editedStory.loc.coordinates[0].toString());
     }
+    //set photoLnks
+    this.storyModel.photoLinks = this.editedStory.photoLinks;
 
 
 
@@ -131,7 +137,7 @@ export class EditComponent implements OnInit, OnChanges {
 
   private failedRetrieve(error: any) {
     /*console.log("failed retrieve: ", error);*/
-    this.log.debug("failed retrieve: " + error.message);
+    this.log.debug('failed retrieve: ' + error.message);
 
   }
 
@@ -140,10 +146,10 @@ export class EditComponent implements OnInit, OnChanges {
 // onPositionChanged(newPos: string){
 onPositionChanged(newPos) {
   // set value of text box
-  this.log.debug('onPosition changed called with', newPos);
+  this.log.debug('onPosition changed called with' + newPos);
   // round to 6 dec places
-  this.latitude.setValue(Number(newPos.lat).toFixed(6));
-  this.longitude.setValue(Number(newPos.lng).toFixed(6));
+  this.latitude.setValue(Number(newPos.lat()).toFixed(6));
+  this.longitude.setValue(Number(newPos.lng()).toFixed(6));
   this.storyModel.shapeType = '';
   this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
 }
@@ -180,7 +186,7 @@ onSubmit() {
   this.storyModel.sources = source;
   this.storyModel.content = description;
 
-  //set the location based on latitude contents
+  // set the location based on latitude contents
   this.storyModel.loc = new Place('Point', [ Number(this.longitude.value).toFixed(6), Number(this.latitude.value).toFixed(6) ]);
   console.log('onSubmit $event.file=', event);
 
@@ -199,6 +205,10 @@ private successfulSubmit() {
   // }, 4000);
   //this.tellStoryForm.reset();
   this.resetForm();
+  setTimeout(() => {
+    this._router.navigate(['/list']);
+  }, 2000);
+
 }
 
 
@@ -212,16 +222,24 @@ private resetForm() {
   this.contributor.reset('');
   this.latitude.reset('');
   this.longitude.reset('');
+  //this.editedStory.photoLinks = null;
   // and close the map
   this.ckMap.setValue(false);
 }
 
+
+  deletePhoto(i){
+   this.log.debug('Button clicked with: ' + i);
+   // remove photo
+    this.storyModel.photoLinks.splice(i, 1);
+  }
 
 
 
 imageUploaded($event) {
   this.log.debug('imageUploaded called');
   console.log('imageUploaded called. Event.file:', $event.file);
+
   // pull out lat.lng
   this.pictures.push(new Picture(<File> $event.file));
   this.coordsFromPhoto.getCoordsFromPhoto($event.file);

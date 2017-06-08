@@ -25,21 +25,27 @@
         <div class="panel-heading" role="tab" [id]="'id'+i">
         <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" [href]="'#collapse'+i" aria-expanded="false" aria-controls="collapse">
-        "{{story.title}}. Submitted by: {{story.contributors}}"
+        "{{story.title}}"
         </a>
         </h4>
         </div>
         <div [id]="'collapse'+i" class="panel-collapse collapse" role="tabpanel" aria-labelledby="'id'+i">
         <div class="panel-body">
-          <div ng-show="story.photoLinks.length() > 0">
-          <img  src="{{story.photoLinks[0]}}" alt="tree image" style="width:50px;height:50px;margin:5px"></div>
-         <p>{{story.content}}</p>
+          <div ng-show="story.photoLinks != null" *ngFor="let uri of story.photoLinks;let i=index">
+          <img [id]="'photo'+i" src="{{uri}}" alt="tree image" class="img-thumbnail img-tag" (click)="showEnlargedPhoto(i)"></div>
+          <p>{{story.content}}</p>
+          <p>Source(s): {{story.sources}}</p>
         </div>
+
         </div>
       </div>
     </div>
 
-
-
   </div>
+</div>
+<div id="myModal" *ngIf="showModal" class="modal">
+  <!-- The Close Button -->
+  <span class="close" (click)="closeModal()">&times;</span>
+  <img class="modal-content" id="img01" src="{{imageToShow}}">
+
 </div>

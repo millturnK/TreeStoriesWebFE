@@ -25,7 +25,7 @@
       <tbody>
       <tr *ngFor="let story of stories; let i=index" (click)="storySelected(i)">
         <td>{{story.title}}</td>
-        <td>{{story.latitude}}, {{story.longitude}}</td>
+        <td>{{story.loc.coordinates[1]}}, {{story.loc.coordinates[0]}}</td>
         <td>{{story.creationDate}}</td>
         <td>
           <button class="btn-sm btn-success"   (click)="edit(i)"  >
