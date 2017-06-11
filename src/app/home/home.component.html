@@ -31,8 +31,9 @@
         </div>
         <div [id]="'collapse'+i" class="panel-collapse collapse" role="tabpanel" aria-labelledby="'id'+i">
         <div class="panel-body">
-          <div ng-show="story.photoLinks != null" *ngFor="let uri of story.photoLinks;let i=index">
-          <img [id]="'photo'+i" src="{{uri}}" alt="tree image" class="img-thumbnail img-tag" (click)="showEnlargedPhoto(i)"></div>
+          <div ng-show="story.photoLinks != null" *ngFor="let uri of story.photoLinks;let i=index" class="photoDisplay">
+          <img [id]="'photo'+i" src="{{uri}}" alt="tree image" class="img-thumbnail" (click)="showEnlargedPhoto(i)">
+          </div>
           <p>{{story.content}}</p>
           <p>Source(s): {{story.sources}}</p>
         </div>

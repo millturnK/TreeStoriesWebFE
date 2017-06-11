@@ -37,34 +37,32 @@
     </div>
     <div class="col-md-6">
 
-      <label>Existing photo(s)</label>
+      <label style="float:left">Existing photo(s)</label>
+      <!--<div *ngFor="let uri of editedStory.photoLinks;let i=index" class="photoDisplay">-->
+        <!--<button type="button" class="btn btn-xs delete-img-tag"  (click)="deletePhoto(i)"><i class="glyphicon glyphicon-remove"></i></button>-->
+        <!--<img [id]="'photo'+i"  src="{{uri}}" alt="tree image" class="img-thumbnail">-->
+    <!--</div>-->
 
-      <div *ngFor="let uri of editedStory.photoLinks;let i=index" style="width:100px; height:100px; position: relative">
+      <div id="myModal"*ngFor="let uri of editedStory.photoLinks;let i=index" class="photoDisplay">
+        <!-- The Close Button -->
+        <span class="close" (click)="deletePhoto(i)">&times;</span>
+        <img class="img-thumbnail" [id]="'photo'+i" src="{{uri}}">
 
-        <!--<img id="photo" *ngFor="let uri of editedStory.photoLinks" src="{{uri}}" alt="tree image" style="width:75px;height:75px;margin:5px">-->
-        <!--<a href="#" class="thumbnail">-->
+      </div>
 
-        <!--<div class="image_canvas">-->
-        <button type="button" class="btn btn-xs delete-img-tag"  (click)="deletePhoto(i)"><i class="glyphicon glyphicon-remove"></i></button>
-        <!--<a href="#" class="thumbnail">-->
-        <img [id]="'photo'+i"  src="{{uri}}" alt="tree image" class="img-thumbnail">
-
-        <!--</a>-->
-
-    </div>
-     
   </div>
   </div>
   </div>
 
 
-  <!--<div *ngIf="editedStory">-->
+  <div *ngIf="editedStory">
   <div class="row" >
     <div class="col-md-12" height="500px">
       <h4 >Location and type of feature</h4>
       <app-interactive-map [editedStory]="editedStory"(onPositionChanged)="onPositionChanged($event)" (onRectPositionChanged)="onRectPositionChanged($event)">
       </app-interactive-map>
     </div>
+  </div>
   </div>
 
   <div class="row">

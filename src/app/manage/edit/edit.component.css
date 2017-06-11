@@ -4,6 +4,13 @@
   margin:5px;
 
 }
+.photoDisplay {
+  float:left;
+  margin: 5px;
+  padding: 5px;
+  height: 110px;
+  width: 110px;
+}
 
 .img-tag{
   display: inline-block;
@@ -13,8 +20,8 @@
 }
 
 .delete-img-tag {
-  position: absolute;
-  top:0;
+  position: relative;
+  top:15px;
   left: 5px;
   z-index:2;
   color: red;
@@ -33,29 +40,29 @@
   margin: 5px;
   top: 0;
   left:0;
-  cursor: pointer;
-  transition: 0.3s;
+  z-index: -1;
+  /*cursor: pointer;*/
+  /*transition: 0.3s;*/
 }
 .img-thumbnail-hover{
   opacity: 0.7;
 }
-.oldDeleteImgStyle{
-  background-color: #e6242d;
-  position: absolute;
-  top:0;
-  left: 0;
-}
+/*.oldDeleteImgStyle{*/
+  /*background-color: #e6242d;*/
+  /*position: absolute;*/
+  /*top:0;*/
+  /*left: 0;*/
+/*}*/
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
+  position: relative; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 100px; /* Full width */
+  height: 100px; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
@@ -66,20 +73,20 @@
   margin: auto;
   display: block;
   width: 80%;
-  max-width: 700px;
+  max-width: 100px;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
-#caption {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-  text-align: center;
-  color: #ccc;
-  padding: 10px 0;
-  height: 150px;
-}
+/*#caption {*/
+  /*margin: auto;*/
+  /*display: block;*/
+  /*width: 80%;*/
+  /*max-width: 100px;*/
+  /*text-align: center;*/
+  /*color: #f10507;*/
+  /*!*padding: 10px 0;*!*/
+  /*height: 20px;*/
+/*}*/
 
 /* Add Animation - Zoom in the Modal */
 .modal-content, #caption {
@@ -101,13 +108,17 @@
 
 /* The Close Button */
 .close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
+  position: relative;
+  /*top: 0px;*/
+  /*right: 35px;*/
+  /*color: #ffffff;*/
+  color:#f10507;
   font-size: 40px;
-  font-weight: bold;
+  font-weight:bolder;
   transition: 0.3s;
+  z-index: 4;
+  top:30px;
+  left: 5px;
 }
 
 .close:hover,
@@ -118,7 +129,7 @@
 }
 
 /* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
+@media only screen and (max-width: 100px){
   .modal-content {
     width: 100%;
   }

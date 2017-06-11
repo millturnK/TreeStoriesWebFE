@@ -3,6 +3,11 @@
   overflow-y: auto;
 
 }
+.photoDisplay {
+  float:left;
+  margin: 5px;
+  padding: 5px
+}
 
 .img-thumbnail{
   height: 50px;
@@ -85,7 +90,7 @@
   position: absolute;
   top: 15px;
   right: 35px;
-  color: #f1f1f1;
+  color: #f10507;
   font-size: 40px;
   font-weight: bold;
   transition: 0.3s;
