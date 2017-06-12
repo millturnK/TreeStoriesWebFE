@@ -1,12 +1,13 @@
-import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../user/models/user';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 
+
 declare var jQuery: any;
-declare const google: any;
+declare var google: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,6 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private sub: any;
   private logout = false;
   private register = false;
+  @Output() onPanTo = new EventEmitter<string>();
+  panPosition: google.maps.LatLng;
   //modal = document.getElementById('myModal');
 
 // Get the image and insert it inside the modal - use its "alt" text as a caption
@@ -57,7 +60,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
   }
+  panToStoryLocation(coords){
 
+    this.log.debug('in panToStoryLocation. Coords=' + coords);
+    const panTo = new google.maps.LatLng(coords[1], coords[0]);
+    const posString = coords[1] + ',' + coords[0];
+   // this.onPanTo.emit(posString);
+    this.panPosition = panTo;
+    this.log.debug('in panToStoryLocation. panPosition=' + this.panPosition);
+  }
 
   ngOnDestroy() {
     this.sub.unsubscribe();

@@ -12,7 +12,7 @@
 <div class="row">
   <div class="col-md-12">
 <h3>Mapped tree stories</h3>
-    <app-google-maps (onPlaceChanged)="onPlaceChanged($event)"></app-google-maps>
+    <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [panTo]="panPosition"></app-google-maps>
   </div>
 </div>
 
@@ -24,7 +24,8 @@
       <div class="panel panel-default" *ngFor="let story of getStories();let i=index">
         <div class="panel-heading" role="tab" [id]="'id'+i">
         <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" [href]="'#collapse'+i" aria-expanded="false" aria-controls="collapse">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" [href]="'#collapse'+i" aria-expanded="false"
+           aria-controls="collapse" (click)="panToStoryLocation(story.loc.coordinates)">
         "{{story.title}}"
         </a>
         </h4>

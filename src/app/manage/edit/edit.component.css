@@ -5,11 +5,14 @@
 
 }
 .photoDisplay {
+  position: relative;
   float:left;
   margin: 5px;
   padding: 5px;
   height: 110px;
   width: 110px;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
 
 .img-tag{
@@ -30,22 +33,22 @@
   position: relative;
 }
 
-.img-thumbnail{
+.imgDisplay{
   height: 100px;
   width: 100px;
   border: 2px solid rgb(221, 221, 221);
   border-radius: 4px;
-  display: inline-block;
   position: relative;
-  margin: 5px;
-  top: 0;
-  left:0;
-  z-index: -1;
-  /*cursor: pointer;*/
-  /*transition: 0.3s;*/
+  z-index: 1;
+  align-self: center;
+  cursor: pointer;
+  transition: 0.3s;
 }
-.img-thumbnail-hover{
-  opacity: 0.7;
+.imgDisplay:hover,
+.imgDisplay:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
 }
 /*.oldDeleteImgStyle{*/
   /*background-color: #e6242d;*/
@@ -107,30 +110,41 @@
 }
 
 /* The Close Button */
-.close {
-  position: relative;
-  /*top: 0px;*/
-  /*right: 35px;*/
-  /*color: #ffffff;*/
-  color:#f10507;
+.deletePic {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  color: #f10507;
   font-size: 40px;
-  font-weight:bolder;
+  font-weight: bold;
   transition: 0.3s;
   z-index: 4;
-  top:30px;
-  left: 5px;
+  transition: 0.3s;
 }
 
-.close:hover,
-.close:focus {
-  color: #bbb;
+.deletePic:hover,
+.deletePic:focus {
+  color: #bfbfbf;
   text-decoration: none;
   cursor: pointer;
 }
 
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 100px){
-  .modal-content {
-    width: 100%;
-  }
-}
+
+/*.close {*/
+  /*position: absolute;*/
+  /*top: 15px;*/
+  /*right: 35px;*/
+  /*color: #f10507;*/
+  /*font-size: 40px;*/
+  /*font-weight: bold;*/
+  /*transition: 0.3s;*/
+/*}*/
+
+/*.close:hover,*/
+/*.close:focus {*/
+  /*color: #bbb;*/
+  /*text-decoration: none;*/
+  /*cursor: pointer;*/
+/*}*/
+
+

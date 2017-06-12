@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, NgZone} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, NgZone, OnChanges} from '@angular/core';
 import {GoogleApiService} from '../../services/google-api.service';
 import {loggerFactory} from '../../config/ConfigLog4j';
 import {isUndefined} from 'util';
@@ -15,9 +15,12 @@ import {Story} from '../../models/story';
   styleUrls: ['./google-maps.component.css']
 })
 // TODO detect click and drag on marker to new position
-export class GoogleMapsComponent implements OnInit {
+export class GoogleMapsComponent implements OnInit, OnChanges {
 
   @Output() onPlaceChanged = new EventEmitter<string>();
+  @Input() editedStory: google.maps.LatLng;
+  @Input() panTo: google.maps.LatLng;
+
 
   @ViewChild('search')
   public searchElementRef: ElementRef;
@@ -49,7 +52,16 @@ export class GoogleMapsComponent implements OnInit {
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
   }
+  ngOnChanges() {
+    this.log.debug('in ngOnChanges:' );
+    this.log.debug('panTo=' + this.panTo);
+    if (!isUndefined(this.map)) {
+      this.map.panTo(this.panTo);
+      this.map.setZoom(18);
+    }
 
+
+  }
   // parse them and add them to map
   successfulRetrieve(stories: Story[]) {
     // TODO remove this when migrating environments - find a way to get this from env var
@@ -134,7 +146,12 @@ export class GoogleMapsComponent implements OnInit {
 
   }
 
+ onPanTo(pos: google.maps.LatLng){
+   this.log.debug('in onPanTo. pos=' + pos);
+   this.map.setZoom(18);
+   this.map.panTo(pos);
 
+ }
 
   ngOnInit() {
     this.googleApi.initMap().then(() => {
