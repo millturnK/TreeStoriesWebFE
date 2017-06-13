@@ -5,8 +5,8 @@
     <h1>
       {{title}}
     </h1>
-    <button class="btn btn-default" type="button" (click)="openTell()" *ngIf="_user.loggedin">Tell my tree story</button>
-    <button class="btn btn-default" type="button" disabled *ngIf="!_user.loggedin">Tell my tree story</button>
+    <button class="btn btn-default btn-background" type="button" (click)="openTell()" *ngIf="_user.loggedin">Tell my tree story</button>
+    <button class="btn btn-default btn-background" type="button" disabled *ngIf="!_user.loggedin">Tell my tree story</button>
   </div>
 </div>
 <div class="row">
@@ -22,7 +22,7 @@
     <div class="panel-group scrollPanel" id="accordion" role="tablist" aria-multiselectable="true">
 
       <div class="panel panel-default" *ngFor="let story of getStories();let i=index">
-        <div class="panel-heading" role="tab" [id]="'id'+i">
+        <div class="panel-heading titlePanel" role="tab" [id]="'id'+i">
         <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" [href]="'#collapse'+i" aria-expanded="false"
            aria-controls="collapse" (click)="panToStoryLocation(story.loc.coordinates)">

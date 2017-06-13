@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-html,
+
 body {
   height: 100%;
   margin: 0;
@@ -21,24 +21,24 @@ body {
   padding: 0 16px;
 }
 h1{
-  font-size: 2em;
+  font-size: 3em;
   font-weight:700;
-  font-family:'Della Respira', serif;
+  font-family: 'Dancing Script', cursive;
 }
 h2{
   font-size: 1.75em;
-  font-family:'Della Respira', serif;
+  font-family:'Roboto', serif;
   font-weight:700;
 }
 h3{
   font-size: 1.5em;
-  font-family:'Della Respira', serif;
-  font-weight:700;
+  font-family:'Roboto', serif;
+  font-weight:500;
 }
 h4{
   font-size: 1.2em;
-  font-family:'Della Respira', serif;
-  font-weight:700;
+  font-family:'Roboto', serif;
+  font-weight:500;
 
 }
 /*

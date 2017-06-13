@@ -1,3 +1,16 @@
+
+.titlePanel{
+  background-color: #eaf4f2;
+  box-shadow: 5px 5px 5px rgb(191, 191, 191);
+}
+
+
+
+.btn-background{
+  background-color:#F7931E;
+  color: white;
+}
+
 .scrollPanel {
   height: 20pc;
   overflow-y: auto;
@@ -46,6 +59,8 @@
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
+
+
 
 /* Modal Content (Image) */
 .modal-content {
