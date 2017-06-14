@@ -110,7 +110,7 @@ export class TellComponent {
      // round to 6 dec places
      this.latitude.setValue(Number(newPos.lat()).toFixed(6));
      this.longitude.setValue(Number(newPos.lng()).toFixed(6));
-     //this.storyModel.location = new Place('Point',[Number(newPos.lat()).toFixed(6), Number(newPos.lng()).toFixed(6) ]);
+
      this.storyModel.shapeType = '';
     this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
   }
@@ -123,14 +123,15 @@ export class TellComponent {
     const centre = newPos.getCenter();
     this.latitude.setValue(Number(centre.lat()).toFixed(6));
     this.longitude.setValue(Number(centre.lng()).toFixed(6));
-    const centreCoords = [Number(centre.lng()).toFixed(6), Number(centre.lat()).toFixed(6)];
+    const centreCoords: number[] = [Number(centre.lng().toFixed(6)), Number(centre.lat().toFixed(6))];
+    //const cc2: number[] = [Number('34')., 45];
 
    this.storyModel.loc = new Place('Point', centreCoords);
     //this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
-    const coordsNE = [Number(newPos.getNorthEast().lat()).toFixed(6), Number(newPos.getNorthEast().lng()).toFixed(6)];
+    const coordsNE = [Number(newPos.getNorthEast().lat().toFixed(6)), Number(newPos.getNorthEast().lng().toFixed(6))];
    this.storyModel.NECoords = new Place('Point', coordsNE);
    // this.storyModel.NECoords = { type : 'Point', coordinates : coordsNE };
-    const coordsSW = [Number(newPos.getSouthWest().lat()).toFixed(6), Number(newPos.getSouthWest().lng()).toFixed(6)];
+    const coordsSW = [Number(newPos.getSouthWest().lat().toFixed(6)), Number(newPos.getSouthWest().lng().toFixed(6))];
     this.storyModel.SWCoords = new Place('Point', coordsSW);
     this.storyModel.shapeType = '';
     this.storyModel.shapeType = this.storyModel.shapeTypeRect;

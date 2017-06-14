@@ -3,9 +3,9 @@
  */
 export class Place {
   type: string;
-  coordinates: any[];
+  coordinates: number[];
 
-  constructor(name: string, coords: any[]) {
+  constructor(name: string, coords: number[]) {
     this.type = name;
     this.coordinates = coords;
   }

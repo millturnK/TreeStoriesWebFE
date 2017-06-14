@@ -4,7 +4,9 @@
   box-shadow: 5px 5px 5px rgb(191, 191, 191);
 }
 
-
+.panelStory{
+  background-color:whitesmoke;
+}
 
 .btn-background{
   background-color:#F7931E;
@@ -14,6 +16,7 @@
 .scrollPanel {
   height: 20pc;
   overflow-y: auto;
+  margin-top: 1pc;
 
 }
 .photoDisplay {

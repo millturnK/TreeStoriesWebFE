@@ -82,10 +82,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._user.clear();
 
   }
-  showEnlargedPhoto(i) {
-    this.log.debug('in showEnlargedPhoto.Index=' + i);
-    const photoUrl = this.stories[i].photoLinks[0];
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
+  showEnlargedPhoto(uri) {
+    this.log.debug('in showEnlargedPhoto.uri=' + uri);
+    //const photoUrl = this.stories[i].photoLinks[0];
+    const photoUrl = uri;
+      // Get the image and insert it inside the modal - use its "alt" text as a caption
     // const img = document.getElementById('photo' + i);
 
     this.modalImg = jQuery(this.elementRef.nativeElement).find('#img01');
@@ -112,12 +113,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getStories() {
-    this.log.debug('in getStories. Length is ' + this.stories.length);
+    //this.log.debug('in getStories. Length is ' + this.stories.length);
     return this.stories;
   }
 
   successfulRetrieve(stories: Story[]) {
-    this.log.debug('Home Component SuccRet got stories of length' + stories.length);
+    //this.log.debug('Home Component SuccRet got stories of length' + stories.length);
 
     // throw away what is there
     this.stories = [];

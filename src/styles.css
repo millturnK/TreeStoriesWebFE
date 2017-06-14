@@ -25,19 +25,24 @@ h1{
   font-weight:700;
   font-family: 'Dancing Script', cursive;
 }
+titleFont{
+  font-size: 3em;
+  font-weight:700;
+  font-family: 'Dancing Script', cursive;
+}
 h2{
   font-size: 1.75em;
-  font-family:'Roboto', serif;
-  font-weight:700;
+  font-family: 'Tillana', cursive;
+  font-weight:600;
 }
 h3{
   font-size: 1.5em;
-  font-family:'Roboto', serif;
+  font-family: 'Tillana', cursive;
   font-weight:500;
 }
 h4{
   font-size: 1.2em;
-  font-family:'Roboto', serif;
+  font-family: 'Tillana', cursive;
   font-weight:500;
 
 }

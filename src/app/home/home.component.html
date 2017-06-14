@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-md-12">
 
-    <h1>
+    <h1 class="titleFont" title>
       {{title}}
     </h1>
     <button class="btn btn-default btn-background" type="button" (click)="openTell()" *ngIf="_user.loggedin">Tell my tree story</button>
@@ -11,7 +11,8 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-<h3>Mapped tree stories</h3>
+    <h3>Mapped tree stories</h3>
+
     <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [panTo]="panPosition"></app-google-maps>
   </div>
 </div>
@@ -31,9 +32,9 @@
         </h4>
         </div>
         <div [id]="'collapse'+i" class="panel-collapse collapse" role="tabpanel" aria-labelledby="'id'+i">
-        <div class="panel-body">
+        <div class="panel-body panelStory">
           <div ng-show="story.photoLinks != null" *ngFor="let uri of story.photoLinks;let i=index" class="photoDisplay">
-          <img [id]="'photo'+i" src="{{uri}}" alt="tree image" class="img-thumbnail" (click)="showEnlargedPhoto(i)">
+          <img [id]="'photo'+i" src="{{uri}}" alt="tree image" class="img-thumbnail" (click)="showEnlargedPhoto(uri)">
           </div>
           <p>{{story.content}}</p>
           <p>Source(s): {{story.sources}}</p>

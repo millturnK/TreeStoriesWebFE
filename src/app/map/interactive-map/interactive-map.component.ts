@@ -152,6 +152,7 @@ export class InteractiveMapComponent implements OnInit {
       });
 
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete',  e =>  {
+        this.ngZone.run(() => {
         this.deleteMarker();
         this.recOrTreeMarker = e.overlay;
 
@@ -165,7 +166,7 @@ export class InteractiveMapComponent implements OnInit {
           console.log('drawing man. REc pos=' + pos);
           this.onPositionChanged.emit(pos);
         }
-
+        });
       });
       // let markers = [];
       // Listen for the event fired when the user selects a prediction and retrieve

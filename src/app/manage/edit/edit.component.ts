@@ -84,8 +84,8 @@ export class EditComponent implements OnInit, OnChanges {
       this.log.debug('in coords');
       if (!isUndefined(coords) && coords.length > 0){
         this.coordsAttr = coords;
-        this.latitude.setValue(Number(this.coordsAttr[0]).toFixed(6));
-        this.longitude.setValue(Number(this.coordsAttr[1]).toFixed(6));
+        this.latitude.setValue(Number(this.coordsAttr[0].toFixed(6)));
+        this.longitude.setValue(Number(this.coordsAttr[1].toFixed(6)));
         this.log.debug('set photo coords');
       }
 
@@ -148,24 +148,24 @@ onPositionChanged(newPos) {
   // set value of text box
   this.log.debug('onPosition changed called with' + newPos);
   // round to 6 dec places
-  this.latitude.setValue(Number(newPos.lat()).toFixed(6));
-  this.longitude.setValue(Number(newPos.lng()).toFixed(6));
+  this.latitude.setValue(Number(newPos.lat().toFixed(6)));
+  this.longitude.setValue(Number(newPos.lng().toFixed(6)));
   this.storyModel.shapeType = '';
   this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
 }
 onRectPositionChanged(newPos){
   this.log.debug('onRecPositionChanged called with' + newPos);
   const centre = newPos.getCenter();
-  this.latitude.setValue(Number(centre.lat()).toFixed(6));
-  this.longitude.setValue(Number(centre.lng()).toFixed(6));
-  const centreCoords = [Number(centre.lng()).toFixed(6), Number(centre.lat()).toFixed(6)];
+  this.latitude.setValue(Number(centre.lat().toFixed(6)));
+  this.longitude.setValue(Number(centre.lng().toFixed(6)));
+  const centreCoords = [Number(centre.lng().toFixed(6)), Number(centre.lat().toFixed(6))];
 
   this.storyModel.loc = new Place('Point', centreCoords);
   //this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
-  const coordsNE = [Number(newPos.getNorthEast().lat()).toFixed(6), Number(newPos.getNorthEast().lng()).toFixed(6)];
+  const coordsNE = [Number(newPos.getNorthEast().lat().toFixed(6)), Number(newPos.getNorthEast().lng().toFixed(6))];
   this.storyModel.NECoords = new Place('Point', coordsNE);
   // this.storyModel.NECoords = { type : 'Point', coordinates : coordsNE };
-  const coordsSW = [Number(newPos.getSouthWest().lat()).toFixed(6), Number(newPos.getSouthWest().lng()).toFixed(6)];
+  const coordsSW = [Number(newPos.getSouthWest().lat().toFixed(6)), Number(newPos.getSouthWest().lng().toFixed(6))];
   this.storyModel.SWCoords = new Place('Point', coordsSW);
   this.storyModel.shapeType = '';
   this.storyModel.shapeType = this.storyModel.shapeTypeRect;
@@ -187,7 +187,7 @@ onSubmit() {
   this.storyModel.content = description;
 
   // set the location based on latitude contents
-  this.storyModel.loc = new Place('Point', [ Number(this.longitude.value).toFixed(6), Number(this.latitude.value).toFixed(6) ]);
+  this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
   console.log('onSubmit $event.file=', event);
 
   this._storyService.updateStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
