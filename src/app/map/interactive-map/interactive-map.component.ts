@@ -1,5 +1,5 @@
 
-import {Component, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {StoryService} from '../../services/story.service';
 import {Story} from '../../models/story';
 import {isUndefined} from 'util';
@@ -17,6 +17,7 @@ declare const google: any;
 })
 export class InteractiveMapComponent implements OnInit {
   @Input() editedStory: Story;
+  @Input() photoLoc: google.maps.LatLng;
   @Output() onPositionChanged = new EventEmitter<string>();
   @Output() onRectPositionChanged = new EventEmitter<string>();
   myLatLng = {lat: -25.363, lng: 131.044};
@@ -121,6 +122,16 @@ export class InteractiveMapComponent implements OnInit {
     if (this.recOrTreeMarker)   {
       this.recOrTreeMarker.setMap(null);
     }
+  }
+
+  ngOnChanges(changes: SimpleChange){
+
+    if (!isUndefined(this.map)) {
+      this.map.panTo(this.photoLoc);
+      this.map.setZoom(18);
+    }
+
+
   }
 
   ngOnInit() {

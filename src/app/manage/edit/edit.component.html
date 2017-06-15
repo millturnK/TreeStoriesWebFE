@@ -54,7 +54,7 @@
       <div class="col-md-12" height="500px">
         <h4>Location and type of feature</h4>
         <app-interactive-map [editedStory]="editedStory" (onPositionChanged)="onPositionChanged($event)"
-                             (onRectPositionChanged)="onRectPositionChanged($event)">
+                             (onRectPositionChanged)="onRectPositionChanged($event)" [photoLoc]="photoLoc">
         </app-interactive-map>
       </div>
     </div>

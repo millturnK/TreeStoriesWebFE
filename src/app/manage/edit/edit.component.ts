@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, NgZone, OnChanges, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../user/models/user';
 import {StoryService} from '../../services/story.service';
@@ -9,6 +9,7 @@ import {Story} from '../../models/story';
 import {CoordsFromPhoto} from '../../tell/coordsFromPhoto';
 import {isUndefined} from 'util';
 import {Place} from '../../models/Place';
+
 
 declare const google: any;
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
@@ -32,7 +33,7 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit, OnChanges {
+export class EditComponent implements OnInit {
   private log = loggerFactory.getLogger('component.Edit');
   private user: User = null;
   success = false;
@@ -43,6 +44,8 @@ export class EditComponent implements OnInit, OnChanges {
 
   storyModel: Story = new Story();
   pictures: Picture[] = [];
+ // @Output() onPositionChangedFromPhoto = new EventEmitter<google.maps.LatLng>();
+  private photoLoc: google.maps.LatLng;
 
 
 
@@ -68,7 +71,7 @@ export class EditComponent implements OnInit, OnChanges {
     // coordChoiceArea: this.coordChoiceArea
   });
 
-  constructor(private _router: Router, private route: ActivatedRoute,
+  constructor(private _router: Router, private ngZone: NgZone, private route: ActivatedRoute,
               private _user: User, private _storyService: StoryService) {
     this.user = _user;
     this.storyModel.contributors = _user.username;
@@ -80,38 +83,45 @@ export class EditComponent implements OnInit, OnChanges {
     const id = this.route.snapshot.params['id'];
     this.log.debug('in ngOnInit. Id=' + id);
     this.storyModel._id = id;
-      this.coordsFromPhoto.coordsSubject.subscribe((coords: Number[]) => {
+    this.ngZone.run(() => {
+      this.coordsFromPhoto.coordsSubject.subscribe((coords: number[]) => {
       this.log.debug('in coords');
       if (!isUndefined(coords) && coords.length > 0){
         this.coordsAttr = coords;
-        this.latitude.setValue(Number(this.coordsAttr[0].toFixed(6)));
-        this.longitude.setValue(Number(this.coordsAttr[1].toFixed(6)));
+        this.latitude.setValue(Number(this.coordsAttr[0]).toFixed(6));
+        this.longitude.setValue(Number(this.coordsAttr[1]).toFixed(6));
         this.log.debug('set photo coords');
+        // TO DO change map pos
+        //this.editedStory.loc.coordinates = coords;
+        //this.onPositionChangedFromPhoto.emit(new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]) ));
+        this.photoLoc = new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]));
+        console.log('this.photoLoc=', this.photoLoc);
       }
 
+    });
     });
     this._storyService.getStoryByID(this.user, id).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
   }
-  ngOnChanges() {
-
-    this.log.debug('change to input, displaying... ' + this.editedStory.title);
-
-    this.editStoryForm.reset({
-      title: this.editedStory.title,
-      botName: this.editedStory.botName,
-      description: this.editedStory.content,
-      contributor: this.editedStory.contributors,
-      sources: this.editedStory.sources,
-      latititude: Number(this.editedStory.loc.coordinates[1]),
-      longitude: Number(this.editedStory.loc.coordinates[0])
-
-    });
-
-    // do I have the story photolinks here?
-    //this.log.debug('photolinks = ' + this.story.photoLinks);
-
-  }
+  // ngOnChanges() {
+  //
+  //   this.log.debug('change to input, displaying... ' + this.editedStory.title);
+  //
+  //   this.editStoryForm.reset({
+  //     title: this.editedStory.title,
+  //     botName: this.editedStory.botName,
+  //     description: this.editedStory.content,
+  //     contributor: this.editedStory.contributors,
+  //     sources: this.editedStory.sources,
+  //     latititude: Number(this.editedStory.loc.coordinates[1]),
+  //     longitude: Number(this.editedStory.loc.coordinates[0])
+  //
+  //   });
+  //
+  //   // do I have the story photolinks here?
+  //   //this.log.debug('photolinks = ' + this.story.photoLinks);
+  //
+  // }
   private successfulRetrieve(stories: Story[]) {
 
     // assuming only one matching that ID!!!
@@ -197,13 +207,7 @@ onSubmit() {
 }
 
 private successfulSubmit() {
-
-  /*console.log("successful submit");*/
   this.success = true;
-  // setTimeout(() => { // 3
-  //   this._router.navigate(["/curate"]);
-  // }, 4000);
-  //this.tellStoryForm.reset();
   this.resetForm();
   setTimeout(() => {
     this._router.navigate(['/list']);

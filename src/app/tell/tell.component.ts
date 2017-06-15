@@ -46,15 +46,9 @@ export class TellComponent {
   description= new FormControl('', Validators.required);
   contributor= new FormControl('');
   source= new FormControl('', Validators.required);
- // coordChoice = new FormControl('singleTree');
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
-  // bbPointsNELat = new FormControl('');
-  // bbPointsNELng = new FormControl('');
-  // bbPointsSWLat = new FormControl('');
-  // bbPointsSWLng = new FormControl('');
-
   tellStoryForm = new FormGroup({
   title: this.title,
   botName: this.botName,
@@ -65,13 +59,6 @@ export class TellComponent {
   latitude: this.latitude,
   longitude: this.longitude,
   ckMap: this.ckMap,
-  //   bbPointsNELat: this.bbPointsNELat,
-  // bbPointsNELng: this.bbPointsNELng,
-  //   bbPointsSWLat: this.bbPointsSWLat,
-  //   bbPointsSWLng: this.bbPointsSWLng
-
-
-  // coordChoiceArea: this.coordChoiceArea
 });
   coordsAttr: Number[] = [];
   //let input = Observable.bindCallback()
@@ -80,20 +67,18 @@ export class TellComponent {
 
   ngOnInit() {
     this.coordsFromPhoto.coordsSubject.subscribe((
-      coords:Number[])=>{
+      coords: Number[]) => {
       if (!isUndefined(coords) && coords.length > 0) {
         this.coordsAttr = coords;
-        this.latitude.setValue(this.coordsAttr[0].toFixed(6));
-        this.longitude.setValue(this.coordsAttr[1].toFixed(6));
+        this.latitude.setValue(Number(this.coordsAttr[0]).toFixed(6));
+        this.longitude.setValue(Number(this.coordsAttr[1]).toFixed(6));
       }
     });
   }
 
 
 
-
-
-    constructor(private router: Router, private _user: User, private _storyService: StoryService) {
+    constructor(private router: Router,  private _user: User, private _storyService: StoryService) {
         /*this.storyModel = new Story();*/
         // TODO implement login and pass in name, remove placeholder
         // _user.username = 'Katie Test';
@@ -156,8 +141,6 @@ export class TellComponent {
       //set long lat as user may have manually entered it - assign it to location
     // need to reverse to store in DB
       this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
-      // this.storyModel.latitude = this.latitude.value;
-      // this.storyModel.longitude = this.longitude.value;
       console.log('onSubmit $event.file=', event);
 
     this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
