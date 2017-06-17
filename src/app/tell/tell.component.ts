@@ -33,7 +33,7 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
     templateUrl: 'tell.component.html'
 })
 // TODO allow upload of up to 5 photos
-export class TellComponent {
+export class TellComponent implements OnInit {
 
   success = false;
   errorMessage = '';
@@ -61,8 +61,8 @@ export class TellComponent {
   ckMap: this.ckMap,
 });
   coordsAttr: Number[] = [];
-  //let input = Observable.bindCallback()
-  //coordsSubject = new Subject();
+  // let input = Observable.bindCallback()
+  // coordsSubject = new Subject();
   coordsFromPhoto = new CoordsFromPhoto();
 
   ngOnInit() {
@@ -99,20 +99,20 @@ export class TellComponent {
      this.storyModel.shapeType = '';
     this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
   }
-  onRectPositionChanged(newPos){
-      this.log.debug("Yay, I am in onRectPositionChanged. newPos=" + newPos);
+  onRectPositionChanged(newPos) {
+      this.log.debug('Yay, I am in onRectPositionChanged. newPos=' + newPos);
       // somehow parse it!
     // bounds=((-29.916852233070163, 139.833984375), (-25.244695951306028, 148.095703125))
     // to get centre call getCentre()
-    //to get NW corner call: getNorthEast() and getSouthWest()
+    // to get NW corner call: getNorthEast() and getSouthWest()
     const centre = newPos.getCenter();
     this.latitude.setValue(Number(centre.lat()).toFixed(6));
     this.longitude.setValue(Number(centre.lng()).toFixed(6));
     const centreCoords: number[] = [Number(centre.lng().toFixed(6)), Number(centre.lat().toFixed(6))];
-    //const cc2: number[] = [Number('34')., 45];
+    // const cc2: number[] = [Number('34')., 45];
 
    this.storyModel.loc = new Place('Point', centreCoords);
-    //this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
+    // this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
     const coordsNE = [Number(newPos.getNorthEast().lat().toFixed(6)), Number(newPos.getNorthEast().lng().toFixed(6))];
    this.storyModel.NECoords = new Place('Point', coordsNE);
    // this.storyModel.NECoords = { type : 'Point', coordinates : coordsNE };
@@ -138,12 +138,12 @@ export class TellComponent {
       this.storyModel.botName = botName;
       this.storyModel.sources = source;
       this.storyModel.content = description;
-      //set long lat as user may have manually entered it - assign it to location
+      // set long lat as user may have manually entered it - assign it to location
     // need to reverse to store in DB
       this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
       console.log('onSubmit $event.file=', event);
 
-    this._storyService.postStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
+    this._storyService.postStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
 
 
@@ -156,7 +156,7 @@ export class TellComponent {
     // setTimeout(() => { // 3
     //   this._router.navigate(["/curate"]);
     // }, 4000);
-    //this.tellStoryForm.reset();
+    // this.tellStoryForm.reset();
     this.resetForm();
   }
 
