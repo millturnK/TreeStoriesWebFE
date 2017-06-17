@@ -12,7 +12,7 @@ import {EditComponent} from './edit/edit.component';
 
 export const ManageRoutes: Routes = [
 
-  {path: 'list', component: StoryListComponent },
-  {path: 'edit/:id', component: EditComponent }
+  {path: 'list', component: StoryListComponent, canActivate: [AuthGuard] },
+  {path: 'edit/:id', component: EditComponent, canActivate: [AuthGuard] }
 
 ];
