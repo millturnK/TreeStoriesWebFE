@@ -86,14 +86,14 @@ export class EditComponent implements OnInit {
     this.ngZone.run(() => {
       this.coordsFromPhoto.coordsSubject.subscribe((coords: number[]) => {
       this.log.debug('in coords');
-      if (!isUndefined(coords) && coords.length > 0){
+      if (!isUndefined(coords) && coords.length > 0) {
         this.coordsAttr = coords;
         this.latitude.setValue(Number(this.coordsAttr[0]).toFixed(6));
         this.longitude.setValue(Number(this.coordsAttr[1]).toFixed(6));
         this.log.debug('set photo coords');
-        // TO DO change map pos
-        //this.editedStory.loc.coordinates = coords;
-        //this.onPositionChangedFromPhoto.emit(new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]) ));
+        // TODO change map pos
+        // this.editedStory.loc.coordinates = coords;
+        // this.onPositionChangedFromPhoto.emit(new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]) ));
         this.photoLoc = new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]));
         console.log('this.photoLoc=', this.photoLoc);
       }
@@ -126,7 +126,6 @@ export class EditComponent implements OnInit {
 
     // assuming only one matching that ID!!!
     this.editedStory = stories[0];
-    //console.log("successful retrieve: ", this.nfr);
     // now populate the fields
 
     this.title.setValue(this.editedStory.title);
@@ -138,7 +137,7 @@ export class EditComponent implements OnInit {
       this.latitude.setValue(this.editedStory.loc.coordinates[1].toString());
       this.longitude.setValue(this.editedStory.loc.coordinates[0].toString());
     }
-    //set photoLnks
+    // set photoLnks
     this.storyModel.photoLinks = this.editedStory.photoLinks;
 
 
@@ -163,7 +162,7 @@ onPositionChanged(newPos) {
   this.storyModel.shapeType = '';
   this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
 }
-onRectPositionChanged(newPos){
+onRectPositionChanged(newPos) {
   this.log.debug('onRecPositionChanged called with' + newPos);
   const centre = newPos.getCenter();
   this.latitude.setValue(Number(centre.lat().toFixed(6)));
@@ -171,7 +170,7 @@ onRectPositionChanged(newPos){
   const centreCoords = [Number(centre.lng().toFixed(6)), Number(centre.lat().toFixed(6))];
 
   this.storyModel.loc = new Place('Point', centreCoords);
-  //this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
+  // this.storyModel.NECoords = newPos.getNorthEast().newPos.lat().toFixed(6);
   const coordsNE = [Number(newPos.getNorthEast().lat().toFixed(6)), Number(newPos.getNorthEast().lng().toFixed(6))];
   this.storyModel.NECoords = new Place('Point', coordsNE);
   // this.storyModel.NECoords = { type : 'Point', coordinates : coordsNE };
@@ -200,7 +199,7 @@ onSubmit() {
   this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
   console.log('onSubmit $event.file=', event);
 
-  this._storyService.updateStory(this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
+  this._storyService.updateStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
     error => this.failedSubmit(<any>error));
 
 
@@ -226,13 +225,13 @@ private resetForm() {
   this.contributor.reset('');
   this.latitude.reset('');
   this.longitude.reset('');
-  //this.editedStory.photoLinks = null;
+  // this.editedStory.photoLinks = null;
   // and close the map
   this.ckMap.setValue(false);
 }
 
 
-  deletePhoto(i){
+  deletePhoto(i) {
    this.log.debug('Button clicked with: ' + i);
    // remove photo
     this.storyModel.photoLinks.splice(i, 1);

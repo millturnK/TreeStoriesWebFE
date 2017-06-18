@@ -1,5 +1,6 @@
 /**
  * Created by KatieMills on 27/4/17.
+ * Added security back in 18.06
  */
 
 import {Injectable} from '@angular/core';
@@ -7,13 +8,10 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Story} from '../models/story';
 import {User} from '../user/models/user';
-import {AppConsts} from '../app.consts';
+// import {AppConsts} from '../app.consts';
 import {loggerFactory} from '../config/ConfigLog4j';
 import {Picture} from '../models/picture';
 import {environment} from '../../environments/environment';
-
-// declare var google: any;
-
 
 
 @Injectable()
@@ -22,22 +20,17 @@ export class StoryService {
 
   private apiUrl: string = environment.server_url + '/api/v1/story';
 
-
-
-//  private queryUrl = 'http://localhost:3000/api/v1/story';
-
   private log = loggerFactory.getLogger('service.story');
 
   constructor(private http: Http) { }
 
 
-  public postStory(story: Story, pictures: Picture[]): Observable<Story> {
+  public postStory(user: User, story: Story, pictures: Picture[]): Observable<Story> {
 
-    // const headers = new Headers({'Content-Type': 'application/json'});
-
+    // not this is not application/json it's formdata
     const headers = new Headers();
 
-    // headers.append('x-access-token', user.token);
+    headers.append('x-access-token', user.token);
     const options = new RequestOptions({headers: headers});
     const body = JSON.stringify(story);
     const formData: FormData = new FormData();
@@ -69,26 +62,26 @@ export class StoryService {
 
   }
 
-  public updateStory(story: Story, pictures: Picture[]): Observable<Story> {
+  public updateStory(user: User, story: Story, pictures: Picture[]): Observable<Story> {
 
-  // const headers = new Headers({'Content-Type': 'application/json'});
-
+    // not this is not application/json it's formdata
   const headers = new Headers();
+
   const queryUrl = this.apiUrl + '/' + story._id;
 
-  // headers.append('x-access-token', user.token);
+  headers.append('x-access-token', user.token);
   const options = new RequestOptions({headers: headers});
   const body = JSON.stringify(story);
   const formData: FormData = new FormData();
-    formData.append('_id', story._id);
+  formData.append('_id', story._id);
   formData.append('title', story.title);
   formData.append('contributors', story.contributors);
   formData.append('sources', story.sources);
   formData.append('content', story.content);
   formData.append('NECoords', JSON.stringify(story.NECoords));
-    formData.append('SWCoords', JSON.stringify(story.SWCoords));
-    formData.append('loc', JSON.stringify(story.loc));
-    formData.append('shapeType', story.shapeType);
+  formData.append('SWCoords', JSON.stringify(story.SWCoords));
+  formData.append('loc', JSON.stringify(story.loc));
+  formData.append('shapeType', story.shapeType);
   // formData.append('latitude', story.latitude);
   // formData.append('longitude', story.longitude);
   formData.append('botName', story.botName);
@@ -107,11 +100,10 @@ export class StoryService {
     .map(this.extractGetData)
     .catch(this.handleError);
   }
+
   // GET all stories from database
-  //public getStories(user: User): Observable<Story[]> {
   public getStories(): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
-    //headers.append('x-access-token', user.token);
     const options = new RequestOptions({ headers: headers });
 
     return this.http.get(this.apiUrl, options)
@@ -121,7 +113,6 @@ export class StoryService {
 
   public getStoriesWithinRadiusPoint(point: string): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
-    //headers.append('x-access-token', user.token);
     const options = new RequestOptions({ headers: headers });
     const pointQueryUrl = this.apiUrl + '?' + 'point=' + point;
     this.log.debug('in getStoriesWithinRadiusPoint. queryUrl=' + pointQueryUrl);
@@ -132,7 +123,6 @@ export class StoryService {
 
   public getUsersStories(user: User): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
-    //headers.append('x-access-token', user.token);
     const options = new RequestOptions({ headers: headers });
     const userQueryUrl = this.apiUrl + '?' + 'user=' + user.username;
     return this.http.get(userQueryUrl, options)
@@ -156,11 +146,8 @@ export class StoryService {
   private handleError( error: Response | any ) {
     // TODO consider using a remote logging service to capture this
 
-    //this.log.debug("inside handleError using proper logging");
-    //console.log("inside handleError");
-
     const errMsg = 'Please contact MillturnIT support. Error in story service: ' + error.toString();
-    //if (error instanceof Response) {
+    // if (error instanceof Response) {
     //   const body = error.json() || "";
     //   const err = body.error || JSON.stringify(body);
     //   errMsg = `${error.status} - ${error.statusText || ""}. ${err}`;
