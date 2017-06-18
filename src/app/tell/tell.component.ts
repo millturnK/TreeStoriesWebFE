@@ -126,7 +126,7 @@ export class TellComponent implements OnInit {
   }
 
   // Note that location of point or centre pt of rectangle and the NE and SW corners of rect have been set already
-  onSubmit() {
+  onSubmit(form: any) {
       console.log('submit');
       const title = this.title.value;
       const botName = this.botName.value;

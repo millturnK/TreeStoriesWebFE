@@ -109,10 +109,10 @@ export class AccountComponent implements OnInit {
 
   }
 
-  private onSubmit(form: any): void {
+  onSubmit(form: any): void {
    /* console.log("Update this user");*/
 
-    let userToUpd = new User();
+    const userToUpd = new User();
     userToUpd.username = this.username.value;
     userToUpd.firstname = this.firstname.value;
     userToUpd.lastname = this.lastname.value;
@@ -149,7 +149,7 @@ export class AccountComponent implements OnInit {
     /*console.log("Delete this user");*/
   }
 
-  private reset() {
+  reset() {
     /*console.log("Reset this user's password");*/
     this._router.navigate(["/forgot"]);
 

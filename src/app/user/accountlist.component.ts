@@ -64,12 +64,12 @@ export class AccountListComponent implements OnInit {
     /*console.log("Delete: ", this.accounts[idx].username);*/
   }
 
-  private abandonDelete() {
+  abandonDelete() {
     /*console.log("I changed my mind ");*/
     this.deleteCandidate = null;
   }
 
-  private confirmDelete() {
+  confirmDelete() {
     /*console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
 
     this._service.delete( this.accounts[this.deleteCandidate].username, this.user)

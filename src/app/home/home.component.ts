@@ -37,7 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private log = loggerFactory.getLogger('component.Home');
 
 
-  constructor(private elementRef: ElementRef, private _router: Router, private route: ActivatedRoute, private _user: User, private _storyService: StoryService) {
+  constructor(private elementRef: ElementRef, private _router: Router, private route: ActivatedRoute, public _user: User,
+              private _storyService: StoryService) {
 
   }
 

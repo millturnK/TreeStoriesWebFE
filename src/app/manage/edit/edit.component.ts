@@ -181,7 +181,7 @@ onRectPositionChanged(newPos) {
 }
 
 
-onSubmit() {
+onSubmit(form: any) {
   console.log('submit');
 
   const title = this.title.value;
