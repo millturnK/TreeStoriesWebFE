@@ -47,12 +47,12 @@ export class ActivateService {
   }
 
 
-  public finaliseAccount( tokenid: string, paymentToken: string ): Observable<User> {
+  public finaliseAccount( tokenid: string ): Observable<User> {
 
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({ headers: headers});
 
-    const body = JSON.stringify( { activateToken: tokenid, paymentToken: paymentToken } );
+    const body = JSON.stringify( { activateToken: tokenid } );
 //    let targetUrl = 'api/v1/activate/pay';
     const targetUrl = this.apiUrl + '/pay';
 
