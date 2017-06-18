@@ -1,8 +1,8 @@
-import {Component, Output, EventEmitter, ElementRef, OnInit} from "@angular/core";
-import { User } from "./models/user";
-import { Router } from "@angular/router";
-import { RegistrationService } from "./services/register.service";
-import { FormControl, Validators, FormGroup } from "@angular/forms";
+import {Component, Output, EventEmitter, ElementRef, OnInit} from '@angular/core';
+import { User } from './models/user';
+import { Router } from '@angular/router';
+import { RegistrationService } from './services/register.service';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 declare var jQuery: any;
 
@@ -20,9 +20,9 @@ function emailValidator(control: FormControl): { [s: string]: boolean } {
 }
 
 @Component({
-    selector: "register-form",
-    templateUrl: "register.component.html",
-    styleUrls: ["user.components.css"],
+    selector: 'register-form',
+    templateUrl: 'register.component.html',
+    styleUrls: ['user.components.css'],
 
 })
 
@@ -32,13 +32,13 @@ export class RegisterComponent implements OnInit {
     user: EventEmitter<any> = new EventEmitter();
 
     // form controls & group needed to unpin this form
-    firstname = new FormControl("", Validators.required);
-    lastname = new FormControl("", Validators.required);
-    email = new FormControl("", Validators.compose([Validators.required, emailValidator]));
-    password = new FormControl("", Validators.compose([Validators.required, passwordValidator]));
-    passwordConfirm = new FormControl("", Validators.compose([Validators.required, passwordValidator]));
-    organisation = new FormControl("");
-    paymentplan = new FormControl("IND", Validators.required);
+    firstname = new FormControl('', Validators.required);
+    lastname = new FormControl('', Validators.required);
+    email = new FormControl('', Validators.compose([Validators.required, emailValidator]));
+    password = new FormControl('', Validators.compose([Validators.required, passwordValidator]));
+    passwordConfirm = new FormControl('', Validators.compose([Validators.required, passwordValidator]));
+    organisation = new FormControl('');
+    paymentplan = new FormControl('IND', Validators.required);
 
     registerForm = new FormGroup({
         firstname: this.firstname,
@@ -56,8 +56,8 @@ export class RegisterComponent implements OnInit {
     public businessPostcode: number;
     public businessTelephone: string;
 
-    public regErrorMsg = "";
-    public regSuccess = "";
+    public regErrorMsg = '';
+    public regSuccess = '';
 
     loading = false;
 
@@ -74,13 +74,13 @@ export class RegisterComponent implements OnInit {
     onSubmit(form: any): void {
 
         // clear out my result fields...
-        this.regErrorMsg = "";
-        this.regSuccess = "";
+        this.regErrorMsg = '';
+        this.regSuccess = '';
 
         // make sure the passwords are equal
        if (this.password.value !== this.passwordConfirm.value) {
 
-            this.regErrorMsg = "The passwords you have provided do not match";
+            this.regErrorMsg = 'The passwords you have provided do not match';
 
             return;
         }
@@ -111,7 +111,7 @@ export class RegisterComponent implements OnInit {
 
 
   private failedRegister(error: any) {
-    console.log("Register failed: ", error);
+    console.log('Register failed: ', error);
     this.regErrorMsg = error;
     this.loading = false;
 
@@ -120,25 +120,25 @@ export class RegisterComponent implements OnInit {
 
   private successfulRegister(user: User) {
 
-      /*console.log("Rego successful: ", user);*/
         this.loading = false;
       // need to pass this back
       // Success, so emit
       this.user.emit( user );
 
-      this.regSuccess = "ok";
+      this.regSuccess = 'ok';
 
-      this.firstname.reset("");
-      this.lastname.reset("");
-      this.email.reset("");
-      this.organisation.reset("");
+      this.firstname.reset('');
+      this.lastname.reset('');
+      this.email.reset('');
+      this.organisation.reset('');
 
 
+    // All you need to do is use an empty string ''. If you reset like this password.reset() then
+    // you are setting the value to null. This fails on the verification.
+    this.password.reset('');
+    // this.passwordConfirm.updateValueAndValidity('');
+    this.passwordConfirm.reset('');
 
-      // TODO Work out how to reset the password fields without a major meltdown
-      // this.password.reset();
-      // this.passwordConfirm.updateValueAndValidity("");
-      // this.passwordConfirm.reset();
 
 
   }
