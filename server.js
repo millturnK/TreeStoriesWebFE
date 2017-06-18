@@ -36,8 +36,8 @@ app.use(express.static(__dirname + '/dist'));
 // providing the ability to override the environment.ts settings here
 app.get('/env', function(req, res) {
 
-  if (process.env.SPQR_SERVER && process.env.STRIPE_PKEY) {
-    res.json({ SPQR_SERVER: process.env.SPQR_SERVER, STRIPE_PKEY: process.env.STRIPE_PKEY });
+  if (process.env.TREE_STORIES_SERVER) {
+    res.json({ TREE_STORIES_SERVER: process.env.TREE_STORIES_SERVER });
   } else {
     res.status(400).json({ message: 'No env set.' });
   }

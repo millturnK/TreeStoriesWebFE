@@ -9,15 +9,20 @@ import { AppComponent } from './app.component';
 import { UserModule } from './user/user.module';
 import { NavbarComponent } from './navbar.component';
 import { User } from './user/models/user';
-import {AppConsts} from './app.consts';
-import { NgModule } from '@angular/core';
+import { AppConsts } from './app.consts';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {TellModule} from './tell/tell.module';
-import {GoogleApiService} from './services/google-api.service';
-import {ImageUploadModule} from 'angular2-image-upload';
-import {ManageModule} from './manage/manage.module';
+import { TellModule } from './tell/tell.module';
+import { GoogleApiService } from './services/google-api.service';
+import { ImageUploadModule } from 'angular2-image-upload';
+import { ManageModule } from './manage/manage.module';
 import { InteractiveMapComponent } from './map/interactive-map/interactive-map.component';
 
+import { AppConfig } from './config/app.config';
+
+export function appConfigFactory(config: AppConfig) {
+  return () => config.load();
+}
 
 @NgModule({
   declarations: [
@@ -43,7 +48,14 @@ import { InteractiveMapComponent } from './map/interactive-map/interactive-map.c
     appRoutingProviders,
     AUTH_PROVIDERS,
     AppConsts,
-    GoogleApiService
+    GoogleApiService,
+    AppConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appConfigFactory,
+      deps: [AppConfig],
+      multi: true
+    }
 
   ],
   bootstrap: [AppComponent]
