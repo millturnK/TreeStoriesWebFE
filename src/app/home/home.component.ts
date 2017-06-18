@@ -6,6 +6,7 @@ import {StoryService} from '../services/story.service';
 import {loggerFactory} from '../config/ConfigLog4j';
 
 
+
 declare var jQuery: any;
 declare var google: any;
 @Component({
@@ -80,6 +81,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     localStorage.removeItem('currentUser');
 
     this._user.clear();
+
+  }
+  login() {
+    // console.log('Login clicked');
+    if (!this._user.loggedin) {
+      this._router.navigate(['login']);
+    }
 
   }
   showEnlargedPhoto(uri) {

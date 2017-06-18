@@ -7,6 +7,7 @@ import { HomeComponent } from './home.component';
 import {AuthGuardPrivlege} from '../auth.guard.privlege';
 import {AuthGuard} from '../auth.guard';
 import {TellComponent} from '../tell/tell.component';
+import {LoginComponent} from '../user/login.component';
 
 
 export const HomeRoutes: Routes = [
