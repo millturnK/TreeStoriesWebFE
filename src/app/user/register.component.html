@@ -15,20 +15,15 @@
 
 <div class="alert alert-danger" role="alert"  *ngIf="regErrorMsg">
   <div class="header">Registration Failed</div>
-  <p>An error occurred when processing your registration: {{regErrorMsg}}</p>
+  <p>Please contact <a href="mailto:office@millturn.com.au?Subject=Bug" target="_top">Millturn IT Support</a>. An error occurred when processing your registration: {{regErrorMsg}}</p>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <h4>Access to a complete quality requirements repository</h4>
-            <p>$10 AUD will buy yearly access to a reliable and up-to-date repository of industry endorsed and standards-conformant
-                quality requirements maintained by industry experts. Save valuable time by not re-inventing the wheel each time you write a
-            requirements specification and relax, knowing you can rely on these requirements.</p>
-            <h4>Contribute to improving the quality of quality requirements in our global analyst community</h4>
-            <p>You will also retain the ongoing right to maintain the content of any requirements you contribute. </p>
-            <h4>Earn free memberships</h4>
-            <p>If you contribute five requirements to the community and they are all endorsed, you will get one free yearly membership.</p>
+            <h4>Join our diverse community of story tellers</h4>
+            <p>Registration will allow you to join our community, tell your story and, later on, comment on and
+            curate other contributors' stories.</p>
         </div>
         <div class="col-md-4 sideform">
             <form role="form" (ngSubmit)="onSubmit(registerForm.value)" [formGroup]="registerForm">

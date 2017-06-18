@@ -6,6 +6,8 @@ import {HomeComponent} from './home.component';
 import {GoogleMapsComponent} from './google-maps/google-maps.component';
 import {StoryService} from '../services/story.service';
 import {CommonModule} from '@angular/common';
+import {ToolTipModule} from 'angular2-tooltip';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {CommonModule} from '@angular/common';
     BrowserModule,
     FormsModule,
     HttpModule,
-    CommonModule
+    CommonModule,
+    ToolTipModule,
+    RouterModule
   ],
   providers: [
     StoryService
