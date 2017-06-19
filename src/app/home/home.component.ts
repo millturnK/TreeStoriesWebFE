@@ -1,4 +1,7 @@
-import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../user/models/user';
 import {Story} from '../models/story';
@@ -8,7 +11,7 @@ import {loggerFactory} from '../config/ConfigLog4j';
 
 
 declare var jQuery: any;
-declare var google: any;
+// declare var google: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,6 +19,7 @@ declare var google: any;
 })
 // TODO change to display all thumbnails of photos
 export class HomeComponent implements OnInit, OnDestroy {
+
   imageToShow: string;
   showModal: boolean;
   title = 'Tree Stories';
@@ -25,12 +29,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   private register = false;
   @Output() onPanTo = new EventEmitter<string>();
   panPosition: google.maps.LatLng;
-  //modal = document.getElementById('myModal');
 
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-  //img = document.getElementById('myImg');
-//  modalImg = document.getElementById('img01').nativeElement;
-  // captionText = document.getElementById("caption");
+  // attributes related to pagination
+  // only display this many stories at a time
+  displayPageSize = 3;
+  // whenever you go to the database get this many, make sure this is at least twice display size
+  retrieveDocNum = 10;
+  // these define where the user current is currently looking within the overall story list
+  startIndex = 0;
+  endIndex = 0;
+
+  // modal attributes
   modalImg;
   modal;
 
@@ -58,11 +67,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
 
-    this.log.debug('in ngOnit');
-    this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
+    this.log.debug('Retrieve initial stories');
+    // this will go and grab a larger number of stories
+    this._storyService.getPageStories(this.retrieveDocNum).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
+    // this._storyService.getStories( ).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+    //  error => this.failedRetrieve(<any>error));
   }
-  panToStoryLocation(coords){
+
+
+  panToStoryLocation(coords) {
 
     this.log.debug('in panToStoryLocation. Coords=' + coords);
     const panTo = new google.maps.LatLng(coords[1], coords[0]);
@@ -93,11 +107,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   showEnlargedPhoto(uri) {
     this.log.debug('in showEnlargedPhoto.uri=' + uri);
-    //const photoUrl = this.stories[i].photoLinks[0];
     const photoUrl = uri;
-      // Get the image and insert it inside the modal - use its "alt" text as a caption
-    // const img = document.getElementById('photo' + i);
 
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
     this.modalImg = jQuery(this.elementRef.nativeElement).find('#img01');
     this.modal = jQuery(this.elementRef.nativeElement).find('#myModal');
 
@@ -122,24 +134,52 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getStories() {
-    //this.log.debug('in getStories. Length is ' + this.stories.length);
-    return this.stories;
+
+    // just return what the user should see
+    this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
+
+    const temp = [];
+    let tempIdx = 0;
+
+    for ( let i = this.startIndex; i < this.endIndex; i++) {
+      temp[tempIdx++] = this.stories[i];
+    }
+
+    return temp;
+
+    // return this.stories;
   }
 
   successfulRetrieve(stories: Story[]) {
-    //this.log.debug('Home Component SuccRet got stories of length' + stories.length);
 
+    // how many stories did you get?
+    this.log.debug('Retrieved: ' + stories.length + ' stories');
     // throw away what is there
     this.stories = [];
     this.stories = stories;
+
+    this.startIndex = 0;
+    // if the number of stories is greater than the display page size, then only
+    this.endIndex = this.stories.length > this.displayPageSize ? this.displayPageSize : this.stories.length;
+
   }
+
+  successfulPageRetrieve(stories: Story[]) {
+
+    // how many stories did you get?
+    this.log.debug('Page Retrieved: ' + stories.length + ' stories, adding to total.');
+    // silently add on the new stories
+    this.stories = this.stories.concat(stories);
+    this.log.debug('Story[] len = ' + this.stories.length);
+
+  }
+
 
   failedRetrieve(error: any) {
     // handle error
     this.log.debug('Error:' + error);
 
   }
-
 
 
   onPlaceChanged(newPos) {
@@ -158,6 +198,62 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   // TO DO - put markers on map - do we share one map or can we have two different instances of the component?
+
+  previousPage() {
+    if (this.startIndex === 0) {
+      this.log.debug('Previous disabled');
+      return;
+    }
+    this.log.debug('Get previous page of data');
+    this.startIndex = this.startIndex - this.displayPageSize;
+    this.endIndex = this.startIndex + this.displayPageSize;
+  }
+
+  nextPage() {
+    if (this.endIndex >= this.stories.length) {
+      this.log.debug('Next disabled');
+      return;
+    }
+    this.log.debug('Get next page of data');
+
+    // check whether we need to go retrieve more? If this is the last page then yes
+    if (this.stories.length - this.endIndex < (2 * this.displayPageSize)) {
+      // better go try and get some more...
+      // get last index of story and retrieve the next bunch of stories
+      const lastId = this.stories[this.stories.length - 1]._id;
+
+      this.log.debug('Get stories from id = ' + lastId);
+
+      this._storyService.getPageStories(this.retrieveDocNum, lastId).subscribe( (results: Story[]) => this.successfulPageRetrieve(results),
+        error => this.failedRetrieve(<any>error));
+    }
+
+    // now just shuffle along the indexes
+    this.startIndex = this.startIndex + this.displayPageSize;
+    if (this.startIndex + this.displayPageSize > this.stories.length ) {
+      this.endIndex = this.stories.length;
+    } else {
+      this.endIndex = this.startIndex + this.displayPageSize;
+    }
+
+  }
+
+  previousEnabled() {
+    if (this.startIndex > 0) {
+      return 'previous';
+    }
+    return 'previous disabled';
+  }
+
+  nextEnabled() {
+    if (this.endIndex < this.stories.length) {
+      return 'next';
+    }
+    return 'next disabled';
+  }
+
+
+
 
 }
 

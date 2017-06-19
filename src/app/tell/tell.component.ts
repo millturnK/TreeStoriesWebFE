@@ -29,7 +29,7 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 }
 
 @Component({
-    selector: 'tell-form',
+    selector: 'app-tell-form',
     templateUrl: 'tell.component.html'
 })
 // TODO allow upload of up to 5 photos
@@ -50,16 +50,17 @@ export class TellComponent implements OnInit {
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
   tellStoryForm = new FormGroup({
-  title: this.title,
-  botName: this.botName,
-  description: this.description,
-  contributor: this.contributor,
-  source: this.source,
- // coordChoice: this.coordChoice,
-  latitude: this.latitude,
-  longitude: this.longitude,
-  ckMap: this.ckMap,
-});
+    title: this.title,
+    botName: this.botName,
+    description: this.description,
+    contributor: this.contributor,
+    source: this.source,
+    // coordChoice: this.coordChoice,
+    latitude: this.latitude,
+    longitude: this.longitude,
+    ckMap: this.ckMap,
+  });
+
   coordsAttr: Number[] = [];
   // let input = Observable.bindCallback()
   // coordsSubject = new Subject();
@@ -168,7 +169,7 @@ export class TellComponent implements OnInit {
     this.botName.reset('');
     this.description.reset('');
     this.source.reset('');
-    this.contributor.reset('');
+    // this.contributor.reset('');
     this.latitude.reset('');
     this.longitude.reset('');
     this.pictures = [];
