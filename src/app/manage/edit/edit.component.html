@@ -53,6 +53,9 @@
 
       <div class="col-md-12" height="500px">
         <h4>Location and type of feature</h4>
+        <p>Use the controls to zoom in and out then click to add a marker for your tree location.
+          Or search for a place and click to add a marker or a rectangle to mark an area. Note: drag isn't enabled - click on rectangle or marker and redraw again to move it).
+          The coordinates will be extrapolated from either the photo you submit or the marker or area you draw (its centrepoint) or you can manually enter them.</p>
         <app-interactive-map [editedStory]="editedStory" (onPositionChanged)="onPositionChanged($event)"
                              (onRectPositionChanged)="onRectPositionChanged($event)" [photoLoc]="photoLoc">
         </app-interactive-map>
@@ -130,5 +133,5 @@
   <div class="header">Failed to save story</div>
   <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
 </div>
-<p>editlStoryForm value: {{ editStoryForm.value | json}}</p>
-<p>editStoryModel value: {{ storyModel | json}}</p>
+<!--<p>editlStoryForm value: {{ editStoryForm.value | json}}</p>-->
+<!--<p>editStoryModel value: {{ storyModel | json}}</p>-->

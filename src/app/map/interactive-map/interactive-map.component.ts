@@ -58,8 +58,8 @@ export class InteractiveMapComponent implements OnInit {
         position: google.maps.ControlPosition.TOP_RIGHT,
         drawingModes: ['marker', 'rectangle']
       },
-      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: true},
-      rectangleOptions: {editable: true, draggable: true}
+      markerOptions: {icon: '../assets/treeMarker.png', editable: true, draggable: false},
+      rectangleOptions: {editable: true, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5}
     });
 
     this.drawingManager.setMap(this.map);
@@ -87,7 +87,7 @@ export class InteractiveMapComponent implements OnInit {
         this.recOrTreeMarker = new google.maps.Rectangle();
         this.recOrTreeMarker.setBounds(myBounds);
         this.recOrTreeMarker.setMap(this.map);
-        this.recOrTreeMarker.setOptions({editable: true, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5});
+        // this.recOrTreeMarker.setOptions({editable: true, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5});
        // this.recOrTreeMarker.addListener('bounds_changed', this.onRectPositionChanged.emit(this.recOrTreeMarker.getBounds()));
         // TODO set other options
 
@@ -107,8 +107,8 @@ export class InteractiveMapComponent implements OnInit {
         this.recOrTreeMarker.setPosition(this.latlng);
         this.recOrTreeMarker.setTitle(this.editedStory.title);
         this.recOrTreeMarker.setMap(this.map);
-        this.recOrTreeMarker.setIcon('../assets/treeMarker.png');
-        this.recOrTreeMarker.draggable = false;
+        // this.recOrTreeMarker.setIcon('../assets/treeMarker.png');
+        // this.recOrTreeMarker.draggable = false;
       }
       // zoom map to here
       this.map.panTo(this.latlng );
@@ -169,7 +169,7 @@ export class InteractiveMapComponent implements OnInit {
 
         if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
-          console.log('drawing man. bounds=' + bounds);
+          console.log('drawing man. marker bounds=' + bounds);
           this.onRectPositionChanged.emit(bounds);
 
         } else if (e.type === 'marker') {

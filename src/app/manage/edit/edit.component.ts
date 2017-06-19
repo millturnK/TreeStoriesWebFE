@@ -157,16 +157,16 @@ onPositionChanged(newPos) {
   // set value of text box
   this.log.debug('onPosition changed called with' + newPos);
   // round to 6 dec places
-  this.latitude.setValue(Number(newPos.lat().toFixed(6)));
-  this.longitude.setValue(Number(newPos.lng().toFixed(6)));
+  this.latitude.setValue(Number(newPos.lat()).toFixed(6));
+  this.longitude.setValue(Number(newPos.lng()).toFixed(6));
   this.storyModel.shapeType = '';
   this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
 }
 onRectPositionChanged(newPos) {
   this.log.debug('onRecPositionChanged called with' + newPos);
   const centre = newPos.getCenter();
-  this.latitude.setValue(Number(centre.lat().toFixed(6)));
-  this.longitude.setValue(Number(centre.lng().toFixed(6)));
+  this.latitude.setValue(Number(centre.lat()).toFixed(6));
+  this.longitude.setValue(Number(centre.lng()).toFixed(6));
   const centreCoords = [Number(centre.lng().toFixed(6)), Number(centre.lat().toFixed(6))];
 
   this.storyModel.loc = new Place('Point', centreCoords);
