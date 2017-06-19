@@ -8,6 +8,13 @@ body {
   font-family: 'Open Sans', sans-serif;
 
 }
+.bodyTextButton{
+  height: 100%;
+  margin: 0;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+
+}
 
 #main-wrapper {
   box-sizing: border-box;
@@ -74,6 +81,6 @@ ul {
 }
 
 .tableHeader{
-  background-color: #ffebc2;
+  background-color: #eaf4f2;
 
 }

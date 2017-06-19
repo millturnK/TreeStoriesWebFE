@@ -11,7 +11,7 @@
   <div class="col-md-12">
     <div class="table-scrollable">
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
 
       <thead class="tableHeader">
       <tr>
@@ -26,7 +26,7 @@
       <tr *ngFor="let story of stories; let i=index" (click)="storySelected(i)">
         <td>{{story.title}}</td>
         <td>{{story.loc.coordinates[1]}}, {{story.loc.coordinates[0]}}</td>
-        <td>{{story.creationDate}}</td>
+        <td>{{userFriendlyDate(story.creationDate)}}</td>
         <td>
           <button class="btn-sm btn-success"   (click)="edit(i)"  >
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>

@@ -4,6 +4,7 @@ import {User} from '../user/models/user';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import {loggerFactory} from '../config/ConfigLog4j';
+import {FormControl} from '@angular/forms';
 
 
 
@@ -20,19 +21,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   showModal: boolean;
   title = 'Tree Stories';
   stories: Story[]= [];
+  prevStories: Story[]= [];
   private sub: any;
   private logout = false;
-  private register = false;
-  @Output() onPanTo = new EventEmitter<string>();
   panPosition: google.maps.LatLng;
-  //modal = document.getElementById('myModal');
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-  //img = document.getElementById('myImg');
-//  modalImg = document.getElementById('img01').nativeElement;
-  // captionText = document.getElementById("caption");
   modalImg;
   modal;
+  // ckShowAll = new FormControl('');
+  ckShowAllChecked = false;
 
   private log = loggerFactory.getLogger('component.Home');
 
@@ -42,6 +38,31 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
+  showAll(){
+    this.log.debug('show all clicked');
+    // get all stories
+
+    this.ckShowAllChecked = this.ckShowAllChecked ? false : true;
+
+    this.log.debug('show all value = ' + this.ckShowAllChecked);
+
+
+  //  if(this.ckShowAllChecked === false){
+  //    this.ckShowAllChecked = true;
+  //  }
+    if (this.ckShowAllChecked){
+      this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
+        error => this.failedRetrieve(<any>error));
+      //this.ckShowAllChecked = false;
+    }
+    // if not clicked, remove stories somehow...later. TODO save the existing story array and reset
+    else{
+      this.stories = this.prevStories;
+    }
+
+
+
+  }
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
@@ -132,6 +153,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     // throw away what is there
     this.stories = [];
     this.stories = stories;
+
+  }
+  successfulRetrieveFocusedSearch(stories: Story[]) {
+    //this.log.debug('Home Component SuccRet got stories of length' + stories.length);
+
+    // throw away what is there
+    this.stories = [];
+    this.stories = stories;
+    this.prevStories = stories;
   }
 
   failedRetrieve(error: any) {
@@ -144,8 +174,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onPlaceChanged(newPos) {
     // set value of text box
+    this.stories= [];
     this.log.debug('onPlace changed called with' + newPos);
-    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieveFocusedSearch(results),
       error => this.failedRetrieve(<any>error));
     // TODO this isn't being set with the new stories
   }

@@ -45,7 +45,11 @@ export class StoryListComponent implements OnInit {
     this.log.debug('Error:' + error);
 
   }
+  userFriendlyDate(creationDate): string{
+    const friendlyDate = new Date(Date.parse(creationDate));
 
+    return friendlyDate.toDateString();
+  }
 
   storySelected(index: number) {
     this.log.debug('selected: ' + index + ', =' + this.stories[index].title);
