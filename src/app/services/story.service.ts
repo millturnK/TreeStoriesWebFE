@@ -120,6 +120,20 @@ export class StoryService {
       .map(this.extractGetData)
       .catch(this.handleError);
   }
+  public delete(storyId: string, user: User): Observable<string> {
+
+    const headers = new Headers({'Content-Type': 'application/json'});
+    headers.append('x-access-token', user.token);
+    const options = new RequestOptions({ headers: headers });
+
+    const targetUrl = this.apiUrl + '/' + storyId;
+
+    return this.http.delete(targetUrl, options)
+      .timeout(10000)
+      .map(this.extractDeleteData)
+      .catch(this.handleError);
+
+  }
 
   public getUsersStories(user: User): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
@@ -185,6 +199,14 @@ export class StoryService {
     const body = res.json();
     // console.log("NFRService: extractGetData.Got response. Details:", body);
     return body || { };
+  }
+  private extractDeleteData(res: Response) {
+    if ( res.status < 200 || res.status >= 300) {
+      throw new Error('Response status: ' + res.status);
+    }
+    const body = res.json();
+
+    return body.result || '';
   }
 
 }

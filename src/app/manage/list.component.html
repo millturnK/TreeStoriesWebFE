@@ -6,6 +6,15 @@
     </h2>
   </div>
 </div>
+<div class="alert alert-success" role="alert" *ngIf="success" >
+  <h4>Story Submitted</h4>
+  <p>Thankyou. This story has now been deleted and will no longer appear on the home-screen map.</p>
+</div>
+
+<div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+  <div class="header">Failed to save story</div>
+  <p>The following error occurred when trying to save your story: {{errorMessage}}</p>
+</div>
 
 <div class="row">
   <div class="col-md-12">
@@ -55,5 +64,29 @@
 <div class="row" *ngIf="selectedStory">
   <div class="col-md-12">
     <show-story-form [story]="selectedStory"></show-story-form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="abandonDelete()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Danger Will Robinson!!</h4>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to do this?
+            Deleted stories cannot be recovered.
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="abandonDelete()">No</button>
+            <button type="button" class="btn btn-primary" id="confirmDelete" data-dismiss="modal" (click)="confirmDelete()">Yes</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>

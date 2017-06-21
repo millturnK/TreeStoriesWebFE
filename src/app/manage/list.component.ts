@@ -15,6 +15,12 @@ export class StoryListComponent implements OnInit {
   title = 'Your Tree Stories';
   stories: Story[]= [];
   selectedStory: Story;
+  failureMsgHeader = '';
+  failureMsg = '';
+  success = false;
+  errorMessage = '';
+  deleteCandidate = null;
+
 
 
   private log = loggerFactory.getLogger('component.ListStory');
@@ -67,6 +73,32 @@ export class StoryListComponent implements OnInit {
 
   delete(index: number) {
     this.log.debug('delete: ' + index + ', =' + this.stories[index].title);
+    this.deleteCandidate = index;
+    // this._storyService.delete(this.stories[index]._id, this._user ).subscribe((results: string) => this.successfulDelete(results),
+    //   error => this.failedDelete(<any>error));
+  }
+  abandonDelete() {
+    /*console.log("I changed my mind ");*/
+    this.deleteCandidate = null;
+  }
+
+  confirmDelete() {
+    /*console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
+
+    this._storyService.delete(this.stories[this.deleteCandidate]._id, this._user ).subscribe((results: string) => this.successfulDelete(results),
+      error => this.failedDelete(<any>error));
+
+
+  }
+  private successfulDelete(result: string) {
+    //set success message
+    this.success = true;
+  }
+
+  private failedDelete(error: any) {
+    this.success = false;
+    this.failureMsgHeader = 'Story delete failed';
+    this.errorMessage = 'Unable to delete story. Error = ' + error;
   }
 
 
