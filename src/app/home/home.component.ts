@@ -24,10 +24,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   showModal: boolean;
   title = 'Tree Stories';
   stories: Story[]= [];
+  prevStories: Story[]= [];
   private sub: any;
   private logout = false;
-  private register = false;
-  @Output() onPanTo = new EventEmitter<string>();
   panPosition: google.maps.LatLng;
 
   // attributes related to pagination
@@ -42,6 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   // modal attributes
   modalImg;
   modal;
+  // ckShowAll = new FormControl('');
+  ckShowAllChecked = false;
 
   private log = loggerFactory.getLogger('component.Home');
 
@@ -51,6 +52,31 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
+  showAll(){
+    this.log.debug('show all clicked');
+    // get all stories
+
+    this.ckShowAllChecked = this.ckShowAllChecked ? false : true;
+
+    this.log.debug('show all value = ' + this.ckShowAllChecked);
+
+
+  //  if(this.ckShowAllChecked === false){
+  //    this.ckShowAllChecked = true;
+  //  }
+    if (this.ckShowAllChecked){
+      this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
+        error => this.failedRetrieve(<any>error));
+      //this.ckShowAllChecked = false;
+    }
+    // if not clicked, remove stories somehow...later. TODO save the existing story array and reset
+    else{
+      this.stories = this.prevStories;
+    }
+
+
+
+  }
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
@@ -184,8 +210,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onPlaceChanged(newPos) {
     // set value of text box
+    this.stories= [];
     this.log.debug('onPlace changed called with' + newPos);
-    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieveFocusedSearch(results),
       error => this.failedRetrieve(<any>error));
     // TODO this isn't being set with the new stories
   }

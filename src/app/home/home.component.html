@@ -15,15 +15,24 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <h3>Mapped tree stories</h3>
+    <!--<h3>Mapped tree stories <button class="btn btn-default btn-background bodyTextButton" type="button">Show All</button></h3>-->
+    <h3>Mapped tree stories </h3>
+    <!--<div class="col-md-3">-->
+      <!--<div class="form-group">-->
+        <div class="checkbox">
+          <label><input type="checkbox" name="ckShowAll"  (click)="showAll()"  ><b>List All Stories</b>
+            <br><i>NOTE: check this if you are trying to view trees within a large region (such as a country) as only locations within 20km of a place searched for will be shown.</i></label>
+        </div>
+      <!--</div>-->
+    <!--</div>-->
 
-    <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [panTo]="panPosition"></app-google-maps>
-  </div>
-</div>
+       <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [panTo]="panPosition" [storiesToMap]="stories"></app-google-maps>
+     </div>
+   </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <!--<div class="table-scrollable">-->
+   <div class="row">
+     <div class="col-md-12">
+       <!--<div class="table-scrollable">-->
     <div class="panel-group scrollPanel" id="accordion" role="tablist" aria-multiselectable="true">
 
       <div class="panel panel-default" *ngFor="let story of getStories();let i=index">
