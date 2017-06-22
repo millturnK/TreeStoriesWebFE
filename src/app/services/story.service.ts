@@ -131,12 +131,25 @@ export class StoryService {
   public getStoriesWithinRadiusPoint(point: string): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({ headers: headers });
-    const pointQueryUrl = this.apiUrl + '?' + 'point=' + point + '&maxDistance=1000000'; // set to 1000km initially
+    const pointQueryUrl = this.apiUrl + '?' + 'point=' + point; // + '&maxDistance=1000000'; // set to 1000km initially
     this.log.debug('in getStoriesWithinRadiusPoint. queryUrl=' + pointQueryUrl);
     return this.http.get(pointQueryUrl, options)
       .map(this.extractGetData)
       .catch(this.handleError);
   }
+
+
+  public getStoriesFromPointMin(lat: number, lng: number, minDistance: number): Observable<Story[]> {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const options = new RequestOptions({ headers: headers });
+    const pointQueryUrl = this.apiUrl + '?' + 'point=' + lat + ',' + lng + '&minDistance=' + minDistance;
+    this.log.debug('in getStoriesFromPointMin. queryUrl=' + pointQueryUrl);
+    return this.http.get(pointQueryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
+
+
   public delete(storyId: string, user: User): Observable<string> {
 
     const headers = new Headers({'Content-Type': 'application/json'});

@@ -32,6 +32,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   // This is the initial point on which the map is centred
   centreMap: google.maps.LatLng;
 
+  // Search position, where you should search from stories from
+  searchPos: google.maps.LatLng;
+
   // This is the point on which the map is focussed, all distances calculated from here
   panPosition: google.maps.LatLng;
 
@@ -39,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // only display this many stories at a time
   displayPageSize = 3;
   // whenever you go to the database get this many, make sure this is at least twice display size
-  retrieveDocNum = 10;
+  // retrieveDocNum = 10;
   // these define where the user current is currently looking within the overall story list
   startIndex = 0;
   endIndex = 0;
@@ -54,44 +57,32 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   constructor(private elementRef: ElementRef, private _router: Router, private route: ActivatedRoute, public _user: User,
-              private _storyService: StoryService) {
-    // set the initial position
-    //this.centreMap = new google.maps.LatLng(-25.363, 131.044);
+              private _storyService: StoryService) { }
 
-  }
-
-  showAll() {
-    this.log.debug('show all clicked');
-    // get all stories
-
-    this.ckShowAllChecked = this.ckShowAllChecked ? false : true;
-
-    this.log.debug('show all value = ' + this.ckShowAllChecked);
-
-
-  //  if(this.ckShowAllChecked === false){
-  //    this.ckShowAllChecked = true;
-  //  }
-    if (this.ckShowAllChecked) {
-      this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
-        error => this.failedRetrieve(<any>error));
-      // this.ckShowAllChecked = false;
-    } else {
-    // if not clicked, remove stories somehow...later. TODO save the existing story array and reset
-      this.stories = this.prevStories;
-    }
-
-
-
-  }
 
   showPosition(position) {
- this.log.debug('showPos. Lat= ' + position.coords.latitude + 'long' + position.coords.longitude);
- this.centreMap = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-}
+    this.log.debug('showPos. Lat= ' + position.coords.latitude + 'long' + position.coords.longitude);
+    this.centreMap = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    this.searchPos = this.centreMap;
+
+    // now that we have a new location, based on where the person is, go and retrieve a page of stories
+    // centered on this location.
+    const centrePos = position.coords.latitude + ',' + position.coords.longitude;
+    this._storyService.getStoriesWithinRadiusPoint(centrePos).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+      error => this.failedRetrieve(<any>error));
+
+  }
+
   ngOnInit() {
-    if(navigator.geolocation){
+    if (navigator.geolocation) {
+      this.log.debug('Retrieve initial stories - using geoloc');
       navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+    } else {
+      this.log.debug('Retrieve initial stories - no geoloc');
+      // this will go and grab a larger number of stories, centred on middle of Oz
+      this._storyService.getStoriesWithinRadiusPoint('-25.363, 131.044').subscribe( (results: Story[]) => this.successfulRetrieve(results),
+        error => this.failedRetrieve(<any>error));
+
     }
 
 
@@ -109,14 +100,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
 
-    this.log.debug('Retrieve initial stories');
-    // this will go and grab a larger number of stories
-    this._storyService.getPageStories(this.retrieveDocNum).subscribe( (results: Story[]) => this.successfulRetrieve(results),
-      error => this.failedRetrieve(<any>error));
-    // this._storyService.getStories( ).subscribe( (results: Story[]) => this.successfulRetrieve(results),
-    //  error => this.failedRetrieve(<any>error));
-  }
 
+  }
 
   panToStoryLocation(coords) {
 
@@ -140,6 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._user.clear();
 
   }
+
   login() {
     // console.log('Login clicked');
     if (!this._user.loggedin) {
@@ -147,6 +133,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   }
+
   showEnlargedPhoto(uri) {
     this.log.debug('in showEnlargedPhoto.uri=' + uri);
     const photoUrl = uri;
@@ -206,11 +193,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
+  /*
   successfulRetrieveFocusedSearch(stories: Story[]) {
-    // this.log.debug('Home Component SuccRet got stories of length' + stories.length);
 
-    // throw away what is there
-    this.stories = [];
     this.stories = stories;
 
     // set the indexes
@@ -219,13 +204,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.endIndex = this.stories.length > this.displayPageSize ? this.displayPageSize : this.stories.length;
 
     this.prevStories = stories;
-  }
+  }*/
 
   successfulPageRetrieve(stories: Story[]) {
 
     // how many stories did you get?
     this.log.debug('Page Retrieved: ' + stories.length + ' stories, adding to total.');
-    // silently add on the new stories
+    // silently add on the new stories, if they are new
+
     this.stories = this.stories.concat(stories);
     this.log.debug('Story[] len = ' + this.stories.length);
 
@@ -239,16 +225,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
+  /*
+     This is an event emitted by the embedded map, when the use types a place into the place search box.
+     We need to go retrieve stories focussed around this point.
+   */
   onPlaceChanged(newPos) {
-    // set value of text box
-    this.stories = [];
-    this.log.debug('onPlace changed called with' + newPos);
-    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieveFocusedSearch(results),
-      error => this.failedRetrieve(<any>error));
-    // TODO this isn't being set with the new stories
-  }
 
-  // TODO implement only going here if user is logged in
+    this.log.debug('onPlace changed called with' + newPos);
+
+    const coords = newPos.split(',');
+    // don't mess with the centre position
+    this.searchPos = new google.maps.LatLng(coords[0], coords[1]);
+
+    this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+      error => this.failedRetrieve(<any>error));
+
+  }
+  
   openTell() {
     console.log('in openTell');
     this._router.navigate(['tell']);
@@ -278,22 +271,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.stories.length - this.endIndex < (2 * this.displayPageSize)) {
       // better go try and get some more...
       // get last index of story and retrieve the next bunch of stories
-      const lastId = this.stories[this.stories.length - 1]._id;
+      // const lastId = this.stories[this.stories.length - 1]._id;
 
       // now need to work out how far away the last story is and then go get the next page of stories that are
       // greater than that minimum distance.
       const minLoc: Place = this.stories[this.stories.length - 1].loc;
 
-      const minDistance = this.getDistanceFromLatLonInKm(minLoc.coordinates[0], minLoc.coordinates[1], this.panPosition.lat(), this.panPosition.lng());
+      const minDistance = this.getDistanceFromLatLonInKm(minLoc.coordinates[0], minLoc.coordinates[1], this.searchPos.lat(), this.searchPos.lng());
 
+      this.log.debug('Get stories from minDistance = ' + (minDistance * 1000 + 10));
 
-      this.log.debug('Get stories from minDistance = ' + minDistance * 1000);
-
-
-      this.log.debug('Get stories from id = ' + lastId);
-
-      this._storyService.getPageStories(this.retrieveDocNum, lastId).subscribe( (results: Story[]) => this.successfulPageRetrieve(results),
+      this._storyService.getStoriesFromPointMin(this.searchPos.lat(), this.searchPos.lng(), minDistance * 1000 + 10 ).subscribe( (results: Story[]) => this.successfulPageRetrieve(results),
         error => this.failedRetrieve(<any>error));
+
+
     }
 
     // now just shuffle along the indexes
