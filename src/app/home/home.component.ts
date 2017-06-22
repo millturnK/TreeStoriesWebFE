@@ -55,6 +55,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private elementRef: ElementRef, private _router: Router, private route: ActivatedRoute, public _user: User,
               private _storyService: StoryService) {
+    // set the initial position
+    //this.centreMap = new google.maps.LatLng(-25.363, 131.044);
 
   }
 
@@ -85,14 +87,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   showPosition(position) {
  this.log.debug('showPos. Lat= ' + position.coords.latitude + 'long' + position.coords.longitude);
+ this.centreMap = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 }
   ngOnInit() {
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
     }
 
-    // set the initial position
-    this.centreMap = new google.maps.LatLng(-25.363, 131.044);
 
     this.sub = this.route.params.subscribe(params => {
       // search for a logout parameter if it is present
@@ -177,7 +178,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getStories() {
 
     // just return what the user should see
-    this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
+    //this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
 
     const temp = [];
     let tempIdx = 0;

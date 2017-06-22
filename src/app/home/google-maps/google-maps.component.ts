@@ -53,8 +53,8 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
   }
 
   initialise() {
-    // this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
-    this.latlng = this.centreMap;
+    this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
+    //this.latlng = this.centreMap;
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
       zoom: 4
@@ -77,6 +77,17 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
         console.log('ngOnChanges. StoriesToMap=', this.storiesToMap);
         this.mapStories(this.storiesToMap);
       }
+      if(!isUndefined(this.centreMap)){
+        this.latlng = this.centreMap;
+        this.log.debug('ngOnChanges. ltlng=' + this.latlng);
+        this.map.setCenter(this.latlng);
+      }
+      else {
+        this.latlng = {lat: -25.363, lng: 131.044};
+
+      }
+
+
 
     }
     // if(!isUndefined(this.storiesToMap) && !isUndefined(this.map)) {
@@ -155,77 +166,6 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
   successfulRetrieve(stories: Story[]) {
     // TODO remove this when migrating environments - find a way to get this from env var
     this.mapStories(stories);
-    //const baseServerUrl = 'http://localhost:3000';
-
-    // for (const story of stories) {
-    //   // need to reverse location as coming out of the db long lat
-    //   let position = null;
-    //   this.log.debug('stories.length=' + stories.length);
-    //   if(!isUndefined(story.loc.coordinates))
-    //   {
-    //     position = new google.maps.LatLng(story.loc.coordinates[1], story.loc.coordinates[0]);
-    //     const marker = new google.maps.Marker();
-    //     // this should be formatted in HTML tags - put in for loop
-    //     let content = '';
-    //     // console.log('in GM retrieve: story= ', story);
-    //     if (!isUndefined(story.photoLinks) && story.photoLinks != null) {
-    //       for (const uri of story.photoLinks)
-    //       {
-    //         content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'
-    //           + ' style=\"width:50px;height:50px;margin:5px\">';
-    //         this.log.debug('uri of story.photolinks:' + content);
-    //       }
-    //     }
-    //     content = content + ('<p>' + story.content + '</p>');
-    //     this.log.debug('final content: ' + content);
-    //     marker.setPosition(position);
-    //     marker.setTitle(story.title);
-    //     marker.setMap(this.map);
-    //     marker.setIcon('../assets/treeMarker.png');
-    //     marker.addListener('click', event => {
-    //       this.log.debug('Click called. Marker title=' + marker.getTitle());
-    //       this.log.debug('Click called. content=' + story.content);
-    //       const infowindow = new google.maps.InfoWindow({
-    //         content: content,
-    //         position: marker.getPosition(),
-    //         maxWidth: 200
-    //       });
-    //       infowindow.open(this.map);
-    //     });
-    //     this.markers.push(marker);
-    //     // now draw rectangle
-    //     if (story.shapeType != null){
-    //       if (story.shapeType === 'rectangle') {
-    //         //SW then NE
-    //         const SW = new google.maps.LatLng(story.SWCoords.coordinates[0], story.SWCoords.coordinates[1]);
-    //         const NE = new google.maps.LatLng(story.NECoords.coordinates[0], story.NECoords.coordinates[1]);
-    //         const myBounds = new google.maps.LatLngBounds(SW, NE);
-    //         const rectangle = new google.maps.Rectangle();
-    //         rectangle.setBounds(myBounds);
-    //         rectangle.setOptions({editable: false, draggable: false, strokeColor: '#FF0000', fillColor: '#ffbf2a', fillOpacity: 0.5});
-    //         rectangle.setMap(this.map);
-    //
-    //         // TODO set other options
-    //
-    //         // strokeColor: '#FF0000',
-    //         //   strokeOpacity: 0.8,
-    //         //   strokeWeight: 2,
-    //         //   fillColor: '#fff764',
-    //         //   fillOpacity: 0.5,
-    //         //   map: this.map,
-    //         //   bounds: {
-    //         //
-    //         // }
-    //       }// draw it on
-    //     }
-    //   }
-    //   else
-    //   {
-    //     this.log.error('can\'t map story id'+ story._id + 'as it has no location');
-    //   }
-
-    //}
-
     }
 
 
