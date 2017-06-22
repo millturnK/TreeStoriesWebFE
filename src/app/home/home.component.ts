@@ -63,7 +63,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   }
+
+  showPosition(position) {
+ this.log.debug('showPos. Lat= ' + position.coords.latitude + 'long' + position.coords.longitude);
+}
   ngOnInit() {
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+    }
 
     this.sub = this.route.params.subscribe(params => {
       // search for a logout parameter if it is present
