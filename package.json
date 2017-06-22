@@ -34,7 +34,6 @@
     "exif-js": "^2.2.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
-    "ngGeolocation": "0.0.7",
     "rxjs": "^5.1.0",
     "typescript-logging": "^0.3.1",
     "web-animations-js": "^2.2.5",

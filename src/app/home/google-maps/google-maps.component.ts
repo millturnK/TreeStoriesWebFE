@@ -79,7 +79,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
       }
       if(!isUndefined(this.centreMap)){
         this.latlng = this.centreMap;
-        this.log.debug('ngOnChanges. ltlng=' + this.latlng);
+        this.log.debug('ngOnChanges. centreMap=' + this.latlng);
         this.map.setCenter(this.latlng);
       }
       else {
@@ -87,14 +87,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
 
       }
 
-
-
     }
-    // if(!isUndefined(this.storiesToMap) && !isUndefined(this.map)) {
-    //   console.log('ngOnChanges. StoriesToMap=',this.storiesToMap);
-    //   this.mapStories(this.storiesToMap);
-    //
-    // }
 
 
   }
