@@ -7,6 +7,7 @@ import {User} from '../user/models/user';
 import {Story} from '../models/story';
 import {StoryService} from '../services/story.service';
 import {loggerFactory} from '../config/ConfigLog4j';
+import {Place} from '../models/Place';
 
 
 
@@ -27,6 +28,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   prevStories: Story[]= [];
   private sub: any;
   private logout = false;
+
+  // This is the initial point on which the map is centred
+  centreMap: google.maps.LatLng;
+
+  // This is the point on which the map is focussed, all distances calculated from here
   panPosition: google.maps.LatLng;
 
   // attributes related to pagination
@@ -52,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-  showAll(){
+  showAll() {
     this.log.debug('show all clicked');
     // get all stories
 
@@ -64,13 +70,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   //  if(this.ckShowAllChecked === false){
   //    this.ckShowAllChecked = true;
   //  }
-    if (this.ckShowAllChecked){
+    if (this.ckShowAllChecked) {
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
         error => this.failedRetrieve(<any>error));
-      //this.ckShowAllChecked = false;
-    }
+      // this.ckShowAllChecked = false;
+    } else {
     // if not clicked, remove stories somehow...later. TODO save the existing story array and reset
-    else{
       this.stories = this.prevStories;
     }
 
@@ -78,6 +83,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit() {
+
+    // set the initial position
+    this.centreMap = new google.maps.LatLng(-25.363, 131.044);
 
     this.sub = this.route.params.subscribe(params => {
       // search for a logout parameter if it is present
@@ -190,6 +198,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
+  successfulRetrieveFocusedSearch(stories: Story[]) {
+    // this.log.debug('Home Component SuccRet got stories of length' + stories.length);
+
+    // throw away what is there
+    this.stories = [];
+    this.stories = stories;
+
+    // set the indexes
+    this.startIndex = 0;
+    // if the number of stories is greater than the display page size, then only
+    this.endIndex = this.stories.length > this.displayPageSize ? this.displayPageSize : this.stories.length;
+
+    this.prevStories = stories;
+  }
+
   successfulPageRetrieve(stories: Story[]) {
 
     // how many stories did you get?
@@ -210,7 +233,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onPlaceChanged(newPos) {
     // set value of text box
-    this.stories= [];
+    this.stories = [];
     this.log.debug('onPlace changed called with' + newPos);
     this._storyService.getStoriesWithinRadiusPoint(newPos).subscribe( (results: Story[]) => this.successfulRetrieveFocusedSearch(results),
       error => this.failedRetrieve(<any>error));
@@ -249,6 +272,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       // get last index of story and retrieve the next bunch of stories
       const lastId = this.stories[this.stories.length - 1]._id;
 
+      // now need to work out how far away the last story is and then go get the next page of stories that are
+      // greater than that minimum distance.
+      const minLoc: Place = this.stories[this.stories.length - 1].loc;
+
+      const minDistance = this.getDistanceFromLatLonInKm(minLoc.coordinates[0], minLoc.coordinates[1], this.panPosition.lat(), this.panPosition.lng());
+
+
+      this.log.debug('Get stories from minDistance = ' + minDistance * 1000);
+
+
       this.log.debug('Get stories from id = ' + lastId);
 
       this._storyService.getPageStories(this.retrieveDocNum, lastId).subscribe( (results: Story[]) => this.successfulPageRetrieve(results),
@@ -279,6 +312,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     return 'next disabled';
   }
 
+
+  /*
+    Haversine formula
+   */
+  getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number , lon2: number) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1);  // deg2rad below
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+       Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+       Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt( 1 - a ));
+    const d = R * c; // Distance in km
+    return d;
+  }
+
+  deg2rad(deg) {
+     return deg * (Math.PI / 180 );
+  }
 
 
 
