@@ -14,7 +14,7 @@
 }
 
 .scrollPanel {
-  height: 20pc;
+  height: 15pc;
   overflow-y: auto;
   margin-top: 1pc;
 
@@ -118,6 +118,10 @@
 .close:focus {
   color: #bbb;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.pagBtn:hover {
   cursor: pointer;
 }
 

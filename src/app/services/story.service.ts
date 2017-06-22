@@ -87,7 +87,7 @@ export class StoryService {
   formData.append('botName', story.botName);
   formData.append('photoLinks', JSON.stringify(story.photoLinks));
   // TODO Not available in story yet
-  // formData.append('links', []);
+  formData.append('links', []);
 
 
   // formData.append('test', 'test');
@@ -111,10 +111,27 @@ export class StoryService {
       .catch(this.handleError);
   }
 
+  public getPageStories(pageSize = 5, fromId?: string): Observable<Story[]> {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const options = new RequestOptions({ headers: headers });
+
+    let queryUrl = this.apiUrl;
+    if (fromId) {
+      queryUrl = queryUrl + '?' + 'pgsize=' + pageSize + '&' + 'from=' + fromId;
+    } else {
+      queryUrl = queryUrl + '?' + 'pgsize=' + pageSize;
+    }
+
+    return this.http.get(queryUrl, options)
+      .map(this.extractGetData)
+      .catch(this.handleError);
+  }
+
+
   public getStoriesWithinRadiusPoint(point: string): Observable<Story[]> {
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({ headers: headers });
-    const pointQueryUrl = this.apiUrl + '?' + 'point=' + point;
+    const pointQueryUrl = this.apiUrl + '?' + 'point=' + point + '&maxDistance=1000000'; // set to 1000km initially
     this.log.debug('in getStoriesWithinRadiusPoint. queryUrl=' + pointQueryUrl);
     return this.http.get(pointQueryUrl, options)
       .map(this.extractGetData)

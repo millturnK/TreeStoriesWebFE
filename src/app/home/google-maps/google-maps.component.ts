@@ -23,7 +23,11 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
   // @Input() editedStory: google.maps.LatLng;
   // @Input() panTo: google.maps.LatLng;
  // @Input() editedStory: any;
+
+  // Use this to pan the map to a specific location
   @Input() panTo: google.maps.LatLng;
+  // use this to set the initial location on which the map should centre
+  @Input() centreMap: google.maps.LatLng;
 
 
   @ViewChild('search')
@@ -49,7 +53,8 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
   }
 
   initialise() {
-    this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
+    // this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
+    this.latlng = this.centreMap;
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
       zoom: 4
@@ -58,6 +63,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
   }
+
   ngOnChanges() {
     this.log.debug('in ngOnChanges:' );
 

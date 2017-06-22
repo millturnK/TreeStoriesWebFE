@@ -26,7 +26,7 @@
       <!--</div>-->
     <!--</div>-->
 
-       <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [panTo]="panPosition" [storiesToMap]="stories"></app-google-maps>
+       <app-google-maps (onPlaceChanged)="onPlaceChanged($event)" [centreMap]="centreMap" [panTo]="panPosition" [storiesToMap]="stories"></app-google-maps>
      </div>
    </div>
 
@@ -59,9 +59,17 @@
 
   </div>
 </div>
-<div id="myModal" *ngIf="showModal" class="modal">
+
+<nav aria-label="...">
+  <ul class="pager">
+    <li class="{{previousEnabled()}}"><a class="pagBtn" (click)="previousPage()">Previous</a></li>
+    <li class="{{nextEnabled()}}"><a class="pagBtn" (click)="nextPage()">Next</a></li>
+  </ul>
+</nav>
+
+<div id="myModal" *ngIf="showModal" class="modal" #modal>
   <!-- The Close Button -->
   <span class="close" (click)="closeModal()">&times;</span>
-  <img class="modal-content" id="img01" src="{{imageToShow}}">
+  <img class="modal-content" id="img01" src="{{imageToShow}}" #modalImg>
 
 </div>
