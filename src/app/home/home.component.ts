@@ -142,18 +142,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.modalImg = jQuery(this.elementRef.nativeElement).find('#img01');
     this.modal = jQuery(this.elementRef.nativeElement).find('#myModal');
 
-    console.log('modal = ', this.modal);
-    console.log('img = ', this.modalImg);
-
     this.modalImg.src = photoUrl;
 
-    console.log('was I am to set img?', this.modalImg);
-
-    //this.modal.style.display = 'block';
     this.showModal = true;
     this.imageToShow = photoUrl;
-
-    console.log('was I able to set display?', this.modal);
 
   }
 
@@ -165,7 +157,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getStories() {
 
     // just return what the user should see
-    //this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
+    this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
 
     const temp = [];
     let tempIdx = 0;
@@ -193,27 +185,32 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-  /*
-  successfulRetrieveFocusedSearch(stories: Story[]) {
-
-    this.stories = stories;
-
-    // set the indexes
-    this.startIndex = 0;
-    // if the number of stories is greater than the display page size, then only
-    this.endIndex = this.stories.length > this.displayPageSize ? this.displayPageSize : this.stories.length;
-
-    this.prevStories = stories;
-  }*/
 
   successfulPageRetrieve(stories: Story[]) {
 
     // how many stories did you get?
     this.log.debug('Page Retrieved: ' + stories.length + ' stories, adding to total.');
     // silently add on the new stories, if they are new
+    for (const newstory of stories) {
 
-    this.stories = this.stories.concat(stories);
-    this.log.debug('Story[] len = ' + this.stories.length);
+      // see if we already have it, otherwise add to the end
+      let found = false;
+
+      for (const oldstory of this.stories) {
+
+        if (oldstory._id === newstory._id) {
+          found = true;
+        }
+      }
+
+      if (!found) {
+        this.stories = this.stories.concat( newstory );
+      }
+
+    }
+
+    // this.stories = this.stories.concat(stories);
+    this.log.debug('Story[] len now = ' + this.stories.length);
 
   }
 
@@ -241,7 +238,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       error => this.failedRetrieve(<any>error));
 
   }
-  
+
   openTell() {
     console.log('in openTell');
     this._router.navigate(['tell']);
@@ -277,12 +274,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       // greater than that minimum distance.
       const minLoc: Place = this.stories[this.stories.length - 1].loc;
 
-      const minDistance = this.getDistanceFromLatLonInKm(minLoc.coordinates[0], minLoc.coordinates[1], this.searchPos.lat(), this.searchPos.lng());
+      const minDistance = this.getDistanceFromLatLonInKm(minLoc.coordinates[0], minLoc.coordinates[1],
+                                                         this.searchPos.lat(), this.searchPos.lng());
 
       this.log.debug('Get stories from minDistance = ' + (minDistance * 1000 + 10));
 
-      this._storyService.getStoriesFromPointMin(this.searchPos.lat(), this.searchPos.lng(), minDistance * 1000 + 10 ).subscribe( (results: Story[]) => this.successfulPageRetrieve(results),
-        error => this.failedRetrieve(<any>error));
+      this._storyService.getStoriesFromPointMin(this.searchPos.lat(), this.searchPos.lng(), minDistance * 1000 + 10 )
+        .subscribe( (results: Story[]) => this.successfulPageRetrieve(results), error => this.failedRetrieve(<any>error));
 
 
     }
@@ -291,6 +289,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.startIndex = this.startIndex + this.displayPageSize;
     if (this.startIndex + this.displayPageSize > this.stories.length ) {
       this.endIndex = this.stories.length;
+
     } else {
       this.endIndex = this.startIndex + this.displayPageSize;
     }
