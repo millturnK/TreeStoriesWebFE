@@ -87,7 +87,7 @@ export class StoryService {
   formData.append('botName', story.botName);
   formData.append('photoLinks', JSON.stringify(story.photoLinks));
   // TODO Not available in story yet
-  formData.append('links', []);
+  // formData.append('links', []);
 
 
   // formData.append('test', 'test');
