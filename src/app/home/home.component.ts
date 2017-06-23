@@ -157,7 +157,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getStories() {
 
     // just return what the user should see
-    this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
+    // this.log.debug('show user stories: [' + this.startIndex + '..' + (this.endIndex - 1) + ']');
 
     const temp = [];
     let tempIdx = 0;
