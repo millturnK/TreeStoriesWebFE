@@ -1,4 +1,7 @@
-import {Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, NgZone, OnChanges} from '@angular/core';
+import {
+  Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, NgZone, OnChanges,
+  SimpleChange
+} from '@angular/core';
 import {GoogleApiService} from '../../services/google-api.service';
 import {loggerFactory} from '../../config/ConfigLog4j';
 import {isUndefined} from 'util';
@@ -54,41 +57,63 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
 
   initialise() {
     this.latlng = new google.maps.LatLng(this.myLatLng.lat, this.myLatLng.lng);
-    //this.latlng = this.centreMap;
+    // this.latlng = this.centreMap;
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: this.latlng,
       zoom: 4
     });
 
+    /*
       this._storyService.getStories().subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
+      */
   }
 
-  ngOnChanges() {
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
     this.log.debug('in ngOnChanges:' );
 
-    if (!isUndefined(this.map)) {
-      if(!isUndefined(this.panTo)){
-        this.map.panTo(this.panTo);
-        this.log.debug('panTo=' + this.panTo);
-        this.map.setZoom(18);
-      }
-      if(!isUndefined(this.storiesToMap)){
-        console.log('ngOnChanges. StoriesToMap=', this.storiesToMap);
-        this.mapStories(this.storiesToMap);
-      }
-      if(!isUndefined(this.centreMap)){
-        this.latlng = this.centreMap;
-        this.log.debug('ngOnChanges. centreMap=' + this.latlng);
-        this.map.setCenter(this.latlng);
-      }
-      else {
-        this.latlng = {lat: -25.363, lng: 131.044};
+    // what changed?
+    if ( changes['panTo'] && changes['panTo'].previousValue !== changes['panTo'].currentValue ) {
+      // panTo prop changed
+      this.log.debug('panTo change: ' + changes['panTo'].currentValue);
 
+      if (!isUndefined(this.map)) {
+        if (!isUndefined(this.panTo)) {
+          this.map.panTo(this.panTo);
+          this.log.debug('panTo=' + this.panTo);
+          this.map.setZoom(18);
+        }
       }
 
     }
 
+    if ( changes['centreMap'] && changes['centreMap'].previousValue !== changes['centreMap'].currentValue ) {
+      // centreMap prop changed
+      this.log.debug('centreMap change: ' + changes['centreMap'].currentValue);
+
+      // ONLY change this if you detect this has changed, should only happen early on
+      if (!isUndefined(this.map)) {
+
+        if (!isUndefined(this.centreMap)) {
+          this.latlng = this.centreMap;
+          // this.log.debug('ngOnChanges. ltlng=' + this.latlng);
+          this.map.setCenter(this.latlng);
+        } else {
+          this.latlng = {lat: -25.363, lng: 131.044};
+        }
+      }
+
+    }
+
+    if (!isUndefined(this.map)) {
+      // reload the stories, should probably do this within an if too, just to cut down on unnecessary remaps.
+      if (!isUndefined(this.storiesToMap)) {
+        console.log('ngOnChanges. StoriesToMap=', this.storiesToMap);
+        this.mapStories(this.storiesToMap);
+      }
+
+    }
 
   }
 
@@ -114,11 +139,11 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
           for (const uri of story.photoLinks) {
             content = content + '<img src=\"' + uri + '\" ' + 'alt=\"tree image\"'
               + ' style=\"width:50px;height:50px;margin:5px\">';
-            this.log.debug('uri of story.photolinks:' + content);
+            // this.log.debug('uri of story.photolinks:' + content);
           }
         }
         content = content + ('<p>' + story.content + '</p>');
-        this.log.debug('final content: ' + content);
+        // this.log.debug('final content: ' + content);
         marker.setPosition(position);
         marker.setTitle(story.title);
         marker.setMap(this.map);
@@ -137,7 +162,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
         // now draw rectangle
         if (story.shapeType != null) {
           if (story.shapeType === 'rectangle') {
-            //SW then NE
+            // SW then NE
             const SW = new google.maps.LatLng(story.SWCoords.coordinates[0], story.SWCoords.coordinates[1]);
             const NE = new google.maps.LatLng(story.NECoords.coordinates[0], story.NECoords.coordinates[1]);
             const myBounds = new google.maps.LatLngBounds(SW, NE);
@@ -156,6 +181,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
   }
 
   // parse them and add them to map
+  /*
   successfulRetrieve(stories: Story[]) {
     // TODO remove this when migrating environments - find a way to get this from env var
     this.mapStories(stories);
@@ -166,7 +192,7 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
     this.log.error('failed retrieve: ' + error);
     this.errorMsg = error;
 
-  }
+  }*/
 
  onPanTo(pos: google.maps.LatLng){
    this.log.debug('in onPanTo. pos=' + pos);
@@ -240,15 +266,13 @@ export class GoogleMapsComponent implements OnInit, OnChanges {
             }
           });
 
+          // Fitting the map nicely to the place selected
           this.map.fitBounds(bounds);
           const posString = lat + ',' + lng;
           this.log.debug('in search box listener. posString=' + posString);
           this.onPlaceChanged.emit(posString);
 
-
-
         });
-
 
       }); // end places changed
 
