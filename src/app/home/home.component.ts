@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // attributes related to pagination
   // only display this many stories at a time
-  displayPageSize = 3;
+  displayPageSize = 5;
   // whenever you go to the database get this many, make sure this is at least twice display size
   // retrieveDocNum = 10;
   // these define where the user current is currently looking within the overall story list
@@ -298,16 +298,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   previousEnabled() {
     if (this.startIndex > 0) {
-      return 'previous';
+      return '';
     }
-    return 'previous disabled';
+    return 'disabled';
   }
 
   nextEnabled() {
     if (this.endIndex < this.stories.length) {
-      return 'next';
+      return '';
     }
-    return 'next disabled';
+    return 'disabled';
   }
 
 
