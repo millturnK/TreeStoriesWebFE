@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {User} from '../user/models/user';
 import {Router} from '@angular/router';
 import {Story} from '../models/story';
@@ -9,7 +9,9 @@ import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';
 import {isUndefined} from 'util';
 import {CoordsFromPhoto} from './coordsFromPhoto';
+
 declare const google: any;
+declare var jQuery: any;
 
 
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
@@ -43,9 +45,9 @@ export class TellComponent implements OnInit {
 
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
-  description= new FormControl('', Validators.required);
-  contributor= new FormControl('');
-  source= new FormControl('', Validators.required);
+  description = new FormControl('', [Validators.required, Validators.minLength(140)]);
+  contributor = new FormControl('');
+  source = new FormControl('', Validators.required);
   latitude = new FormControl('', latitudeValidator);
   longitude = new FormControl('', longitudeValidator);
   ckMap  = new FormControl('');
@@ -66,7 +68,21 @@ export class TellComponent implements OnInit {
   // coordsSubject = new Subject();
   coordsFromPhoto = new CoordsFromPhoto();
 
+
+
+
+
+  constructor(private router: Router,  private _user: User, private _storyService: StoryService, private elementRef: ElementRef) {
+     this.storyModel.contributors = _user.username;
+     // set it to Marker as shapetype by default
+    this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
+  }
+
   ngOnInit() {
+
+    // enable the tooltips
+    jQuery(this.elementRef.nativeElement).find('[data-toggle="tooltip"]').tooltip();
+
     this.coordsFromPhoto.coordsSubject.subscribe((
       coords: Number[]) => {
       if (!isUndefined(coords) && coords.length > 0) {
@@ -76,17 +92,6 @@ export class TellComponent implements OnInit {
       }
     });
   }
-
-
-
-    constructor(private router: Router,  private _user: User, private _storyService: StoryService) {
-        /*this.storyModel = new Story();*/
-        // TODO implement login and pass in name, remove placeholder
-        // _user.username = 'Katie Test';
-        this.storyModel.contributors = _user.username;
-        // set it to Marker as shapetype by default
-        this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
-    }
 
 
    // onPositionChanged(newPos: string){

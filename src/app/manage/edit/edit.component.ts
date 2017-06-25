@@ -1,4 +1,4 @@
-import {Component, EventEmitter, NgZone, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, NgZone, OnChanges, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../user/models/user';
 import {StoryService} from '../../services/story.service';
@@ -12,6 +12,9 @@ import {Place} from '../../models/Place';
 
 
 declare const google: any;
+declare var jQuery: any;
+
+
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
   console.log('in lat val. control=', control.value);
@@ -51,7 +54,7 @@ export class EditComponent implements OnInit {
 
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
-  description= new FormControl('', Validators.required);
+  description= new FormControl('', [Validators.required, Validators.minLength(140)]);
   contributor= new FormControl('');
   source= new FormControl('', Validators.required);
   latitude = new FormControl('', latitudeValidator);
@@ -72,7 +75,8 @@ export class EditComponent implements OnInit {
   });
 
   constructor(private _router: Router, private ngZone: NgZone, private route: ActivatedRoute,
-              private _user: User, private _storyService: StoryService) {
+              private _user: User, private _storyService: StoryService, private elementRef: ElementRef) {
+
     this.user = _user;
     this.storyModel.contributors = _user.username;
     this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
@@ -80,6 +84,10 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // enable the tooltips
+    jQuery(this.elementRef.nativeElement).find('[data-toggle="tooltip"]').tooltip();
+
     const id = this.route.snapshot.params['id'];
     this.log.debug('in ngOnInit. Id=' + id);
     this.storyModel._id = id;
