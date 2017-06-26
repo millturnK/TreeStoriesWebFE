@@ -2,21 +2,6 @@
 
 
 <h2>Register</h2>
-<p></p>
-
-<div class="alert alert-success" role="alert" *ngIf="regSuccess" >
-  <h4>Registration Successful</h4>
-  <p>
-      An email has been sent to your nominated email address. Please click on the link supplied to activate
-      your account and finalise your registration.
-      If you don't see an email check your spam folder.
-  </p>
-</div>
-
-<div class="alert alert-danger" role="alert"  *ngIf="regErrorMsg">
-  <div class="header">Registration Failed</div>
-  <p>Please contact <a href="mailto:office@millturn.com.au?Subject=Bug" target="_top">Millturn IT Support</a>. An error occurred when processing your registration: {{regErrorMsg}}</p>
-</div>
 
 <div class="container">
     <div class="row">
@@ -125,7 +110,19 @@
         </div>
     </div>
 </div>
+<div class="alert alert-success" role="alert" *ngIf="regSuccess" >
+  <h4>Registration Successful</h4>
+  <p>
+    An email has been sent to your nominated email address. Please click on the link supplied to activate
+    your account and finalise your registration.
+    If you don't see an email check your spam folder.
+  </p>
+</div>
 
+<div class="alert alert-danger" role="alert"  *ngIf="regErrorMsg">
+  <div class="header">Registration Failed</div>
+  <p>Please contact <a href="mailto:office@millturn.com.au?Subject=Bug" target="_top">Millturn IT Support</a>. An error occurred when processing your registration: {{regErrorMsg}}</p>
+</div>
 
 
 

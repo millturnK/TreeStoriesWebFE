@@ -1,4 +1,4 @@
-import {Component, Input, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {Component, Input, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from './user/models/user';
 
@@ -9,7 +9,7 @@ declare var jQuery: any;
   templateUrl: 'navbar.component.html',
   styleUrls: ['navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
     @Input()
     user: User;
@@ -19,7 +19,10 @@ export class NavbarComponent implements OnInit {
     // means no need anymore for jquery.
     //@ViewChild('ddmenu') dropDownMenu: ElementRef;
 
-  constructor(private _router: Router, private elementRef: ElementRef) {}
+  constructor(private _router: Router, private elementRef: ElementRef) {
+
+
+  }
 
   ngOnInit(): any {
     // Need to pass in the URL to redirect to if not logged in
@@ -28,21 +31,29 @@ export class NavbarComponent implements OnInit {
 
     jQuery(this.elementRef.nativeElement).find('.dropdown-toggle')
       .dropdown();
-    if(this.user.photoLink){
+
+    this.setNewUserPhoto();
+
+  }
+  ngOnDestroy() {
+    this.userPhotoURL = '';
+  }
+
+  setNewUserPhoto(){
+    if (this.user.photoLink) {
       this.userPhotoURL = this.user.photoLink;
     }
-    else{
+    else {
       this.userPhotoURL = '../assets/ic_person_black_24dp_1x.png';
     }
-
-
-
   }
 
 
   login() {
     // console.log('Login clicked');
+    this.setNewUserPhoto();
     if (!this.user.loggedin) {
+
       this._router.navigate(['login']);
     }
 
@@ -70,5 +81,6 @@ export class NavbarComponent implements OnInit {
     this._router.navigate(['/account', this.user.username]);
 
   }
+
 
 }

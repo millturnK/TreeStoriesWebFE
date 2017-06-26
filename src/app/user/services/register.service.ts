@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Optional} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {User} from '../models/user';
@@ -12,20 +12,12 @@ export class RegistrationService {
 
   constructor(private http: Http) {}
 
-  // TODO - put in all user fields
+
   register(user: User, picture: Picture): Observable<User> {
 
    // const headers = new Headers({'Content-Type': 'application/json'});
     const headers = new Headers();
     const options = new RequestOptions({ headers: headers});
-    // userin.username = this.email.value;
-    // userin.firstname = this.firstname.value;
-    // userin.lastname = this.lastname.value;
-    // userin.businessName = this.organisation.value;
-    // userin.paymentOption = this.paymentplan.value;
-    // userin.password = this.password.value;
-    // // by default new users are plebs
-    // userin.role = User.ROLE_INACTIVE_CD;
 
    // const body = JSON.stringify( user );
     const formData: FormData = new FormData();

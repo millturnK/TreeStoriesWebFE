@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 import {User} from '../models/user';
 import {environment} from '../../../environments/environment';
+import {Picture} from '../../models/picture';
 
 @Injectable()
 export class AuthenticationService {
@@ -120,17 +121,27 @@ export class AuthenticationService {
     return Observable.throw(errMsg);
   }
 
-  public updateAccount(account: User, adminuser: User): Observable<User> {
+  public updateAccount(account: User, picture: Picture, adminuser: User): Observable<User> {
 
-    const headers = new Headers({'Content-Type': 'application/json'});
+    // const headers = new Headers({'Content-Type': 'application/json'});
+    const headers = new Headers();
     headers.append('x-access-token', adminuser.token);
     const options = new RequestOptions({ headers: headers});
 
-    const body = JSON.stringify( account );
+   // const body = JSON.stringify( account );
+    const formData: FormData = new FormData();
+    formData.append('username', account.username);
+    formData.append('firstname', account.firstname);
+    formData.append('lastname', account.lastname);
+    formData.append('businessName', account.businessName);
+    formData.append('paymentOption', account.paymentOption);
+    formData.append('password', account.password);
+    formData.append('role', account.role);
+    formData.append(picture.partName, picture.file);
     const targetUrl = this.apiUrl + '/' + account.username;
 
     // use put for update
-    return this.http.put(targetUrl, body, options)
+    return this.http.put(targetUrl, formData, options)
       .timeout(10000)
       .map(this.extractData)
       .catch(this.handleError);

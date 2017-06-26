@@ -1,11 +1,7 @@
 
-<h2>User Account</h2>
+<h2>Update Account Details</h2>
 
 <div class="row">
-
-  <div class="col-md-6">
-    Change your account details.
-   </div>
 
   <div class="col-md-6">
     <button class="btn btn-info pull-right" (click)="reset()">Reset Password</button>
@@ -14,26 +10,27 @@
 </div>
 
 
-<div class="alert alert-success" role="alert" *ngIf="updatesuccess" >
-  <p>User {{updatesuccess}} successfully updated. </p>
-</div>
-
-<div class="alert alert-danger" role="alert"  *ngIf="updateerror">
-  <div class="header">Something went wrong</div>
-  <p>Unable to update user: {{errorMessage}}</p>
-</div>
-
-
-
 <form role="form"  (ngSubmit)="onSubmit(accountForm.value)" [formGroup]="accountForm">
 
   <!--<button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn"-->
           <!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #ddmenu>-->
     <!--<i class="glyphicon glyphicon-user"></i>-->
   <!--</button>-->
+  <div class="row">
+    <div class="col-md-4">
   <span class="member-photo">
-          <img src="https://media.licdn.com/mpr/mpr/shrinknp_100_100/AAEAAQAAAAAAAAu7AAAAJGMwYzlkMzU3LWQ3YWItNGY3Mi1hMDkzLTM0Zjg1YWFmYTA1Yw.jpg" class="member-photo" alt="Katie Mills" height="70" width="70">
+          <img id="userPhoto" (click)="setShowPhotoUpload()" src="{{userPhotoURL}}" class="member-photo" alt="photo of {{user.firstname}} {{user.lastname}}" height="70" width="70">
         </span>
+    </div>
+    <div class="col-md-4" *ngIf="showPhotoUpload" >
+    <label imgUpload="imgUpload">Upload new profile photo</label>
+    <image-upload id="imgUpload"[max]="1"
+                  (onFileUploadFinish)="imageUploaded($event)"
+                  [maxFileSize]="2048576">
+    </image-upload>
+      <!--<button class="btn" (click)="applyPhoto">Update</button>-->
+    </div>
+  </div>
 <div class="row">
   <div class="col-md-4">
     <div class="form-group required">
@@ -127,4 +124,11 @@
   <button type="submit" class="btn btn-success" [disabled]="!accountForm.valid">Update</button>
 
 </form>
+<div class="alert alert-success" role="alert" *ngIf="updatesuccess" >
+  <p>User {{updatesuccess}} successfully updated. </p>
+</div>
 
+<div class="alert alert-danger" role="alert"  *ngIf="updateerror">
+  <div class="header">Something went wrong</div>
+  <p>Unable to update user: {{errorMessage}}</p>
+</div>

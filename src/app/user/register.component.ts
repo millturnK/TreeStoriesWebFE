@@ -100,8 +100,6 @@ export class RegisterComponent implements OnInit {
     console.log('imageUploaded called. Event.file:', $event.file);
     // pull out lat.lng
     this.picture = new Picture(<File> $event.file);
-
-
   }
 
 
@@ -133,13 +131,13 @@ export class RegisterComponent implements OnInit {
 
   }
 
-
+// TODO need to reset all fields
   private successfulRegister(user: User) {
 
         this.loading = false;
       // need to pass this back
       // Success, so emit
-      this.user.emit( user );
+
 
       this.regSuccess = 'ok';
 
@@ -156,7 +154,7 @@ export class RegisterComponent implements OnInit {
     // this.passwordConfirm.updateValueAndValidity('');
     this.passwordConfirm.reset('');
 
-
+    this.user.emit( user );
 
   }
 

@@ -6,6 +6,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthenticationService } from "./services/authentication.service";
 import { User } from "./models/user";
 import {ActivatedRoute, Router} from "@angular/router";
+import {loggerFactory} from '../config/ConfigLog4j';
+import {Picture} from '../models/picture';
 
 @Component({
   selector: 'account-form',
@@ -21,7 +23,9 @@ export class AccountComponent implements OnInit {
     {id: User.ROLE_SENATOR_CD, name: User.ROLE_SENATOR},
     {id: User.ROLE_INACTIVE_CD, name: User.ROLE_INACTIVE}
   ];
-
+  userPhotoURL = '';
+  showPhotoUpload = false;
+  picture: Picture = null;
   username = new FormControl("", Validators.required);
   password = new FormControl("", Validators.required);
   firstname = new FormControl("", Validators.required);
@@ -52,6 +56,7 @@ export class AccountComponent implements OnInit {
   public updatesuccess = "";
 
   user: User;
+  private log = loggerFactory.getLogger('component.Account');
 
 
   constructor(private route: ActivatedRoute, private _service: AuthenticationService, private _user: User,
@@ -60,7 +65,10 @@ export class AccountComponent implements OnInit {
     this.user = _user;
   }
 
-
+  setShowPhotoUpload(){
+    this.showPhotoUpload = true;
+    this.log.debug('this.showPhotoUpload =' + this.showPhotoUpload);
+  }
   ngOnInit() {
 
     // (+) converts string "id" to a number
@@ -76,6 +84,7 @@ export class AccountComponent implements OnInit {
     }
 
 
+
     // kick off retrieval from back-end
     // All good, logged in, so go retrieve all the rated properties
 
@@ -84,7 +93,12 @@ export class AccountComponent implements OnInit {
         error => this.failedRetrieve(<any>error));
 
   }
-
+  imageUploaded($event) {
+    this.log.debug('imageUploaded called');
+    console.log('imageUploaded called. Event.file:', $event.file);
+    // pull out lat.lng
+    this.picture = new Picture(<File> $event.file);
+  }
 
   private successfulRetrieve(user: User) {
     /*console.log("Retrieve successful: ", user);*/
@@ -99,6 +113,12 @@ export class AccountComponent implements OnInit {
     this.paymentopt.setValue( user.paymentOption );
     this.admin.setValue( user.admin );
     this.roleCtrl.setValue( user.role );
+    if(this.user.photoLink){
+      this.userPhotoURL = this.user.photoLink;
+    }
+    else{
+      this.userPhotoURL = '../assets/ic_person_black_24dp_1x.png';
+    }
 
   }
 
@@ -124,7 +144,8 @@ export class AccountComponent implements OnInit {
     userToUpd.paymentOption = this.paymentopt.value;
     userToUpd.role = this.roleCtrl.value;
 
-    this._service.updateAccount(userToUpd, this.user)
+
+    this._service.updateAccount(userToUpd, this.picture, this.user)
       .subscribe( (result: User) => this.successfulUpdate(result),
       error => this.failedUpdate(<any>error));
 

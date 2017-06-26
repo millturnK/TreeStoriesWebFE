@@ -57,3 +57,15 @@ nav a.router-link-active {
   padding: 0;
   overflow: hidden;
 }
+.member-photo-small {
+  box-shadow: 0 2px 5px rgba(0,0,0,.15);
+  border: 2px solid #fff;
+  border-radius: 100%;
+  display: inline;
+  height: 30px;
+  width: 30px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
