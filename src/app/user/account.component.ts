@@ -8,9 +8,9 @@ import { User } from "./models/user";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: "account-form",
-  templateUrl: "account.component.html",
-  styleUrls: ["user.components.css"],
+  selector: 'account-form',
+  templateUrl: 'account.component.html',
+  styleUrls: ['user.components.css', 'account.component.css']
 
 })
 

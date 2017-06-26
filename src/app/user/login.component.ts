@@ -64,6 +64,7 @@ export class LoginComponent {
         this._user.paymentOption = user.paymentOption;
         this._user.admin = user.admin;
         this._user.role = user.role;
+        this._user.photoLink = user.photoLink;
 
         // store the user in local storage
         console.log('Pushing user into localstorage');

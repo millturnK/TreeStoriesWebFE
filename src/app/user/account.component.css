@@ -1,0 +1,33 @@
+.profile-photo-edit-circle {
+  position: absolute;
+  display: block;
+  height: 32px;
+  width: 32px;
+  border-radius: 32px;
+  bottom: -6px;
+  right: -6px;
+  background-color: rgba(255,255,255,.9);
+  box-shadow: 0 2px 3px rgba(0,0,0,.2);
+  color: #0084bf;
+  padding: 8px 0 0 2px;
+}
+.btn-circle.btn-med {
+  width: 40px;
+  height: 40px;
+  padding: 5px 8px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 20px;
+}
+.member-photo {
+  box-shadow: 0 2px 5px rgba(0,0,0,.15);
+  border: 2px solid #fff;
+  border-radius: 100%;
+  display: inline;
+  height: 70px;
+  width: 70px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}

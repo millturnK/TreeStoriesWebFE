@@ -3,6 +3,8 @@ import { User } from './models/user';
 import { Router } from '@angular/router';
 import { RegistrationService } from './services/register.service';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import {Picture} from '../models/picture';
+import {loggerFactory} from '../config/ConfigLog4j';
 
 declare var jQuery: any;
 
@@ -30,6 +32,7 @@ export class RegisterComponent implements OnInit {
 
     @Output()
     user: EventEmitter<any> = new EventEmitter();
+    picture: Picture = null;
 
     // form controls & group needed to unpin this form
     firstname = new FormControl('', Validators.required);
@@ -58,6 +61,7 @@ export class RegisterComponent implements OnInit {
 
     public regErrorMsg = '';
     public regSuccess = '';
+    private log = loggerFactory.getLogger('component.Register');
 
     loading = false;
 
@@ -69,7 +73,10 @@ export class RegisterComponent implements OnInit {
     ngOnInit(): any {
         jQuery(this.elementRef.nativeElement).find('[data-toggle="tooltip"]').tooltip();
     }
+    upLoadPhoto(){
 
+
+    }
 
     onSubmit(form: any): void {
 
@@ -88,6 +95,14 @@ export class RegisterComponent implements OnInit {
         this.register();
 
     }
+  imageUploaded($event) {
+    this.log.debug('imageUploaded called');
+    console.log('imageUploaded called. Event.file:', $event.file);
+    // pull out lat.lng
+    this.picture = new Picture(<File> $event.file);
+
+
+  }
 
 
     register() {
@@ -101,10 +116,11 @@ export class RegisterComponent implements OnInit {
       // by default new users are plebs
       userin.role = User.ROLE_INACTIVE_CD;
 
+
         // toggle the loading flag
         this.loading = true;
 
-      this._regService.register( userin )
+      this._regService.register( userin, this.picture )
         .subscribe( userout => this.successfulRegister(userout),
           error => this.failedRegister(<any>error));
     }
@@ -131,6 +147,7 @@ export class RegisterComponent implements OnInit {
       this.lastname.reset('');
       this.email.reset('');
       this.organisation.reset('');
+      this.picture = null;
 
 
     // All you need to do is use an empty string ''. If you reset like this password.reset() then

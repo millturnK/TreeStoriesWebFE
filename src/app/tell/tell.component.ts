@@ -39,7 +39,7 @@ export class TellComponent implements OnInit {
 
   success = false;
   errorMessage = '';
-  private log = loggerFactory.getLogger('component.GoogleMaps');
+  private log = loggerFactory.getLogger('component.Tell');
   storyModel: Story = new Story();
   pictures: Picture[] = [];
 

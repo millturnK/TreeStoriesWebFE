@@ -32,6 +32,15 @@
         </div>
         <div class="col-md-4 sideform">
             <form role="form" (ngSubmit)="onSubmit(registerForm.value)" [formGroup]="registerForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <label imgUpload="imgUpload">Upload profile photo</label>
+                  <image-upload id="imgUpload"[max]="1"
+                                (onFileUploadFinish)="imageUploaded($event)"
+                                [maxFileSize]="2048576">
+                  </image-upload>
+                </div>
+              </div>
 
             <div class="row">
                 <div class="col-md-12">

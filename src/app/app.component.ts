@@ -33,6 +33,7 @@ export class AppComponent {
       this._user.paymentOption = user.paymentOption;
       this._user.admin = user.admin;
       this._user.role = user.role;
+      this._user.photoLink = user.photoLink;
 
 
     }

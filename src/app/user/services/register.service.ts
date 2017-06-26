@@ -3,6 +3,7 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {User} from '../models/user';
 import {environment} from '../../../environments/environment';
+import {Picture} from '../../models/picture';
 
 @Injectable()
 export class RegistrationService {
@@ -11,16 +12,34 @@ export class RegistrationService {
 
   constructor(private http: Http) {}
 
-  // Now a real implementation using a back-end for authentication
-  register(user: User): Observable<User> {
+  // TODO - put in all user fields
+  register(user: User, picture: Picture): Observable<User> {
 
-    const headers = new Headers({'Content-Type': 'application/json'});
+   // const headers = new Headers({'Content-Type': 'application/json'});
+    const headers = new Headers();
     const options = new RequestOptions({ headers: headers});
+    // userin.username = this.email.value;
+    // userin.firstname = this.firstname.value;
+    // userin.lastname = this.lastname.value;
+    // userin.businessName = this.organisation.value;
+    // userin.paymentOption = this.paymentplan.value;
+    // userin.password = this.password.value;
+    // // by default new users are plebs
+    // userin.role = User.ROLE_INACTIVE_CD;
 
-    const body = JSON.stringify( user );
+   // const body = JSON.stringify( user );
+    const formData: FormData = new FormData();
+    formData.append('username', user.username);
+    formData.append('firstname', user.firstname);
+    formData.append('lastname', user.lastname);
+    formData.append('businessName', user.businessName);
+    formData.append('paymentOption', user.paymentOption);
+    formData.append('password', user.password);
+    formData.append('role', user.role);
+    formData.append(picture.partName, picture.file);
     const targetUrl = this.apiUrl + '/register';
 
-    return this.http.post(targetUrl, body, options)
+    return this.http.post(targetUrl, formData, options)
       .timeout(20000)
       .map(this.extractData)
       .catch(this.handleError);

@@ -46,3 +46,14 @@ nav a.router-link-active {
   border-radius: 20px;
 }
 
+.member-photo {
+  box-shadow: 0 2px 5px rgba(0,0,0,.15);
+  border: 2px solid #fff;
+  border-radius: 100%;
+  display: inline;
+  height: 70px;
+  width: 70px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}

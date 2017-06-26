@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
 
     @Input()
     user: User;
+    userPhotoURL = '';
 
     // tag in html that we are referring to here
     // means no need anymore for jquery.
@@ -27,6 +28,14 @@ export class NavbarComponent implements OnInit {
 
     jQuery(this.elementRef.nativeElement).find('.dropdown-toggle')
       .dropdown();
+    if(this.user.photoLink){
+      this.userPhotoURL = this.user.photoLink;
+    }
+    else{
+      this.userPhotoURL = '../assets/ic_person_black_24dp_1x.png';
+    }
+
+
 
   }
 

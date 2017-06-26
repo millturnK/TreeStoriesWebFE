@@ -18,6 +18,7 @@ export class User {
   public loggedin: boolean = false;   // logged in = true
   public resetPasswordToken: string;
   public role: string;
+  public photoLink: string;
 
   // returns object to original state = logged out
   public clear() {
@@ -35,6 +36,7 @@ export class User {
     this.loggedin = false;
     this.resetPasswordToken = null;
     this.role = null;
+    this.photoLink = null;
   }
 
   // Status

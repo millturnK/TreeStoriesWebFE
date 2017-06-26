@@ -15,9 +15,15 @@ import {AccountComponent} from "./account.component";
 import {AccountListComponent} from "./accountlist.component";
 import {RouterModule} from "@angular/router";
 import {ActivateComponent} from "./activate.component";
+import {ImageUploadModule} from 'angular2-image-upload';
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ImageUploadModule.forRoot()],
   declarations: [
     RegisterComponent,
     LoginComponent,
