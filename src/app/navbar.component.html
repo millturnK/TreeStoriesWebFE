@@ -23,8 +23,10 @@
       <!-- if you are logged in this is what appears on the right of the navbar -->
       <ul *ngIf="user.loggedin" class="nav navbar-nav navbar-right">
 
-          <button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #ddmenu>
+          <!--<button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn"-->
+                  <!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #ddmenu>-->
+        <button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #ddmenu>
               <!--<i class="glyphicon glyphicon-user"></i>-->
             <img src="{{userPhotoURL}}" alt="user profile picture" class="member-photo-small">
           </button>

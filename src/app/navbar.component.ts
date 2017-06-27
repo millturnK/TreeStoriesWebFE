@@ -11,9 +11,9 @@ declare var jQuery: any;
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-    @Input()
-    user: User;
-    userPhotoURL = '';
+    @Input() user: User;
+    @Input() userPhotoURL: string;
+   // userPhotoURL = '';
 
     // tag in html that we are referring to here
     // means no need anymore for jquery.
@@ -25,14 +25,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): any {
-    // Need to pass in the URL to redirect to if not logged in
-    // Look, no jquery, Maximillan is awesome.
-    //this.dropDownMenu.nativeElement.dropdown();
 
+    this.setNewUserPhoto();
     jQuery(this.elementRef.nativeElement).find('.dropdown-toggle')
       .dropdown();
 
-    this.setNewUserPhoto();
+
 
   }
   ngOnDestroy() {
@@ -44,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.userPhotoURL = this.user.photoLink;
     }
     else {
-      this.userPhotoURL = '../assets/ic_person_black_24dp_1x.png';
+      this.userPhotoURL = '../assets/ic_person_white_24dp_1x.png';
     }
   }
 

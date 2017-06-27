@@ -117,7 +117,7 @@ export class AccountComponent implements OnInit {
       this.userPhotoURL = this.user.photoLink;
     }
     else{
-      this.userPhotoURL = '../assets/ic_person_black_24dp_1x.png';
+      this.userPhotoURL = '../assets/ic_person_white_24dp_2x.png';
     }
 
   }

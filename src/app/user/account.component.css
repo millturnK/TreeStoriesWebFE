@@ -26,11 +26,13 @@
   display: inline;
   height: 70px;
   width: 70px;
-  margin: 0;
+  margin: 10px;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
+  background-color: #0084bf;
 }
+
 
 
 

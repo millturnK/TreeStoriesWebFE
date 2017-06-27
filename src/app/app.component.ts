@@ -33,6 +33,9 @@ export class AppComponent {
       this._user.paymentOption = user.paymentOption;
       this._user.admin = user.admin;
       this._user.role = user.role;
+      if(!user.photoLink || user.photoLink ===''){
+        this._user.photoLink = '../assets/ic_person_white_24dp_1x.png';
+      }
       this._user.photoLink = user.photoLink;
 
 

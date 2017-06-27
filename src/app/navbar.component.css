@@ -60,12 +60,20 @@ nav a.router-link-active {
 .member-photo-small {
   box-shadow: 0 2px 5px rgba(0,0,0,.15);
   border: 2px solid #fff;
-  border-radius: 100%;
-  display: inline;
-  height: 30px;
-  width: 30px;
-  margin: 0;
+  border-radius: 22px;
+  float: right;
+  height: 42px;
+  width: 42px;
+  margin-top: -8px;
+  margin-right:-10px;
+  margin-bottom:8px;
+  vertical-align: middle;
+  text-align: center;
+
+  /*padding: 0;*/
   padding: 0;
   overflow: hidden;
   cursor: pointer;
+  font-size: 18px;
+  line-height: 1.33;
 }
