@@ -11,22 +11,26 @@ declare var jQuery: any;
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-    @Input() user: User;
-    @Input() userPhotoURL: string;
+    //@Input() user: User;
+   // @Input() userPhotoURL;
+  userPhotoURL = '../assets/ic_person_white_24dp_1x.png';
+  user: User;
+
    // userPhotoURL = '';
 
     // tag in html that we are referring to here
     // means no need anymore for jquery.
     //@ViewChild('ddmenu') dropDownMenu: ElementRef;
 
-  constructor(private _router: Router, private elementRef: ElementRef) {
+  constructor(private _router: Router, private _user: User, private elementRef: ElementRef) {
+    this.user = _user;
 
 
   }
 
   ngOnInit(): any {
 
-    this.setNewUserPhoto();
+   this.setNewUserPhoto();
     jQuery(this.elementRef.nativeElement).find('.dropdown-toggle')
       .dropdown();
 
@@ -45,11 +49,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.userPhotoURL = '../assets/ic_person_white_24dp_1x.png';
     }
   }
-
+  getPhotoLink(): string {
+    if (this.user.photoLink) {
+      return this.user.photoLink;
+    } else {
+      return '../assets/ic_person_white_24dp_1x.png';
+    }
+  }
 
   login() {
     // console.log('Login clicked');
-    this.setNewUserPhoto();
+    //this.setNewUserPhoto();
     if (!this.user.loggedin) {
 
       this._router.navigate(['login']);

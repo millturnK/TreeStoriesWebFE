@@ -28,7 +28,8 @@
         <button class="btn btn-primary btn-med btn-circle dropdown-toggle navbar-btn" type="button" id="userMgtBtn"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" #ddmenu>
               <!--<i class="glyphicon glyphicon-user"></i>-->
-            <img src="{{userPhotoURL}}" alt="user profile picture" class="member-photo-small">
+            <img *ngIf="user.photoLink" src="{{user.photoLink}}" alt="user profile picture" class="member-photo-small">
+          <img *ngIf="!user.photoLink" src="../assets/ic_person_white_24dp_1x.png" alt="user profile picture" class="member-photo-small">
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" >
               <li style="text-align: center"><i class="glyphicon glyphicon-user"></i></li>

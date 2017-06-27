@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {User} from "./user/models/user";
-import {AppConsts} from "./app.consts";
+import {User} from './user/models/user';
+import {AppConsts} from './app.consts';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +19,17 @@ export class AppComponent {
 
 
     this.appConsts = _appConsts;
+    if ( isUndefined(_user.photoLink) || _user.photoLink === '') {
+      this.user.photoLink = '../assets/ic_person_white_24dp_1x.png';
+    }else {
+      this.user.photoLink = _user.photoLink;
+    }
+
 
 
     // see if there is already a user in localStorage and use that
-    if (localStorage.getItem("currentUser")) {
-      let user: User = JSON.parse(localStorage.getItem("currentUser"));
+    if (localStorage.getItem('currentUser')) {
+      const user: User = JSON.parse(localStorage.getItem('currentUser'));
 
       // need to set the global user object up because what you get from JSON parse is structure only
       this._user.firstname = user.firstname;
@@ -33,10 +40,12 @@ export class AppComponent {
       this._user.paymentOption = user.paymentOption;
       this._user.admin = user.admin;
       this._user.role = user.role;
-      if(!user.photoLink || user.photoLink ===''){
+      if ( isUndefined(user.photoLink) || user.photoLink === '') {
         this._user.photoLink = '../assets/ic_person_white_24dp_1x.png';
+      } else {
+        this._user.photoLink = user.photoLink;
       }
-      this._user.photoLink = user.photoLink;
+
 
 
     }
