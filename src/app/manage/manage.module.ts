@@ -10,6 +10,7 @@ import {DisplayOnlyMapComponent} from '../map/displayonly-map.component';
 import { EditComponent } from './edit/edit.component';
 import {ImageUploadModule} from 'angular2-image-upload';
 import {InteractiveMapComponent} from '../map/interactive-map/interactive-map.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {InteractiveMapComponent} from '../map/interactive-map/interactive-map.co
     ReactiveFormsModule,
     HttpModule,
     CommonModule,
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    NgbModule
   ],
   providers: [
     StoryService

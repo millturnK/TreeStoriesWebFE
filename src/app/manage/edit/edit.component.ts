@@ -44,6 +44,8 @@ export class EditComponent implements OnInit {
   coordsAttr: Number[] = [];
   coordsFromPhoto = new CoordsFromPhoto();
   editedStory: Story = null;
+  progBarValue = 0;
+  showProgBar = true;
 
   storyModel: Story = new Story();
   pictures: Picture[] = [];
@@ -206,6 +208,7 @@ onSubmit(form: any) {
   // set the location based on latitude contents
   this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
   console.log('onSubmit $event.file=', event);
+  this.progBarValue = 20;
 
   this._storyService.updateStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
     error => this.failedSubmit(<any>error));
@@ -214,18 +217,16 @@ onSubmit(form: any) {
 }
 
 private successfulSubmit() {
+  this.progBarValue = 80;
   this.success = true;
   this.resetForm();
-  setTimeout(() => {
-    this._router.navigate(['/list']);
-  }, 2000);
-
+  setTimeout(() => {this.showProgBar = false; this._router.navigate(['/list']); }, 2000);
 }
 
 
 private resetForm() {
-
-  // manually resetting all the fields. Have seen some funny behaviour when resetting a whole form group
+  this.progBarValue = 100;
+    // manually resetting all the fields. Have seen some funny behaviour when resetting a whole form group
   this.title.reset('');
   this.botName.reset('');
   this.description.reset('');

@@ -43,7 +43,7 @@ export class TellComponent implements OnInit {
   storyModel: Story = new Story();
   pictures: Picture[] = [];
   progBarValue = 0;
-
+  showProgBar = false;
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
   description = new FormControl('', [Validators.required, Validators.minLength(140)]);
@@ -77,6 +77,7 @@ export class TellComponent implements OnInit {
      this.storyModel.contributors = _user.username;
      // set it to Marker as shapetype by default
     this.storyModel.shapeType = this.storyModel.shapeTypeMarker;
+
   }
 
   ngOnInit() {
@@ -134,7 +135,8 @@ export class TellComponent implements OnInit {
 
   // Note that location of point or centre pt of rectangle and the NE and SW corners of rect have been set already
   onSubmit(form: any) {
-      console.log('submit');
+
+    this.showProgBar = true;
       const title = this.title.value;
       const botName = this.botName.value;
       const description = this.description.value;
@@ -161,10 +163,9 @@ export class TellComponent implements OnInit {
     /*console.log("successful submit");*/
     this.progBarValue = 80;
     this.success = true;
-    // setTimeout(() => { // 3
-    //   this._router.navigate(["/curate"]);
-    // }, 4000);
-    // this.tellStoryForm.reset();
+    setTimeout(() => {
+      this.showProgBar = false;
+    }, 2000);
 
 
     this.resetForm();
