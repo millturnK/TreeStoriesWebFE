@@ -89,7 +89,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         error => this.failedRetrieve(<any>error));
 
     }
-
+    for (let i = 0; i < 3; i++) {
+      this.progBarValue = this.progBarValue + 5;
+    }
 
     this.sub = this.route.params.subscribe(params => {
       // search for a logout parameter if it is present
