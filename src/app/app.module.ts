@@ -16,9 +16,11 @@ import { TellModule } from './tell/tell.module';
 import { GoogleApiService } from './services/google-api.service';
 import { ImageUploadModule } from 'angular2-image-upload';
 import { ManageModule } from './manage/manage.module';
-import { InteractiveMapComponent } from './map/interactive-map/interactive-map.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 import { AppConfig } from './config/app.config';
+import {NgbProgressbarConfig} from './config/progressbar-config';
 
 export function appConfigFactory(config: AppConfig) {
   return () => config.load();
@@ -41,7 +43,8 @@ export function appConfigFactory(config: AppConfig) {
     RouterModule,
     ReactiveFormsModule,
     routing,
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    NgbModule.forRoot()
   ],
   providers: [
     User,
@@ -49,6 +52,7 @@ export function appConfigFactory(config: AppConfig) {
     AUTH_PROVIDERS,
     AppConsts,
     GoogleApiService,
+    NgbProgressbarConfig,
     AppConfig,
     {
       provide: APP_INITIALIZER,

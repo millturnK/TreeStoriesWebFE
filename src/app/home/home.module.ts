@@ -8,6 +8,7 @@ import {StoryService} from '../services/story.service';
 import {CommonModule} from '@angular/common';
 import {ToolTipModule} from 'angular2-tooltip';
 import {RouterModule} from '@angular/router';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {RouterModule} from '@angular/router';
     HttpModule,
     CommonModule,
     ToolTipModule,
-    RouterModule
+    RouterModule,
+    NgbModule
   ],
   providers: [
     StoryService

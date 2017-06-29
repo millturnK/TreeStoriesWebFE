@@ -118,9 +118,12 @@
       </div>
     </div>
   </div>
-  <button type="submit" class="btn btn-success" [disabled]="!tellStoryForm.valid">Submit</button>
+  <button type="submit" class="btn btn-success spaceBelow" [disabled]="!tellStoryForm.valid">Submit</button>
 
 </form>
+<div class="row">
+  <div class="col-md-12"><ngb-progressbar class="progress-striped active spaceAbove" max="100" [value]="progBarValue"> </ngb-progressbar></div>
+</div>
 <div class="alert alert-success" role="alert" *ngIf="success" >
   <h4>Story Submitted</h4>
   <p>Thankyou. This story has now been submitted and will appear on the home-screen map.</p>

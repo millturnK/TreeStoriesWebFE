@@ -18,7 +18,6 @@ declare var jQuery: any;
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-// TODO change to display all thumbnails of photos
 export class HomeComponent implements OnInit, OnDestroy {
 
   imageToShow: string;
@@ -28,6 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   prevStories: Story[]= [];
   private sub: any;
   private logout = false;
+  progBarValue = 0;
+  showProgBar = true;
 
   // This is the initial point on which the map is centred
   centreMap: google.maps.LatLng;
@@ -68,17 +69,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     // now that we have a new location, based on where the person is, go and retrieve a page of stories
     // centered on this location.
     const centrePos = position.coords.latitude + ',' + position.coords.longitude;
+    this.progBarValue = 50;
     this._storyService.getStoriesWithinRadiusPoint(centrePos).subscribe( (results: Story[]) => this.successfulRetrieve(results),
       error => this.failedRetrieve(<any>error));
 
   }
 
   ngOnInit() {
+    this.progBarValue = 10;
     if (navigator.geolocation) {
       this.log.debug('Retrieve initial stories - using geoloc');
       navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+
     } else {
       this.log.debug('Retrieve initial stories - no geoloc');
+      this.progBarValue = 50;
       // this will go and grab a larger number of stories, centred on middle of Oz
       this._storyService.getStoriesWithinRadiusPoint('-25.363, 131.044').subscribe( (results: Story[]) => this.successfulRetrieve(results),
         error => this.failedRetrieve(<any>error));
@@ -173,6 +178,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   successfulRetrieve(stories: Story[]) {
 
+    this.progBarValue = 80;
     // how many stories did you get?
     this.log.debug('Retrieved: ' + stories.length + ' stories');
     // throw away what is there
@@ -182,8 +188,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.startIndex = 0;
     // if the number of stories is greater than the display page size, then only
     this.endIndex = this.stories.length > this.displayPageSize ? this.displayPageSize : this.stories.length;
+    this.progBarValue = 100;
+    setTimeout(() => {
+      this.showProgBar = false;
+    }, 2000);
 
   }
+
+
+
 
 
   successfulPageRetrieve(stories: Story[]) {

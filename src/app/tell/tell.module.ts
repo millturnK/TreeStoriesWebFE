@@ -13,6 +13,7 @@ import {StoryService} from '../services/story.service';
 import { MapComponent } from './map/map.component';
 import { GoogleApiService } from '../services/google-api.service';
 import {ImageService} from 'angular2-image-upload/lib/image.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {ImageService} from 'angular2-image-upload/lib/image.service';
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    NgbModule
 
     // AgmCoreModule.forRoot({
     //   apiKey: 'AIzaSyBEtWNCzXeRZdmXGg8XU8zh0JMSbsiEHPA'

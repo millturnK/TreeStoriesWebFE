@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {User} from './user/models/user';
 import {AppConsts} from './app.consts';
 import {isUndefined} from 'util';
+import {NgbProgressbarConfig} from './config/progressbar-config';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent {
   appConsts: AppConsts;
 
   // Use injection to create the app user.
-  constructor(private _user: User, _appConsts: AppConsts) {
+  constructor(private _user: User, _appConsts: AppConsts, _progBarConfig: NgbProgressbarConfig) {
 
     this.user = _user;
 

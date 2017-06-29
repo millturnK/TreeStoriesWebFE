@@ -5,13 +5,16 @@
     <h1 class="titleFont" title>
       {{title}}
     </h1>
-    <button class="btn btn-default btn-background" type="button" (click)="openTell()" *ngIf="_user.loggedin" >Tell my tree story</button>
+    <button class="btn btn-default btn-background spaceBelow" type="button" (click)="openTell()" *ngIf="_user.loggedin" >Tell my tree story</button>
     <!--<button class="btn btn-default btn-background" type="button" disabled *ngIf="!_user.loggedin" tooltip content="Log in to tell your story">Tell my tree story</button>-->
   <div *ngIf="!_user.loggedin">
     <a id='loginLink'(click)="login()" [routerLink]=" ['/login'] "><span class="glyphicon glyphicon-log-in"></span> Login or register to tell your story</a>
 
   </div>
   </div>
+</div>
+<div class="row">
+  <div class="col-md-12"><ngb-progressbar class="progress-striped active spaceAbove" max="100" [value]="progBarValue" *ngIf="showProgBar"> </ngb-progressbar></div>
 </div>
 <div class="row">
   <div class="col-md-12">

@@ -42,6 +42,7 @@ export class TellComponent implements OnInit {
   private log = loggerFactory.getLogger('component.Tell');
   storyModel: Story = new Story();
   pictures: Picture[] = [];
+  progBarValue = 0;
 
   title = new FormControl('', Validators.required);
   botName = new FormControl('');
@@ -148,7 +149,7 @@ export class TellComponent implements OnInit {
     // need to reverse to store in DB
       this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
       console.log('onSubmit $event.file=', event);
-
+      this.progBarValue = 20;
     this._storyService.postStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
 
@@ -158,17 +159,20 @@ export class TellComponent implements OnInit {
   private successfulSubmit() {
 
     /*console.log("successful submit");*/
+    this.progBarValue = 80;
     this.success = true;
     // setTimeout(() => { // 3
     //   this._router.navigate(["/curate"]);
     // }, 4000);
     // this.tellStoryForm.reset();
+
+
     this.resetForm();
   }
 
 
   private resetForm() {
-
+    this.progBarValue = 100;
       // manually resetting all the fields. Have seen some funny behaviour when resetting a whole form group
     this.title.reset('');
     this.botName.reset('');
@@ -180,6 +184,8 @@ export class TellComponent implements OnInit {
     this.pictures = [];
     // and close the map
     this.ckMap.setValue(false);
+    this.progBarValue = 0;
+
   }
 
 
