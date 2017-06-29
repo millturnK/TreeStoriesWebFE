@@ -122,7 +122,7 @@
 
 </form>
 <div class="row">
-  <div class="col-md-12"><ngb-progressbar *nfIf="showProgBar" class="progress-striped active spaceAbove" max="100" [value]="progBarValue"> </ngb-progressbar></div>
+  <div class="col-md-12"><ngb-progressbar *ngIf="showProgBar" class="progress-striped active spaceAbove" max="100" [value]="progBarValue"> </ngb-progressbar></div>
 </div>
 <div class="alert alert-success" role="alert" *ngIf="success" >
   <h4>Story Submitted</h4>
