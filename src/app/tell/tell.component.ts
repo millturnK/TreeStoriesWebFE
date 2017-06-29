@@ -84,7 +84,7 @@ export class TellComponent implements OnInit {
 
     // enable the tooltips
     jQuery(this.elementRef.nativeElement).find('[data-toggle="tooltip"]').tooltip();
-    this.progBarValue = 10;
+    this.progBarValue = 0;
 
     this.coordsFromPhoto.coordsSubject.subscribe((
       coords: Number[]) => {
@@ -165,12 +165,14 @@ export class TellComponent implements OnInit {
     /*console.log("successful submit");*/
     this.progBarValue = 100;
     this.success = true;
+    this.resetForm();
     setTimeout(() => {
+      this.progBarValue = 0;
       this.showProgBar = false;
     }, 2000);
 
 
-    this.resetForm();
+
   }
 
 
