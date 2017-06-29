@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {User} from '../user/models/user';
 import {Router} from '@angular/router';
 import {Story} from '../models/story';
@@ -9,6 +9,7 @@ import {Picture} from '../models/picture';
 import {StoryService} from '../services/story.service';
 import {isUndefined} from 'util';
 import {CoordsFromPhoto} from './coordsFromPhoto';
+import {ImageUploadModule} from 'angular2-image-upload';
 
 declare const google: any;
 declare var jQuery: any;
@@ -37,6 +38,7 @@ function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 // TODO allow upload of up to 5 photos
 export class TellComponent implements OnInit {
 
+  @ViewChild('imgUpload') imgUpload;
   success = false;
   errorMessage = '';
   private log = loggerFactory.getLogger('component.Tell');
@@ -169,8 +171,12 @@ export class TellComponent implements OnInit {
     setTimeout(() => {
       this.progBarValue = 0;
       this.showProgBar = false;
-    }, 2000);
+    }, 1000);
 
+    setTimeout(() => {
+      this.router.navigate(['/list']);
+
+    }, 2000);
 
 
   }
@@ -186,10 +192,12 @@ export class TellComponent implements OnInit {
     // this.contributor.reset('');
     this.latitude.reset('');
     this.longitude.reset('');
+
     this.pictures = [];
     // and close the map
     this.ckMap.setValue(false);
    // this.progBarValue = 0;
+    //this.imgUpload = null;
 
   }
 
