@@ -162,7 +162,7 @@ export class TellComponent implements OnInit {
   private successfulSubmit() {
 
     /*console.log("successful submit");*/
-    this.progBarValue = 80;
+    this.progBarValue = 100;
     this.success = true;
     setTimeout(() => {
       this.showProgBar = false;
@@ -174,7 +174,7 @@ export class TellComponent implements OnInit {
 
 
   private resetForm() {
-    this.progBarValue = 100;
+
       // manually resetting all the fields. Have seen some funny behaviour when resetting a whole form group
     this.title.reset('');
     this.botName.reset('');
@@ -186,7 +186,7 @@ export class TellComponent implements OnInit {
     this.pictures = [];
     // and close the map
     this.ckMap.setValue(false);
-    this.progBarValue = 0;
+   // this.progBarValue = 0;
 
   }
 
