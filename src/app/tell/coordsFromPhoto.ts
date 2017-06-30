@@ -27,7 +27,7 @@ export class CoordsFromPhoto {
       {
         let lat = EXIF.getTag(photo,EXIF.GPSTags.GPSLatitude);
         let GPSVersionID = EXIF.getTag(photo,EXIF.GPSTags.GPSVersionID);
-        // console.log('GPS lat:', allMetaData.GPSLatitude);
+        // //console.log('GPS lat:', allMetaData.GPSLatitude);
         let latArray = allMetaData.GPSLatitude;
         let latRef = allMetaData.GPSLatitudeRef;
         let lngArray = allMetaData.GPSLongitude;

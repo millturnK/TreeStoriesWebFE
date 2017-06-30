@@ -53,7 +53,7 @@ export class StoryService {
     // formData.append('test', 'test');
     for (const pic of pictures) {
       formData.append(pic.partName, pic.file);
-      console.log('appended image to req', pic.file);
+      //console.log('appended image to req', pic.file);
     }
 
     return this.http.post(this.apiUrl, formData, options)
@@ -93,7 +93,7 @@ export class StoryService {
   // formData.append('test', 'test');
   for (const pic of pictures) {
     formData.append(pic.partName, pic.file);
-    console.log('appended image to req', pic.file);
+    //console.log('appended image to req', pic.file);
   }
 
   return this.http.put(queryUrl, formData, options)
@@ -227,7 +227,7 @@ export class StoryService {
       throw new Error('Response status: ' + res.status);
     }
     const body = res.json();
-    // console.log("NFRService: extractGetData.Got response. Details:", body);
+    // //console.log("NFRService: extractGetData.Got response. Details:", body);
     return body || { };
   }
   private extractDeleteData(res: Response) {

@@ -55,7 +55,7 @@ export class ShowComponent implements OnChanges {
 
 
   onSubmit() {
-      console.log('submit');
+      //console.log('submit');
 
     }
 

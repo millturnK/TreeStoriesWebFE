@@ -19,7 +19,7 @@ const forceSSL = function() {
   }
 }
 
-console.log('Running in NODE_ENV: ', process.env.NODE_ENV);
+//console.log('Running in NODE_ENV: ', process.env.NODE_ENV);
 
 
 // Instruct the app to use the forceSSL middleware

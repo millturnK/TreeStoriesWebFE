@@ -58,7 +58,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    // console.log('Login clicked');
+    // //console.log('Login clicked');
     //this.setNewUserPhoto();
     if (!this.user.loggedin) {
 
@@ -68,7 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   register() {
-      // console.log('Register clicked');
+      // //console.log('Register clicked');
       this._router.navigate(['register']);
     }
 
@@ -85,7 +85,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private edit() {
 
-    // console.log('Edit called - navigate to user's account:', this.user.username);
+    // //console.log('Edit called - navigate to user's account:', this.user.username);
     this._router.navigate(['/account', this.user.username]);
 
   }

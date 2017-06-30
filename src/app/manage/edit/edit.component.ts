@@ -17,7 +17,7 @@ declare var jQuery: any;
 
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in lat val. control=', control.value);
+  //console.log('in lat val. control=', control.value);
   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -25,7 +25,7 @@ function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 }
 function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in long val. control=', control.value);
+  //console.log('in long val. control=', control.value);
   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -105,7 +105,7 @@ export class EditComponent implements OnInit {
         // this.editedStory.loc.coordinates = coords;
         // this.onPositionChangedFromPhoto.emit(new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]) ));
         this.photoLoc = new google.maps.LatLng(Number(this.coordsAttr[0]), Number(this.coordsAttr[1]));
-        console.log('this.photoLoc=', this.photoLoc);
+        //console.log('this.photoLoc=', this.photoLoc);
       }
 
     });
@@ -155,7 +155,7 @@ export class EditComponent implements OnInit {
     }
 
   private failedRetrieve(error: any) {
-    /*console.log("failed retrieve: ", error);*/
+    /*//console.log("failed retrieve: ", error);*/
     this.log.debug('failed retrieve: ' + error.message);
 
   }
@@ -192,7 +192,7 @@ onRectPositionChanged(newPos) {
 
 
 onSubmit(form: any) {
-  console.log('submit');
+  //console.log('submit');
 
   const title = this.title.value;
   const botName = this.botName.value;
@@ -207,7 +207,7 @@ onSubmit(form: any) {
 
   // set the location based on latitude contents
   this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
-  console.log('onSubmit $event.file=', event);
+  //console.log('onSubmit $event.file=', event);
   this.progBarValue = 20;
 
   this._storyService.updateStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
@@ -250,7 +250,7 @@ private resetForm() {
 
 imageUploaded($event) {
   this.log.debug('imageUploaded called');
-  console.log('imageUploaded called. Event.file:', $event.file);
+  //console.log('imageUploaded called. Event.file:', $event.file);
 
   // pull out lat.lng
   this.pictures.push(new Picture(<File> $event.file));
@@ -258,7 +258,7 @@ imageUploaded($event) {
 }
 
 private failedSubmit(error: any) {
-  /*console.log("failedSubmit called: ", error);*/
+  /*//console.log("failedSubmit called: ", error);*/
   this.success = false;
   this.errorMessage = error;
 }

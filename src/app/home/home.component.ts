@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.logout = params['logout'];
 
       if (this.logout) {
-        console.log('Logout request in home route', this.logout);
+        ////console.log('Logout request in home route', this.logout);
 
         this.logoutUser();
 
@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private logoutUser() {
 
-    console.log('Dropping user from localstorage');
+    ////console.log('Dropping user from localstorage');
     localStorage.removeItem('currentUser');
 
     this._user.clear();
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    // console.log('Login clicked');
+    // ////console.log('Login clicked');
     if (!this._user.loggedin) {
       this._router.navigate(['login']);
     }
@@ -255,7 +255,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   openTell() {
-    console.log('in openTell');
+    ////console.log('in openTell');
     this._router.navigate(['tell']);
 
   }

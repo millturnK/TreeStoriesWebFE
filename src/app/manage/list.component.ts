@@ -78,12 +78,12 @@ export class StoryListComponent implements OnInit {
     //   error => this.failedDelete(<any>error));
   }
   abandonDelete() {
-    /*console.log("I changed my mind ");*/
+    /*//console.log("I changed my mind ");*/
     this.deleteCandidate = null;
   }
 
   confirmDelete() {
-    /*console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
+    /*//console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
 
     this._storyService.delete(this.stories[this.deleteCandidate]._id, this._user ).subscribe((results: string) => this.successfulDelete(results),
       error => this.failedDelete(<any>error));

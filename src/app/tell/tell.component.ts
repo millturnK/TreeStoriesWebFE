@@ -17,7 +17,7 @@ declare var jQuery: any;
 
 function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in lat val. control=', control);
+  ////console.log('in lat val. control=', control);
   const pattern =  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -25,7 +25,7 @@ function latitudeValidator(control: FormControl): { [s: string]: boolean } {
 }
 function longitudeValidator(control: FormControl): { [s: string]: boolean } {
 
-  console.log('in long val. control=', control);
+  ////console.log('in long val. control=', control);
   const pattern =  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
   return control.value.match(pattern) ? null : {pattern: true};
 
@@ -102,7 +102,7 @@ export class TellComponent implements OnInit {
    // onPositionChanged(newPos: string){
   onPositionChanged(newPos) {
      // set value of text box
-     console.log('onPosition changed called with', newPos);
+     ////console.log('onPosition changed called with', newPos);
      // round to 6 dec places
      this.latitude.setValue(Number(newPos.lat()).toFixed(6));
      this.longitude.setValue(Number(newPos.lng()).toFixed(6));
@@ -153,7 +153,7 @@ export class TellComponent implements OnInit {
       // set long lat as user may have manually entered it - assign it to location
     // need to reverse to store in DB
       this.storyModel.loc = new Place('Point', [ Number(this.longitude.value), Number(this.latitude.value) ]);
-      console.log('onSubmit $event.file=', event);
+      ////console.log('onSubmit $event.file=', event);
       this.progBarValue = 20;
     this._storyService.postStory(this._user, this.storyModel, this.pictures).subscribe( result => this.successfulSubmit(),
       error => this.failedSubmit(<any>error));
@@ -164,7 +164,7 @@ export class TellComponent implements OnInit {
 
   private successfulSubmit() {
 
-    /*console.log("successful submit");*/
+    /*////console.log("successful submit");*/
     this.progBarValue = 100;
     this.success = true;
     this.resetForm();
@@ -206,14 +206,14 @@ export class TellComponent implements OnInit {
 
   imageUploaded($event) {
     this.log.debug('imageUploaded called');
-     console.log('imageUploaded called. Event.file:', $event.file);
+     ////console.log('imageUploaded called. Event.file:', $event.file);
       // pull out lat.lng
     this.pictures.push(new Picture(<File> $event.file));
     this.coordsFromPhoto.getCoordsFromPhoto($event.file);
   }
 
   private failedSubmit(error: any) {
-    /*console.log("failedSubmit called: ", error);*/
+    /*////console.log("failedSubmit called: ", error);*/
     this.success = false;
     this.errorMessage = error;
     this.progBarValue = 0;
@@ -223,7 +223,7 @@ export class TellComponent implements OnInit {
   // // TODO display map drawing tool accordingly
   // isSingleTree(): boolean {
   //   if (this.coordChoice.value === 'singleTree') {
-  //     console.log('single tree checked: ', this.coordChoice.value);
+  //     ////console.log('single tree checked: ', this.coordChoice.value);
   //     return true;
   //   }
   //   return false;

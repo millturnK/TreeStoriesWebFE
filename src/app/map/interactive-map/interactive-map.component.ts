@@ -66,7 +66,7 @@ export class InteractiveMapComponent implements OnInit {
     // set up marker with info from story
     //this.recOrTreeMarker = new google.maps.Marker();
     let content = '';
-    // console.log('in GM retrieve: story= ', story);
+    // //console.log('in GM retrieve: story= ', story);
     if (!isUndefined(this.editedStory.photoLinks)) {
       for (const uri of this.editedStory.photoLinks)
       {
@@ -156,7 +156,7 @@ export class InteractiveMapComponent implements OnInit {
         if (this.map.getBounds() !== undefined) {
           this.searchBox.setBounds(this.map.getBounds());
         } else {
-          console.log('getBounds is undefined');
+          //console.log('getBounds is undefined');
         }
 
 
@@ -169,12 +169,12 @@ export class InteractiveMapComponent implements OnInit {
 
         if (e.type === 'rectangle') {
           const bounds = e.overlay.getBounds();
-          console.log('drawing man. marker bounds=' + bounds);
+          //console.log('drawing man. marker bounds=' + bounds);
           this.onRectPositionChanged.emit(bounds);
 
         } else if (e.type === 'marker') {
           const pos = e.overlay.getPosition();
-          console.log('drawing man. REc pos=' + pos);
+          //console.log('drawing man. REc pos=' + pos);
           this.onPositionChanged.emit(pos);
         }
         });
@@ -190,21 +190,21 @@ export class InteractiveMapComponent implements OnInit {
           let lat = 0;
           let lng = 0;
 
-          console.log('in searchBox. places=', places);
+          //console.log('in searchBox. places=', places);
 
 
           // For each place, get the icon, name and location.
           const bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
             if (!place.geometry) {
-              console.log('Returned place contains no geometry');
+              //console.log('Returned place contains no geometry');
               return;
             }
             const latlng = place.geometry.location;
             lat = latlng.lat().toFixed(6);
             lng = latlng.lng().toFixed(6);
-            console.log('in search box places. lat=', lat, 'lng', lng);
-            console.log('place.geometry.location=', latlng);
+            //console.log('in search box places. lat=', lat, 'lng', lng);
+            //console.log('place.geometry.location=', latlng);
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.

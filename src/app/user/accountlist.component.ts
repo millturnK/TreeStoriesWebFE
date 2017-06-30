@@ -49,7 +49,7 @@ export class AccountListComponent implements OnInit {
   }
 
   private failedRetrieve(error: any) {
-    /*console.log("failed retrieve: ", error);*/
+    /*//console.log("failed retrieve: ", error);*/
 
   }
 
@@ -61,16 +61,16 @@ export class AccountListComponent implements OnInit {
   private delete(idx: number) {
     this.deleteCandidate = idx;
 
-    /*console.log("Delete: ", this.accounts[idx].username);*/
+    /*//console.log("Delete: ", this.accounts[idx].username);*/
   }
 
   abandonDelete() {
-    /*console.log("I changed my mind ");*/
+    /*//console.log("I changed my mind ");*/
     this.deleteCandidate = null;
   }
 
   confirmDelete() {
-    /*console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
+    /*//console.log("Ok, I'm doing it delete: ", this.accounts[this.deleteCandidate].username);*/
 
     this._service.delete( this.accounts[this.deleteCandidate].username, this.user)
       .subscribe( (result: string) => this.successfulDelete(result),
@@ -80,19 +80,19 @@ export class AccountListComponent implements OnInit {
   }
 
   private successfulDelete(result: string) {
-    /*console.log("successful delete: ", result);*/
+    /*//console.log("successful delete: ", result);*/
     // reload the page
     this.deletesuccess = this.accounts[this.deleteCandidate].username;
     this.accounts.splice(this.deleteCandidate, 1);
   }
 
   private failedDelete(error: any) {
-    /*console.log("failed delete: ", error);*/
+    /*//console.log("failed delete: ", error);*/
     this.deleteerror = error;
   }
 
   refreshAcctList() {
-    // console.log("Refresh the list");
+    // //console.log("Refresh the list");
     this.getAccounts();
   }
 

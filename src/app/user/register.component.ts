@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit {
     }
   imageUploaded($event) {
     this.log.debug('imageUploaded called');
-    console.log('imageUploaded called. Event.file:', $event.file);
+    //console.log('imageUploaded called. Event.file:', $event.file);
     // pull out lat.lng
     this.picture = new Picture(<File> $event.file);
   }
@@ -125,7 +125,7 @@ export class RegisterComponent implements OnInit {
 
 
   private failedRegister(error: any) {
-    console.log('Register failed: ', error);
+    //console.log('Register failed: ', error);
     this.regErrorMsg = error;
     this.loading = false;
 

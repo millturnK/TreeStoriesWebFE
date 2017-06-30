@@ -78,7 +78,7 @@ export class AccountComponent implements OnInit {
     // then they must be admin
     if (id !== this.user.username && !this.user.admin) {
       // must be admin to do this and your not
-      /*console.log("Non admin user attempted to access another user's account. ", this.user.username, id);*/
+      /*//console.log("Non admin user attempted to access another user's account. ", this.user.username, id);*/
       this._router.navigate(["/main"]);
 
     }
@@ -95,13 +95,13 @@ export class AccountComponent implements OnInit {
   }
   imageUploaded($event) {
     this.log.debug('imageUploaded called');
-    console.log('imageUploaded called. Event.file:', $event.file);
+    //console.log('imageUploaded called. Event.file:', $event.file);
     // pull out lat.lng
     this.picture = new Picture(<File> $event.file);
   }
 
   private successfulRetrieve(user: User) {
-    /*console.log("Retrieve successful: ", user);*/
+    /*//console.log("Retrieve successful: ", user);*/
 
     this.firstname.setValue( user.firstname );
     this.lastname.setValue( user.lastname );
@@ -123,14 +123,14 @@ export class AccountComponent implements OnInit {
   }
 
   private failedRetrieve(error: any) {
-    /*console.log("Retrieve failed: ", error);*/
+    /*//console.log("Retrieve failed: ", error);*/
 
     this.errorMsg = error;
 
   }
 
   onSubmit(form: any): void {
-   /* console.log("Update this user");*/
+   /* //console.log("Update this user");*/
 
     const userToUpd = new User();
     userToUpd.username = this.username.value;
@@ -152,14 +152,14 @@ export class AccountComponent implements OnInit {
   }
 
   private successfulUpdate(user: User) {
-    /*console.log("Update successful: ", user);*/
+    /*//console.log("Update successful: ", user);*/
 
     this.updatesuccess = user.username;
 
   }
 
   private failedUpdate(error: any) {
-    /*console.log("Update failed: ", error);*/
+    /*//console.log("Update failed: ", error);*/
     this.updateerror = error;
 
   }
@@ -167,11 +167,11 @@ export class AccountComponent implements OnInit {
 
 
   private delete() {
-    /*console.log("Delete this user");*/
+    /*//console.log("Delete this user");*/
   }
 
   reset() {
-    /*console.log("Reset this user's password");*/
+    /*//console.log("Reset this user's password");*/
     this._router.navigate(["/forgot"]);
 
   }

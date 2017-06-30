@@ -54,7 +54,7 @@ export class LoginComponent {
 
 
     private successfulLogin(user: User) {
-        /*console.log('Login successful: ', user);*/
+        /*//console.log('Login successful: ', user);*/
 
         this._user.firstname = user.firstname;
         this._user.lastname = user.lastname;
@@ -67,7 +67,7 @@ export class LoginComponent {
         this._user.photoLink = user.photoLink;
 
         // store the user in local storage
-        console.log('Pushing user into localstorage');
+        //console.log('Pushing user into localstorage');
         localStorage.setItem('currentUser', JSON.stringify(user));
 
         // Successful, so route to main webapp page.
@@ -76,7 +76,7 @@ export class LoginComponent {
     }
 
      private failedLogin(error: any) {
-       console.log('Login failed: ', error);
+       //console.log('Login failed: ', error);
 
        if (error === 'Account inactive') {
            this.errorMsg = 'Your account is inactive. Please complete the registration process first and then login. ' +
@@ -95,7 +95,7 @@ export class LoginComponent {
 
 
   forgot() {
-    /*console.log('Forgot link clicked');*/
+    /*//console.log('Forgot link clicked');*/
     // send them back to the home page
     this._router.navigate(['/forgot']);
 
