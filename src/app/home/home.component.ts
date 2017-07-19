@@ -12,6 +12,7 @@ import {Place} from '../models/Place';
 
 
 declare var jQuery: any;
+const CENTRE_AUS = '-25.363, 131.044';
 // declare var google: any;
 @Component({
   selector: 'app-home',
@@ -79,15 +80,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.progBarValue = 10;
     if (navigator.geolocation) {
       this.log.debug('Retrieve initial stories - using geoloc');
-      navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+      navigator.geolocation.getCurrentPosition(this.showPosition.bind(this), this.showError.bind(this));
 
     } else {
-      this.log.debug('Retrieve initial stories - no geoloc');
-      this.progBarValue = 50;
-      // this will go and grab a larger number of stories, centred on middle of Oz
-      this._storyService.getStoriesWithinRadiusPoint('-25.363, 131.044').subscribe( (results: Story[]) => this.successfulRetrieve(results),
-        error => this.failedRetrieve(<any>error));
-
+      this.loadAllStories();
     }
     for (let i = 0; i < 3; i++) {
       this.progBarValue = this.progBarValue + 5;
@@ -109,6 +105,35 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   }
+
+  loadAllStories(){
+    this.log.debug('Retrieve initial stories - no geoloc');
+    this.progBarValue = 50;
+    // this will go and grab a larger number of stories, centred on middle of Oz
+    this._storyService.getStoriesWithinRadiusPoint(CENTRE_AUS).subscribe( (results: Story[]) => this.successfulRetrieve(results),
+      myError => this.failedRetrieve(<any>myError));
+  }
+
+  showError(error) {
+    this.loadAllStories();
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      //x.innerHTML = "User denied the request for Geolocation."
+      this.log.debug('User denied the request for Geolocation.');
+      break;
+    case error.POSITION_UNAVAILABLE:
+      this.log.debug('Location information is unavailable.');
+      break;
+    case error.TIMEOUT:
+      this.log.debug('The request to get user location timed out.');
+      break;
+    case error.UNKNOWN_ERROR:
+      this.log.debug('An unknown error occurred.');
+      break;
+  }
+}
+
+
 
   panToStoryLocation(coords) {
 
