@@ -78,13 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.progBarValue = 10;
-    if (navigator.geolocation) {
-      this.log.debug('Retrieve initial stories - using geoloc');
-      navigator.geolocation.getCurrentPosition(this.showPosition.bind(this), this.showError.bind(this));
-
-    } else {
       this.loadAllStories();
-    }
     for (let i = 0; i < 3; i++) {
       this.progBarValue = this.progBarValue + 5;
     }
