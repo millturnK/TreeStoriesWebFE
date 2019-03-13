@@ -8,7 +8,7 @@ const path = require('path');
 
 // If an incoming request uses a protocol other than HTTPS,
 // redirect that request to the same url but with HTTPS
-const forceSSL = function() {
+/*const forceSSL = function() {
   return function (req, res, next) {
     if (req.headers['x-forwarded-proto'] !== 'https') {
       return res.redirect(
@@ -17,15 +17,15 @@ const forceSSL = function() {
     }
     next();
   }
-}
+}*/
 
 //console.log('Running in NODE_ENV: ', process.env.NODE_ENV);
 
-
+//commented out file to use ssl
 // Instruct the app to use the forceSSL middleware
-if (process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV === 'production') {
   app.use(forceSSL());
-}
+}*/
 
 
 
